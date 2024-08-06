@@ -1,3 +1,5 @@
 .vs
 bin
 obj
+# Jetbrains Rider directory
+.idea/
