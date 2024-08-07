@@ -1,6 +1,10 @@
 #include <GLFW/glfw3.h>
+#include <iostream>
+
+using namespace std;
 
 int main() {
+    cout << "Hello lib\n";
     GLFWwindow* window;
 
     /* Initialize the library */
