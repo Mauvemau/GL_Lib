@@ -1,1 +1,3 @@
-﻿#include "Renderer.h"
+#include "renderer.h"
+
+using namespace GLlib;

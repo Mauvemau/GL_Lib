@@ -1,12 +1,19 @@
-﻿#pragma once
+#pragma once
 
-namespace Engine
-{
-    class Window
-    {
-    public:
-        Window();
-        ~Window();
-        
-    };
+#include "deps.h"
+
+#include <iostream>
+
+namespace GLlib {
+
+	class DLLExport Window {
+	private:
+		GLFWwindow* window;
+	public:
+		Window(int width, int height, std::string title);
+		~Window();
+
+		GLFWwindow* getReference();
+	};
+
 }

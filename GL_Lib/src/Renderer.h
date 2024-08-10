@@ -1,7 +1,11 @@
-﻿#pragma once
+#pragma once
 
-class Renderer
-{
-public:
-    
-};
+#include "deps.h"
+
+namespace GLlib {
+
+	class DLLExport Renderer {
+
+	};
+
+}
