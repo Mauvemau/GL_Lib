@@ -5,11 +5,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\glad">
-      <UniqueIdentifier>{5b3ba9ac-56d9-4c18-8e0a-5171c8cadc00}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{cea24643-47f8-49b7-bfc8-5b32f4ddd667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\deps">
+      <UniqueIdentifier>{3a48ed01-a7b3-4ee2-951e-ef5b772b4a0e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,14 +22,14 @@
     <ClCompile Include="src\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\glad\src\glad.c">
-      <Filter>Source Files\glad</Filter>
-    </ClCompile>
     <ClCompile Include="src\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\loader.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad\src\glad.c">
+      <Filter>Source Files\deps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +49,7 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\stb_image.h">
-      <Filter>Source Files\utils</Filter>
+      <Filter>Source Files\deps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
