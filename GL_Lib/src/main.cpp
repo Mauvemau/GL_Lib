@@ -25,7 +25,7 @@ int main() {
         cout << "GLFW initialized successfully!\n";
     }
 
-    // Create a windowed mode window and its OpenGL context
+    // Create a window
     gllib::Window window(640, 480, "Hello Triangle");
 
     // Confirm that the window has been properly initialized
