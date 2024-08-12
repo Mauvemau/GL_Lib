@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-using namespace GLlib;
+using namespace gllib;
 using namespace std;
 
 void Renderer::setUpVertexAttributes() {

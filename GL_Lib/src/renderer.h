@@ -2,7 +2,7 @@
 
 #include "deps.h"
 
-namespace GLlib {
+namespace gllib {
 
 	/// <summary>
 	/// This struct contains the 3 basic buffers needed to draw using glDrawElements

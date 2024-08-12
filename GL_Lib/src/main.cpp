@@ -5,8 +5,17 @@
 
 using namespace std;
 
+const float triangleVertexData[] = {
+    -0.5f, -0.5f, 0.0f, /* xyz */ 1.0f, 0.0f, 0.0f, 0.0f, /* rgba */ 0.0f, 0.0f, /* uv */
+     0.0f,  0.5f, 0.0f, /* xyz */ 0.0f, 1.0f, 0.0f, 1.0f, /* rgba */ 1.0f, 0.0f, /* uv */
+     0.5f, -0.5f, 0.0f, /* xyz */ 0.0f, 0.0f, 1.0f, 0.5f, /* rgba */ 0.0f, 1.0f, /* uv */
+};
+const int triangleIndex[] = {
+    0, 1, 2
+};
+
 int main() {
-    /* Initialize the library */
+    /* Initialize the GLFW library */
     if (!glfwInit()) {
         cout << "Failed to initialize glfw!\n";
         return -1;
@@ -16,7 +25,7 @@ int main() {
     }
 
     /* Create a windowed mode window and its OpenGL context */
-    GLlib::Window window(640, 480, "Hello Triangle");
+    gllib::Window window(640, 480, "Hello Triangle");
 
     /* Confirm that the window has been properly initialized */
     if (!window.getIsInitialized()) {
@@ -28,15 +37,34 @@ int main() {
     /* Make the window's context current */
     window.makeContextCurrent();
 
+    /* Initialize the GLAD library */
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        cout << "Failed to initialize GLAD\n";
+        glfwTerminate();
+        return -1;
+    }
+    else {
+        cout << "Initialized GLAD successfully!\n";
+    }
+
     /* Check if the PC has a working OpenGL driver */
     cout << glGetString(GL_VERSION) << "\n";
 
+    /* Get the size of the buffers */
+    size_t triangleVertexDataSize = sizeof(triangleVertexData) / sizeof(triangleVertexData[0]);
+    size_t triangleIndexSize = sizeof(triangleIndex) / sizeof(triangleIndex[0]);
+
+    /* Create the render data for the triangle */
+    gllib::RenderData triangleData = gllib::Renderer::createRenderData(triangleVertexData, triangleVertexDataSize, triangleIndex, triangleIndexSize);
+
     cout << "Render loop has started!\n";
     /* Loop until the user closes the window */
-    while (!window.getShouldClose())
-    {
+    while (!window.getShouldClose()) {
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        gllib::Renderer::clear();
+
+        /* Draw render data */
+        gllib::Renderer::drawElements(triangleData, triangleIndexSize);
 
         /* Swap front and back buffers */
         window.swapBuffers();
@@ -46,6 +74,8 @@ int main() {
     }
     cout << "Render loop ended\n";
 
+    /* Destroy render data to free vram memory */
+    gllib::Renderer::destroyRenderData(triangleData);
     /* Terminate the glfw context and window */
     glfwTerminate();
 

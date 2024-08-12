@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace GLlib {
+namespace gllib {
 
 	class DLLExport Window {
 	private:

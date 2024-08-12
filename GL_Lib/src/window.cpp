@@ -1,6 +1,6 @@
 #include "window.h"
 
-using namespace GLlib;
+using namespace gllib;
 using namespace std;
 
 Window::Window(int width, int height, string title) {
