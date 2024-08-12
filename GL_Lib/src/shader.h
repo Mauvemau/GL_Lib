@@ -4,7 +4,7 @@
 #include <iostream>
 
 namespace gllib {
-	class Shader {
+	class DLLExport Shader {
 	private:
 		static std::string getShaderType(unsigned int type);
 		static unsigned int compileShader(unsigned int type, std::string source);
