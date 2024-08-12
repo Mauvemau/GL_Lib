@@ -1,5 +1,6 @@
 #include "window.h"
 #include "renderer.h"
+#include "shader.h"
 
 #include <iostream>
 
@@ -15,7 +16,7 @@ const int triangleIndex[] = {
 };
 
 int main() {
-    /* Initialize the GLFW library */
+    // Initialize the GLFW library
     if (!glfwInit()) {
         cout << "Failed to initialize glfw!\n";
         return -1;
@@ -24,20 +25,20 @@ int main() {
         cout << "GLFW initialized successfully!\n";
     }
 
-    /* Create a windowed mode window and its OpenGL context */
+    // Create a windowed mode window and its OpenGL context
     gllib::Window window(640, 480, "Hello Triangle");
 
-    /* Confirm that the window has been properly initialized */
+    // Confirm that the window has been properly initialized
     if (!window.getIsInitialized()) {
         cout << "Failed to create window!\n";
         glfwTerminate();
         return -1;
     }
 
-    /* Make the window's context current */
+    // Make the window's context current
     window.makeContextCurrent();
 
-    /* Initialize the GLAD library */
+    // Initialize the GLAD library
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         cout << "Failed to initialize GLAD\n";
         glfwTerminate();
@@ -47,36 +48,46 @@ int main() {
         cout << "Initialized GLAD successfully!\n";
     }
 
-    /* Check if the PC has a working OpenGL driver */
+    // Check if the PC has a working OpenGL driver
     cout << glGetString(GL_VERSION) << "\n";
 
-    /* Get the size of the buffers */
-    size_t triangleVertexDataSize = sizeof(triangleVertexData) / sizeof(triangleVertexData[0]);
-    size_t triangleIndexSize = sizeof(triangleIndex) / sizeof(triangleIndex[0]);
+    // Load vertex and fragment shaders from files
+    const char* vertexSource = gllib::Shader::loadShader("solidColorV.glsl");
+    const char* fragmentSource = gllib::Shader::loadShader("solidColorF.glsl");
+    // Create shader program
+    unsigned int spSolidColor = gllib::Shader::createShader(vertexSource, fragmentSource);
+    // Set current shader program
+    gllib::Shader::useShaderProgram(spSolidColor);
 
-    /* Create the render data for the triangle */
+    // Get the size of the buffers
+    GLsizei triangleVertexDataSize = sizeof(triangleVertexData) / sizeof(triangleVertexData[0]);
+    GLsizei triangleIndexSize = sizeof(triangleIndex) / sizeof(triangleIndex[0]);
+
+    // Create the render data for the triangle
     gllib::RenderData triangleData = gllib::Renderer::createRenderData(triangleVertexData, triangleVertexDataSize, triangleIndex, triangleIndexSize);
 
     cout << "Render loop has started!\n";
-    /* Loop until the user closes the window */
+    // Loop until the user closes the window
     while (!window.getShouldClose()) {
-        /* Render here */
+        // Render here
         gllib::Renderer::clear();
 
-        /* Draw render data */
+        // Draw render data
         gllib::Renderer::drawElements(triangleData, triangleIndexSize);
 
-        /* Swap front and back buffers */
+        // Swap front and back buffers
         window.swapBuffers();
 
-        /* Poll for and process events */
+        // Poll for and process events
         glfwPollEvents();
     }
     cout << "Render loop ended\n";
 
-    /* Destroy render data to free vram memory */
+    // Destroy render data to free vram memory
     gllib::Renderer::destroyRenderData(triangleData);
-    /* Terminate the glfw context and window */
+    // Destroy shader to free vram memory
+    gllib::Shader::destroyShader(spSolidColor);
+    // Terminate the glfw context and window
     glfwTerminate();
 
 	return 0;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "deps.h"
 
 namespace gllib {

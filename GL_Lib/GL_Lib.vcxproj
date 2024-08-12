@@ -20,13 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\renderer.h" />
+    <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
