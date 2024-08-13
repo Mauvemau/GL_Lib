@@ -8,7 +8,7 @@ using namespace std;
 
 LibCore::LibCore() {
     if (!glfwInit()) {
-        cout << "Failed to initialize glfw!\n";
+        cout << "Failed to initialize GLFW!\n";
     }
     else {
         cout << "GLFW initialized successfully!\n";
@@ -16,7 +16,7 @@ LibCore::LibCore() {
 }
 
 LibCore::~LibCore() {
-    cout << "Terminated glfw.\n";
+    cout << "Terminated GLFW.\n";
     glfwTerminate();
 }
 
