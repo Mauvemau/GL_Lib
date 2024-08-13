@@ -2,6 +2,7 @@
 #include "window.h"
 #include "renderer.h"
 #include "shader.h"
+#include "lib_time.h"
 
 #include <iostream>
 
@@ -59,6 +60,8 @@ int main() {
     while (!window.getShouldClose()) {
         // Render here
         gllib::Renderer::clear();
+
+        cout << "FPS: " << gllib::LibTime::getFPS() << ", FrameTime: " << gllib::LibTime::getDeltaTime() << ".\n";
 
         // Draw render data
         gllib::Renderer::drawElements(triangleData, triangleIndexSize);
