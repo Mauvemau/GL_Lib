@@ -33,9 +33,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\deps.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -49,6 +46,9 @@
       <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\stb_image.h">
+      <Filter>Source Files\deps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\deps.h">
       <Filter>Source Files\deps</Filter>
     </ClInclude>
   </ItemGroup>
