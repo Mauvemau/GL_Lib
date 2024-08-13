@@ -1,3 +1,4 @@
+#include "core.h"
 #include "window.h"
 #include "renderer.h"
 #include "shader.h"
@@ -17,13 +18,7 @@ const int triangleIndex[] = {
 
 int main() {
     // Initialize the GLFW library
-    if (!glfwInit()) {
-        cout << "Failed to initialize glfw!\n";
-        return -1;
-    }
-    else {
-        cout << "GLFW initialized successfully!\n";
-    }
+    gllib::LibCore libCore;
 
     // Create a window
     gllib::Window window(640, 480, "Hello Triangle");
@@ -39,14 +34,7 @@ int main() {
     window.makeContextCurrent();
 
     // Initialize the GLAD library
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        cout << "Failed to initialize GLAD\n";
-        glfwTerminate();
-        return -1;
-    }
-    else {
-        cout << "Initialized GLAD successfully!\n";
-    }
+    gllib::LibCore::initGlad();
 
     // Check if the PC has a working OpenGL driver
     cout << glGetString(GL_VERSION) << "\n";
@@ -79,7 +67,7 @@ int main() {
         window.swapBuffers();
 
         // Poll for and process events
-        glfwPollEvents();
+        gllib::LibCore::pollEvents();
     }
     cout << "Render loop ended\n";
 
@@ -87,8 +75,5 @@ int main() {
     gllib::Renderer::destroyRenderData(triangleData);
     // Destroy shader to free vram memory
     gllib::Shader::destroyShader(spSolidColor);
-    // Terminate the glfw context and window
-    glfwTerminate();
-
-	return 0;
+    return 0;
 }
