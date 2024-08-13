@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderer.cpp" />
@@ -27,7 +29,9 @@
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />

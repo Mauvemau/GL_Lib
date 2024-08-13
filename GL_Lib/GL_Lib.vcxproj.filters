@@ -31,6 +31,12 @@
     <ClCompile Include="src\glad\src\glad.c">
       <Filter>Source Files\deps</Filter>
     </ClCompile>
+    <ClCompile Include="src\core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lib_time.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer.h">
@@ -50,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="src\deps.h">
       <Filter>Source Files\deps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lib_time.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
