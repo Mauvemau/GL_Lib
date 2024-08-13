@@ -26,7 +26,7 @@ unsigned int Renderer::createVertexArrayObject() {
     return VAO;
 }
 
-unsigned int Renderer::createVertexBufferObject(const float vertexData[], size_t bufferSize) {
+unsigned int Renderer::createVertexBufferObject(const float vertexData[], GLsizei bufferSize) {
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -35,7 +35,7 @@ unsigned int Renderer::createVertexBufferObject(const float vertexData[], size_t
     return VBO;
 }
 
-unsigned int Renderer::createElementBufferObject(const int index[], size_t bufferSize) {
+unsigned int Renderer::createElementBufferObject(const int index[], GLsizei bufferSize) {
     unsigned int EBO;
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -44,7 +44,7 @@ unsigned int Renderer::createElementBufferObject(const int index[], size_t buffe
     return EBO;
 }
 
-RenderData Renderer::createRenderData(const float vertexData[], size_t vertexDataSize, const int index[], size_t indexSize) {
+RenderData Renderer::createRenderData(const float vertexData[], GLsizei vertexDataSize, const int index[], GLsizei indexSize) {
     RenderData rData;
 
     // VAO will store the attribute pointers of our buffer.
@@ -81,7 +81,7 @@ void Renderer::destroyRenderData(RenderData rData) {
     printf("Render data destroyed.\n");
 }
 
-void Renderer::drawElements(RenderData rData, size_t indexSize) {
+void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 

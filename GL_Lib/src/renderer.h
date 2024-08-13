@@ -20,13 +20,13 @@ namespace gllib {
 		static void setUpVertexAttributes();
 
 		static unsigned int createVertexArrayObject();
-		static unsigned int createVertexBufferObject(const float vertexData[], size_t bufferSize);
-		static unsigned int createElementBufferObject(const int index[], size_t bufferSize);
+		static unsigned int createVertexBufferObject(const float vertexData[], GLsizei bufferSize);
+		static unsigned int createElementBufferObject(const int index[], GLsizei bufferSize);
 
-		static RenderData createRenderData(const float vertexData[], size_t vertexDataSize, const int index[], size_t indexSize);
+		static RenderData createRenderData(const float vertexData[], GLsizei vertexDataSize, const int index[], GLsizei indexSize);
 		static void destroyRenderData(RenderData rData);
 
-		static void drawElements(RenderData rData, size_t indexSize);
+		static void drawElements(RenderData rData, GLsizei indexSize);
 
 		static void clear();
 	};
