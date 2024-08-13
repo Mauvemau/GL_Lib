@@ -1,5 +1,7 @@
 #include "core.h"
+
 #include "deps.h"
+#include "lib_time.h"
 
 #include <iostream>
 
@@ -34,5 +36,6 @@ bool LibCore::initGlad() {
 
 
 void LibCore::pollEvents() {
+    LibTime::updateFrameTime();
     glfwPollEvents();
 }
