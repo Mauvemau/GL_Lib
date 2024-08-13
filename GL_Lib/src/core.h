@@ -11,6 +11,10 @@ namespace gllib {
 		/// Can only be called after initializing a window and setting up the glfw context
 		/// </summary>
 		static bool initGlad();
+
+		/// <summary>
+		/// Must be called on every frame to poll glfw and other library utils
+		/// </summary>
 		static void pollEvents();
 	};
 
