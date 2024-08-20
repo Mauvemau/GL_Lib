@@ -17,8 +17,10 @@ Shape::~Shape() {
 // Protected
 
 void Shape::initRenderData(const float vertexData[], GLsizei vertexDataSize, const int index[], GLsizei indexSize) {
+    // Update the size of the index (The size will depend on the shape drawn)
     this->indexSize = indexSize;
 
+    // Create the render data for the buffers
     renderData = Renderer::createRenderData(vertexData, vertexDataSize, index, indexSize);
 }
 
