@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp" />
+    <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Maths.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
@@ -33,12 +35,15 @@
   <ItemGroup>
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\loader.h" />
+    <ClInclude Include="src\Maths.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\transform.h" />
     <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\window.h" />
   </ItemGroup>
