@@ -1,6 +1,6 @@
 ﻿#include "entity.h"
 
-#include "Maths.h"
+#include "myMaths.h"
 
 namespace gllib
 {
