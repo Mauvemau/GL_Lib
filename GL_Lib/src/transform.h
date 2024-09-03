@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "deps.h"
+#include "glm.hpp"
 
 namespace gllib
 {
@@ -87,7 +88,7 @@ namespace gllib
     };
 
     // Can't link glm
-    /*
+    
     struct DLLExport ModelMatrix
     {
         glm::mat4 model;
@@ -97,5 +98,5 @@ namespace gllib
         glm::mat4 rotationZ;
         glm::mat4 scale;
     };
-    */
+    
 }
