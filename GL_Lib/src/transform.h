@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "deps.h"
+#ifdef _WIN32 // Directory is different in linux
 #include "glm.hpp"
+#else
+#include "glm/glm.hpp"
+#endif _WIN32
 
 namespace gllib
 {
