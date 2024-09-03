@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp" />
+    <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\myMaths.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
@@ -33,12 +35,15 @@
   <ItemGroup>
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\loader.h" />
+    <ClInclude Include="src\myMaths.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\transform.h" />
     <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\window.h" />
   </ItemGroup>
@@ -116,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +155,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,7 +172,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
