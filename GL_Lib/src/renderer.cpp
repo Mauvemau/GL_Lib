@@ -8,15 +8,15 @@ using namespace std;
 void Renderer::setUpVertexAttributes() {
     // position attribute
     // Pointer id 0, length is 3 floats (xyz), each line is 9 floats long in total (xyz,rgba,uv), value begins at position 0 on this line. 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), static_cast<void *>(nullptr));
     glEnableVertexAttribArray(0);
     // color attribute
     // Pointer id 1, length is 4 floats (rgba), value begins at position 3 on this line (after xyz). 
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     // uv attribute
     // Pointer id 2, length is 2 floats (uv), value begins at position 7 on this line (after xyzrgba).
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(7 * sizeof(float)));
     glEnableVertexAttribArray(2);
 }
 
