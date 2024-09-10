@@ -1,17 +1,28 @@
 #include "deps.h"
 
+#include "core.h"
+#include "window.h"
+#include "renderer.h"
+#include "lib_time.h"
+
+#include "triangle.h"
+
 namespace gllib {
 
 	class DLLExport BaseGame {
 	private:
-		void internalInit();
-		void internalUpdate();
-		void internalUninit();
+		LibCore libCore;
+
+		bool initInternal();
+		void updateInternal();
+		void uninitInternal();
 
 	protected:
-		virtual void init();
-		virtual void update();
-		virtual void uninit();
+		Window* window;
+
+		virtual void init() {};
+		virtual void update() {};
+		virtual void uninit() {};
 
 	public:
 		BaseGame();

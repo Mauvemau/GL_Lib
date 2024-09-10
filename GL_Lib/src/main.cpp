@@ -1,3 +1,4 @@
+/*
 #include "core.h"
 #include "window.h"
 #include "renderer.h"
@@ -5,11 +6,49 @@
 #include "lib_time.h"
 
 #include "triangle.h"
+*/
+#include "base_game.h"
 
 #include <iostream>
 
 using namespace std;
 
+class Game : public gllib::BaseGame {
+protected:
+    void init() override;
+    void update() override;
+    void uninit() override;
+public:
+    Game();
+    ~Game() override;
+};
+
+Game::Game() {
+    cout << "Game created!\n";
+}
+
+Game::~Game() {
+    cout << "Game destroyed!\n";
+}
+
+void Game::init() {
+    cout << "External init!!!!\n";
+}
+
+void Game::update() {
+
+}
+
+void Game::uninit() {
+    cout << "External uninit!!!\n";
+}
+
+int main() {
+    Game game;
+    game.start();
+}
+
+/*
 int main() {
     // Initialize the GLFW library
     gllib::LibCore libCore;
@@ -67,3 +106,4 @@ int main() {
     gllib::Shader::destroyShader(spSolidColor);
     return 0;
 }
+*/
