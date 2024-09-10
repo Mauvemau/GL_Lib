@@ -27,6 +27,7 @@ namespace gllib {
 
 	public:
 		static void setUpVertexAttributes();
+		static void setUpMVP();
 
 		static unsigned int createVertexArrayObject();
 		static unsigned int createVertexBufferObject(const float vertexData[], GLsizei bufferSize);

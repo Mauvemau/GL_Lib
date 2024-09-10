@@ -22,7 +22,9 @@ void Renderer::setUpVertexAttributes() {
     // Pointer id 2, length is 2 floats (uv), value begins at position 7 on this line (after xyzrgba).
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(7 * sizeof(float)));
     glEnableVertexAttribArray(2);
+}
 
+void Renderer::setUpMVP() {
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
     glm::mat4 mvp = projMatrix * viewMatrix * modelMatrix;
@@ -94,6 +96,7 @@ void Renderer::destroyRenderData(RenderData rData) {
 }
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
+    setUpMVP();
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 

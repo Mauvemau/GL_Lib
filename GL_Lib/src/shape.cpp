@@ -31,6 +31,10 @@ void Shape::internalDraw() {
     modelMatrix = glm::translate(glm::mat4(1.0f),
         glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 
+    cout << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << ".\n";
+    cout << transform.rotationQuat.x << ", " << transform.rotationQuat.y << ", " << transform.rotationQuat.z << ".\n";
+    cout << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << ".\n";
+
     if (transform.scale.x != 0 || transform.scale.y != 0 || transform.scale.z != 0)
         modelMatrix = glm::scale(modelMatrix, glm::vec3(transform.scale.x, transform.scale.y, 0.0f));
 
@@ -40,5 +44,6 @@ void Shape::internalDraw() {
         modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
         modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
     }
+    Renderer::setModelMatrix(modelMatrix);
     Renderer::drawElements(renderData, indexSize);
 }
