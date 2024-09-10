@@ -35,3 +35,8 @@ bool Window::getIsInitialized() {
 bool Window::getShouldClose() {
 	return glfwWindowShouldClose(window);
 }
+
+
+void Window::setTitle(string title) {
+	glfwSetWindowTitle(window, title.c_str());
+}

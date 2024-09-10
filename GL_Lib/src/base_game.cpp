@@ -11,28 +11,27 @@ using namespace std;
 
 BaseGame::BaseGame() {
 	window = new Window(640, 480, "Loading...");
-}
 
-BaseGame::~BaseGame() {
-	uninitInternal();
-	delete window;
-}
-
-// Private
-
-bool BaseGame::initInternal() {
 	// Confirm that the window has been properly initialized
 	if (!window->getIsInitialized()) {
 		cout << "Failed to create window!\n";
 		glfwTerminate();
-		return false;
+		return;
 	}
 	// Make the window's context current
 	window->makeContextCurrent();
 
 	// Initialize the GLAD library
 	gllib::LibCore::initGlad();
+}
 
+BaseGame::~BaseGame() {
+	delete window;
+}
+
+// Private
+
+bool BaseGame::initInternal() {
 	// Check if the PC has a working OpenGL driver
 	cout << glGetString(GL_VERSION) << "\n";
 
@@ -71,4 +70,5 @@ void BaseGame::uninitInternal() {
 
 void BaseGame::start() {
 	initInternal();
+	uninitInternal();
 }
