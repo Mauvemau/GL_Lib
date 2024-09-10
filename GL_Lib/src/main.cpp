@@ -1,12 +1,3 @@
-/*
-#include "core.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "lib_time.h"
-
-#include "triangle.h"
-*/
 #include "base_game.h"
 
 #include <iostream>
