@@ -49,6 +49,9 @@
     <ClCompile Include="src\myMaths.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\base_game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer.h">
@@ -89,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="src\myMaths.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base_game.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

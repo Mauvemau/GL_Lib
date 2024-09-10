@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\base_game.cpp" />
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
@@ -33,6 +34,7 @@
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\base_game.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
     <ClInclude Include="src\entity.h" />

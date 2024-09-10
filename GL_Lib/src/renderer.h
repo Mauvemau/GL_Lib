@@ -1,6 +1,8 @@
 #pragma once
 #include "deps.h"
 
+#include <glm.hpp>
+
 namespace gllib {
 
 	/// <summary>
@@ -16,6 +18,11 @@ namespace gllib {
 	/// Fully static class
 	/// </summary>
 	class DLLExport Renderer {
+	private:
+		static glm::mat4 projMatrix;
+		static glm::mat4 viewMatrix;
+		static glm::mat4 modelMatrix;
+
 	public:
 		static void setUpVertexAttributes();
 
@@ -27,6 +34,8 @@ namespace gllib {
 		static void destroyRenderData(RenderData rData);
 
 		static void drawElements(RenderData rData, GLsizei indexSize);
+
+		static void setModelMatrix(glm::mat4 newModelMatrix);
 
 		static void clear();
 	};

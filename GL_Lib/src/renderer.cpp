@@ -1,9 +1,14 @@
 #include "renderer.h"
 
 #include <iostream>
+#include <gtc/type_ptr.hpp>
 
 using namespace gllib;
 using namespace std;
+
+glm::mat4 Renderer::projMatrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
 void Renderer::setUpVertexAttributes() {
     // position attribute
@@ -89,6 +94,10 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
+    modelMatrix = newModelMatrix;
 }
 
 void Renderer::clear() {
