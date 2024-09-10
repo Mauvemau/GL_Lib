@@ -5,12 +5,13 @@
 using namespace gllib;
 using namespace std;
 
-Triangle::Triangle() {
+Triangle::Triangle(Transform transform) :
+    Shape(transform){
     // Values for the vertices
     const float triangleVertexData[] = {
-        -0.5f, -0.5f, 0.0f, /* xyz */ 1.0f, 0.0f, 0.0f, 0.0f, /* rgba */ 0.0f, 0.0f, /* uv */
-         0.0f,  0.5f, 0.0f, /* xyz */ 0.0f, 1.0f, 0.0f, 1.0f, /* rgba */ 1.0f, 0.0f, /* uv */
-         0.5f, -0.5f, 0.0f, /* xyz */ 0.0f, 0.0f, 1.0f, 0.5f, /* rgba */ 0.0f, 1.0f, /* uv */
+        -1.0f, -1.0f, 0.0f, /* xyz */ 1.0f, 0.0f, 0.0f, 0.0f, /* rgba */ 0.0f, 0.0f, /* uv */
+         1.0f, -1.0f, 0.0f, /* xyz */ 0.0f, 1.0f, 0.0f, 1.0f, /* rgba */ 1.0f, 0.0f, /* uv */
+         0.0f,  1.0f, 0.0f, /* xyz */ 0.0f, 0.0f, 1.0f, 0.5f, /* rgba */ 0.0f, 1.0f, /* uv */
     };
     // The order in which the vertices are drawn
     const int triangleIndex[] = {

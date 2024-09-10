@@ -2,6 +2,8 @@
 #include "deps.h"
 
 #include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 namespace gllib {
 
@@ -36,6 +38,7 @@ namespace gllib {
 		static void drawElements(RenderData rData, GLsizei indexSize);
 
 		static void setModelMatrix(glm::mat4 newModelMatrix);
+		static void setOrthoProjectionMatrix(float width, float height);
 
 		static void clear();
 	};

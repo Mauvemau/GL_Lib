@@ -1,7 +1,6 @@
 #include "renderer.h"
 
 #include <iostream>
-#include <gtc/type_ptr.hpp>
 
 using namespace gllib;
 using namespace std;
@@ -98,6 +97,10 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
 
 void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
     modelMatrix = newModelMatrix;
+}
+
+void Renderer::setOrthoProjectionMatrix(float width, float height) {
+    projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 }
 
 void Renderer::clear() {

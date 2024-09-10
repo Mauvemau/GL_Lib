@@ -1,10 +1,11 @@
 #pragma once
 
 #include "renderer.h"
+#include "entity.h"
 
 namespace gllib {
 
-    class DLLExport Shape {
+    class DLLExport Shape : public Entity {
     private:
         RenderData renderData;
         unsigned int indexSize;
@@ -14,7 +15,7 @@ namespace gllib {
         void internalDraw();
 
     public:
-        Shape();
+        Shape(Transform transform);
         virtual ~Shape();
 
         virtual void draw() = 0;

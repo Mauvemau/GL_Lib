@@ -5,7 +5,8 @@
 using namespace gllib;
 using namespace std;
 
-Shape::Shape() {
+Shape::Shape(Transform transform) :
+    Entity(transform){
     cout << "Created shape.\n";
 }
 
@@ -26,5 +27,18 @@ void Shape::initRenderData(const float vertexData[], GLsizei vertexDataSize, con
 }
 
 void Shape::internalDraw() {
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(glm::mat4(1.0f),
+        glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+
+    if (transform.scale.x != 0 || transform.scale.y != 0 || transform.scale.z != 0)
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(transform.scale.x, transform.scale.y, 0.0f));
+
+    if (transform.rotationQuat.x != 0 || transform.rotationQuat.y != 0 || transform.rotationQuat.z != 0)
+    {
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.x), glm::vec3(1.0, 0.0f, 0.0f));
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    }
     Renderer::drawElements(renderData, indexSize);
 }

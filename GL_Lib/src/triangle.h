@@ -8,7 +8,7 @@ namespace gllib {
     private:
 
     public:
-        Triangle();
+        Triangle(Transform transform);
         virtual ~Triangle() override;
 
         virtual void draw() override;

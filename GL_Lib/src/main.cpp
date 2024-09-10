@@ -6,7 +6,7 @@ using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
-    gllib::Triangle triangle;
+    gllib::Triangle* triangle;
 protected:
     void init() override;
     void update() override;
@@ -18,6 +18,11 @@ public:
 
 Game::Game() {
     cout << "Game created!\n";
+    gllib::Transform trf;
+    trf.position = {10, 10, 10};
+    trf.rotation = { 0, 0, 0 };
+    trf.scale = { 1, 1, 1 };
+    triangle = new gllib::Triangle(trf);
 }
 
 Game::~Game() {
@@ -32,11 +37,12 @@ void Game::init() {
 void Game::update() {
     gllib::Renderer::clear();
 
-    triangle.draw();
+    triangle->draw();
 }
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
+    delete triangle;
 }
 
 int main() {
