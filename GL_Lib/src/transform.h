@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #else
 #include "glm/glm.hpp"
-#endif _WIN32
+#endif // _WIN32
 
 namespace gllib
 {

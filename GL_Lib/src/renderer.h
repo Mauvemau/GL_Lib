@@ -1,9 +1,15 @@
 #pragma once
 #include "deps.h"
 
+#ifdef _WIN32 // Directory is different in linux
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#else
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#endif // _WIN32
 
 namespace gllib {
 
