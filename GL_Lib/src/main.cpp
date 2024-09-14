@@ -20,8 +20,8 @@ Game::Game() {
     cout << "Game created!\n";
     gllib::Transform trf;
     trf.position = { 100.0f, 100.0f, 0.0f };
-    trf.rotationQuat = { 0.0f, 0.0f, 0.0f, 10.0f };
-    trf.scale = { 50.0f, 50.0f, 0.0f };
+    trf.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trf.scale = { 57.7f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trf);
 }
 
@@ -35,6 +35,12 @@ void Game::init() {
 }
 
 void Game::update() {
+    // Update
+    gllib::Quaternion rot = triangle->getRotationQuat();
+    rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
+    triangle->setRotationQuat(rot);
+
+    // Draw
     gllib::Renderer::clear();
 
     triangle->draw();

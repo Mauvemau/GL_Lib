@@ -7,6 +7,10 @@ using namespace std;
 
 Shape::Shape(Transform transform) :
     Entity(transform){
+    renderData.VAO = 0;
+    renderData.VBO = 0;
+    renderData.EBO = 0;
+    indexSize = 0;
     cout << "Created shape.\n";
 }
 
@@ -18,7 +22,7 @@ Shape::~Shape() {
 
 // Protected
 
-void Shape::initRenderData(const float vertexData[], GLsizei vertexDataSize, const int index[], GLsizei indexSize) {
+void Shape::initRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize) {
     // Update the size of the index (The size will depend on the shape drawn)
     this->indexSize = indexSize;
 
@@ -28,22 +32,13 @@ void Shape::initRenderData(const float vertexData[], GLsizei vertexDataSize, con
 
 void Shape::internalDraw() {
     glm::mat4 modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::translate(glm::mat4(1.0f),
-        glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 
-    cout << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << ".\n";
-    cout << transform.rotationQuat.x << ", " << transform.rotationQuat.y << ", " << transform.rotationQuat.z << ".\n";
-    cout << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << ".\n";
+    modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.x), glm::vec3(1.0, 0.0f, 0.0f));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(transform.scale.x, transform.scale.y, 1.0f));
 
-    if (transform.scale.x != 0 || transform.scale.y != 0 || transform.scale.z != 0)
-        modelMatrix = glm::scale(modelMatrix, glm::vec3(transform.scale.x, transform.scale.y, 0.0f));
-
-    if (transform.rotationQuat.x != 0 || transform.rotationQuat.y != 0 || transform.rotationQuat.z != 0)
-    {
-        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.x), glm::vec3(1.0, 0.0f, 0.0f));
-        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelMatrix = glm::rotate(modelMatrix, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    }
     Renderer::setModelMatrix(modelMatrix);
     Renderer::drawElements(renderData, indexSize);
 }
