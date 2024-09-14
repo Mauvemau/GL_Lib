@@ -21,7 +21,7 @@ Game::Game() {
     gllib::Transform trf;
     trf.position = { 100.0f, 100.0f, 0.0f };
     trf.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trf.scale = { 57.7f, 50.0f, 0.0f };
+    trf.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trf);
 }
 
