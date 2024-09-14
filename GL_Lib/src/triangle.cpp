@@ -18,28 +18,7 @@ Triangle::Triangle(Transform transform) :
         0, 1, 2
     };
 
-    int vertexCount = 3;
-    int vertexStride = 9;
-
-    // Calculate the centroid
-    float centerX = 0.0f, centerY = 0.0f, centerZ = 0.0f;
-
-    for (int i = 0; i < vertexCount; ++i) {
-        centerX += triangleVertexData[i * vertexStride];
-        centerY += triangleVertexData[i * vertexStride + 1];
-        centerZ += triangleVertexData[i * vertexStride + 2];
-    }
-
-    centerX /= vertexCount;
-    centerY /= vertexCount;
-    centerZ /= vertexCount;
-
-    // Adjust each vertex to center it around the origin
-    for (int i = 0; i < vertexCount; ++i) {
-        triangleVertexData[i * vertexStride] -= centerX;
-        triangleVertexData[i * vertexStride + 1] -= centerY;
-        triangleVertexData[i * vertexStride + 2] -= centerZ;
-    }
+    alignVertex(triangleVertexData, 3, 9);
 
     // Aquire the size of each buffer
     int vertexDataSize = sizeof(triangleVertexData) / sizeof(triangleVertexData[0]);

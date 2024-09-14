@@ -43,8 +43,6 @@ bool BaseGame::initInternal() {
 	// Set current shader program
 	gllib::Shader::useShaderProgram(spSolidColor);
 
-	glDisable(GL_CULL_FACE);
-
 	init();
 	updateInternal();
 	Shader::destroyShader(spSolidColor);
