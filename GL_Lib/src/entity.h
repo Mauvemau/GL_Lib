@@ -8,13 +8,14 @@ namespace gllib {
         
     protected:
         Transform transform;
+        Color color;
 
     public:
         Entity(const Transform& transform);
         virtual ~Entity();
 
-        void move(const Vector3& position) const;
-        void rotate(const Quaternion& rotation) const;
+        void move(const Vector3& direction) const;
+        void rotate(const Vector3& eulerRotation) const;
         void updateTransform();
 
         Vector3 upward() const;
@@ -26,6 +27,7 @@ namespace gllib {
         Vector3 getScale() const;
         Vector3 getRotationEuler() const;
         Quaternion getRotationQuat() const;
+        Color getColor() const;
 
         void setTransform(const Transform& transform);
         void setPosition(const Vector3& position);
