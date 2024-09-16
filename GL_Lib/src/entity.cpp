@@ -4,7 +4,7 @@
 
 namespace gllib
 {
-    Entity::Entity(const Transform& transform): transform(transform), color({1.0f, 1.0f, 1.0f, 1.0f})
+    Entity::Entity(const Transform& transform): transform(transform)
     {
     }
 
@@ -63,11 +63,6 @@ namespace gllib
         return transform.rotationQuat;
     }
 
-    Color Entity::getColor() const
-    {
-        return color;
-    }
-
     void Entity::setTransform(const Transform& transform) {
         this->transform = transform;
     }
@@ -86,11 +81,6 @@ namespace gllib
 
     void Entity::setRotationEuler(const Vector3& rotation)	{
         transform.rotationQuat = Maths::Euler(rotation);
-    }
-
-    void Entity::setColor(const Color& color)
-    {
-        this->color = color;
     }
 
     bool Entity::isColliding(const Transform& _transform) const
