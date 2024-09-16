@@ -53,7 +53,7 @@ void Shape::alignVertex(float* vertexData, int vertexCount, int vertexStride) {
     }
 }
 
-void Shape::updateRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize) {
+void Shape::setRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize) {
     // Update the size of the index (The size will depend on the shape drawn)
     this->indexSize = indexSize;
 

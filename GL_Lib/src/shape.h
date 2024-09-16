@@ -12,7 +12,7 @@ namespace gllib {
 
     protected:
         void alignVertex(float* vertexData, int vertexCount, int vertexStride);
-        void updateRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize);
+        void setRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize);
         void internalDraw();
 
     public:
