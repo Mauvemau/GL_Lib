@@ -5,6 +5,15 @@
 using namespace gllib;
 using namespace std;
 
+Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) : 
+    Entity(translation, rotation, scale) {
+    renderData.VAO = 0;
+    renderData.VBO = 0;
+    renderData.EBO = 0;
+    indexSize = 0;
+    cout << "Created shape.\n";
+}
+
 Shape::Shape(Transform transform) :
     Entity(transform){
     renderData.VAO = 0;

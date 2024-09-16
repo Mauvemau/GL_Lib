@@ -16,6 +16,7 @@ namespace gllib {
         void internalDraw();
 
     public:
+        Shape(Vector3 translation, Vector3 rotation, Vector3 scale);
         Shape(Transform transform);
         virtual ~Shape();
 

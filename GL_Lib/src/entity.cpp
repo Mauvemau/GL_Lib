@@ -4,6 +4,12 @@
 
 namespace gllib
 {
+    Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale) {
+        transform.position = translation;
+        transform.rotationQuat = Maths::Euler(rotationEuler);
+        transform.scale = scale;
+    }
+
     Entity::Entity(const Transform& transform): transform(transform)
     {
     }

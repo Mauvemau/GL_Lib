@@ -10,6 +10,7 @@ namespace gllib {
         Transform transform;
 
     public:
+        Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale);
         Entity(const Transform& transform);
         virtual ~Entity();
 
