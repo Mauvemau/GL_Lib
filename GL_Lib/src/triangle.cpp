@@ -31,7 +31,7 @@ void Triangle::updateRenderData(Color color) {
          0.0f,  1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
     };
     // The order in which the vertices are drawn
-    int triangleIndex[] = {
+    const int triangleIndex[] = {
         0, 1, 2
     };
 
