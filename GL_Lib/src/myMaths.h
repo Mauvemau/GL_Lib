@@ -4,7 +4,7 @@
 
 namespace gllib
 {
-    class Maths
+    class DLLExport Maths
     {
     public:
         static Quaternion Euler(Vector3 euler);

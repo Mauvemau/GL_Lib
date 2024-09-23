@@ -16,7 +16,7 @@ namespace gllib {
 	/// <summary>
 	/// This struct contains the 3 basic buffers needed to draw using glDrawElements
 	/// </summary>
-	struct RenderData {
+	struct DLLExport RenderData {
 		unsigned int VAO; // Vertex Array Object
 		unsigned int VBO; // Vertex Buffer Object
 		unsigned int EBO; // Element Buffer Object
