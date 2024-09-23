@@ -54,6 +54,9 @@ void Shape::alignVertex(float* vertexData, int vertexCount, int vertexStride) {
 }
 
 void Shape::setRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize) {
+    if (renderData.VAO > 0) {
+        Renderer::destroyRenderData(renderData);
+    }
     // Update the size of the index (The size will depend on the shape drawn)
     this->indexSize = indexSize;
 

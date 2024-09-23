@@ -80,7 +80,7 @@ RenderData Renderer::createRenderData(const float vertexData[], GLsizei vertexDa
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
+    //cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
 
     // Unbinding after finishing simply for the sake of better binding understanding.
     glBindVertexArray(0);
@@ -92,7 +92,7 @@ void Renderer::destroyRenderData(RenderData rData) {
     glDeleteBuffers(1, &rData.VBO);
     glDeleteVertexArrays(1, &rData.VAO);
 
-    printf("Render data destroyed.\n");
+    //printf("Render data destroyed.\n");
 }
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
