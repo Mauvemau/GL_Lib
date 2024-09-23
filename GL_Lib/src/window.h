@@ -40,6 +40,10 @@ namespace gllib {
 		/// Returns if the user has tried to close the window manually
 		/// </summary>
 		bool getShouldClose();
+		/// <summary>
+		/// Changes the title of the window to a specific string
+		/// </summary>
+		void setTitle(std::string title);
 	};
 
 }

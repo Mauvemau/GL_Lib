@@ -1,69 +1,102 @@
-#include "core.h"
-#include "window.h"
-#include "renderer.h"
-#include "shader.h"
-#include "lib_time.h"
-
-#include "triangle.h"
+#include "base_game.h"
 
 #include <iostream>
 
 using namespace std;
 
+class Game : public gllib::BaseGame {
+private:
+    gllib::Triangle* triangle;
+    gllib::Triangle* triangle2;
+    
+    bool movingRight;
+    float color = 0;
+
+    void moveTriangle2(float speed);
+
+protected:
+    void init() override;
+    void update() override;
+    void uninit() override;
+
+public:
+    Game();
+    ~Game() override;
+};
+
+Game::Game() {
+    cout << "Game created!\n";
+    gllib::Transform trs;
+    trs.position = {100.0f, 100.0f, 0.0f};
+    trs.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
+    trs.scale = {57.74f, 50.0f, 0.0f};
+    triangle = new gllib::Triangle(trs, {0.85f, 0.2f, 0.4f, 1.0f});
+
+    triangle2 = new gllib::Triangle(trs * 2, {1.0f, 1.0f, 1.0f, 1.0f});
+}
+
+Game::~Game() {
+    cout << "Game destroyed!\n";
+}
+
+void Game::init() {
+    cout << "External init!!!!\n";
+    
+    srand(time(nullptr));
+    window->setTitle("Example game lmao");
+}
+
+void Game::update() {
+    // Update
+    gllib::Quaternion rot = triangle->getRotationQuat();
+    rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
+    triangle->setRotationQuat(rot);
+
+
+    gllib::Vector3 rotEuler = gllib::Vector3(0, 0, 10);
+    triangle2->rotate(rotEuler);
+    color += 0.5 * gllib::LibTime::getDeltaTime();
+    if(color > 1.0f) color = 0.0f;
+    triangle2->setColor({color, color, 1, 1.0f});
+    
+    moveTriangle2(50);
+    
+    // Draw
+    gllib::Renderer::clear();
+
+    triangle->draw();
+    triangle2->draw();
+}
+
+void Game::moveTriangle2(float speed) {
+    gllib::Vector3 position = triangle2->getPosition();
+    if (movingRight)
+    {
+        position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
+        if (position.x >= 640.0f)
+        {
+            movingRight = false;
+        }
+    }
+    else
+    {
+        position.x -= gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
+        if (position.x <= 100.0f)
+        {
+            movingRight = true;
+        }
+    }
+    triangle2->setPosition(position);
+}
+
+
+void Game::uninit() {
+    cout << "External uninit!!!\n";
+    delete triangle;
+    delete triangle2;
+}
+
 int main() {
-    // Initialize the GLFW library
-    gllib::LibCore libCore;
-
-    // Create a window
-    gllib::Window window(640, 480, "Hello Triangle");
-
-    // Confirm that the window has been properly initialized
-    if (!window.getIsInitialized()) {
-        cout << "Failed to create window!\n";
-        glfwTerminate();
-        return -1;
-    }
-
-    // Make the window's context current
-    window.makeContextCurrent();
-
-    // Initialize the GLAD library
-    gllib::LibCore::initGlad();
-
-    // Check if the PC has a working OpenGL driver
-    cout << glGetString(GL_VERSION) << "\n";
-
-    // Load vertex and fragment shaders from files
-    const char* vertexSource = gllib::Shader::loadShader("solidColorV.glsl");
-    const char* fragmentSource = gllib::Shader::loadShader("solidColorF.glsl");
-    // Create shader program
-    unsigned int spSolidColor = gllib::Shader::createShader(vertexSource, fragmentSource);
-    // Set current shader program
-    gllib::Shader::useShaderProgram(spSolidColor);
-
-    // Create a triangle
-    gllib::Triangle triangle;
-
-    cout << "Render loop has started!\n";
-    // Loop until the user closes the window
-    while (!window.getShouldClose()) {
-        // Render here
-        gllib::Renderer::clear();
-
-        //cout << "FPS: " << gllib::LibTime::getFPS() << ", FrameTime: " << gllib::LibTime::getDeltaTime() << ".\n";
-
-        // Draw the triangle
-        triangle.draw();
-
-        // Swap front and back buffers
-        window.swapBuffers();
-
-        // Poll for and process events
-        gllib::LibCore::pollEvents();
-    }
-    cout << "Render loop ended\n";
-
-    // Destroy shader to free vram memory
-    gllib::Shader::destroyShader(spSolidColor);
-    return 0;
+    Game game;
+    game.start();
 }

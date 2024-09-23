@@ -4,7 +4,7 @@
 #include "glm.hpp"
 #else
 #include "glm/glm.hpp"
-#endif _WIN32
+#endif // _WIN32
 
 namespace gllib
 {
@@ -22,6 +22,11 @@ namespace gllib
         Vector3 operator+=(Vector3 vector) const
         {
             return {x + vector.x, y + vector.y, z + vector.z};
+        }
+
+        Vector3 operator/(float scalar) const
+        {
+            return {x / scalar, y / scalar, z / scalar};
         }
 
         Vector3(float iX, float iY, float iZ)
@@ -46,9 +51,13 @@ namespace gllib
         float y;
         float z;
         
-        Quaternion operator+=(Quaternion quaternion) const
+        Quaternion& operator+=(const Quaternion& quaternion)
         {
-            return {w + quaternion.w, x + quaternion.x, y + quaternion.y, z + quaternion.z};
+            w += quaternion.w;
+            x += quaternion.x;
+            y += quaternion.y;
+            z += quaternion.z;
+            return *this;
         }
     };
 
@@ -57,21 +66,24 @@ namespace gllib
         float r;
         float g;
         float b;
+        float a;
 
         void normalize()
         {
-            if (r < 0 || g < 0 || b < 0)
+            if (r < 0 || g < 0 || b < 0 || a < 0)
             {
                 r = 0.0f;
                 g = 0.0f;
                 b = 0.0f;
+                a = 0.0f;
             }
 
-            if (r > 1.0f || g > 1.0f || b > 1.0f)
+            if (r > 1.0f || g > 1.0f || b > 1.0f || a > 1.0f)
             {
-                r = r / 255.0f;
-                g = g / 255.0f;
-                b = b / 255.0f;
+                r = 1.0f;
+                g = 1.0f;
+                b = 1.0f;
+                a = 1.0f;
             }
         }
     };
@@ -80,18 +92,34 @@ namespace gllib
     {
         Vector3 position;
         Vector3 scale;
-        Vector3 rotation;
-
         Quaternion rotationQuat;
 
         Vector3 forward;
         Vector3 upward;
         Vector3 right;
+        Transform operator/(float i) const
+        {
+            return {
+                position / i,
+                scale / i,
+                {rotationQuat.w / i, rotationQuat.x / i, rotationQuat.y / i, rotationQuat.z / i},
+                forward / i,
+                upward / i,
+                right / i
+            };
+        }
 
-        Color color;
-    };
-
-    // Can't link glm
+        Transform operator*(float i) const
+        {
+            return {
+                position * i,
+                scale * i,
+                {rotationQuat.w * i, rotationQuat.x * i, rotationQuat.y * i, rotationQuat.z * i},
+                forward * i,
+                upward * i,
+                right * i
+            };
+        }    };
     
     struct DLLExport ModelMatrix
     {
@@ -104,3 +132,4 @@ namespace gllib
     };
     
 }
+        

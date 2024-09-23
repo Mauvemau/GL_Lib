@@ -5,6 +5,10 @@
 using namespace gllib;
 using namespace std;
 
+glm::mat4 Renderer::projMatrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
+
 void Renderer::setUpVertexAttributes() {
     // position attribute
     // Pointer id 0, length is 3 floats (xyz), each line is 9 floats long in total (xyz,rgba,uv), value begins at position 0 on this line. 
@@ -18,6 +22,16 @@ void Renderer::setUpVertexAttributes() {
     // Pointer id 2, length is 2 floats (uv), value begins at position 7 on this line (after xyzrgba).
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(7 * sizeof(float)));
     glEnableVertexAttribArray(2);
+}
+
+void Renderer::setUpMVP() {
+    // TRS
+    // the mpv matrix is calculated multiplying p*v*m
+    glm::mat4 mvp = projMatrix * viewMatrix * modelMatrix;
+    GLint prog = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+    int mvpLocation = glGetUniformLocation(prog, "u_MVP");
+    glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
 unsigned int Renderer::createVertexArrayObject() {
@@ -66,7 +80,7 @@ RenderData Renderer::createRenderData(const float vertexData[], GLsizei vertexDa
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
+    //cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
 
     // Unbinding after finishing simply for the sake of better binding understanding.
     glBindVertexArray(0);
@@ -78,10 +92,11 @@ void Renderer::destroyRenderData(RenderData rData) {
     glDeleteBuffers(1, &rData.VBO);
     glDeleteVertexArrays(1, &rData.VAO);
 
-    printf("Render data destroyed.\n");
+    //printf("Render data destroyed.\n");
 }
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
+    setUpMVP();
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 
@@ -89,6 +104,14 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
+    modelMatrix = newModelMatrix;
+}
+
+void Renderer::setOrthoProjectionMatrix(float width, float height) {
+    projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 }
 
 void Renderer::clear() {

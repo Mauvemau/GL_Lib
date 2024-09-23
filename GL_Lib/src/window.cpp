@@ -1,11 +1,14 @@
 #include "window.h"
 
+#include "renderer.h" // To set the proj matrix
+
 using namespace gllib;
 using namespace std;
 
 Window::Window(int width, int height, string title) {
 	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	cout << "Window created!\n";
+	Renderer::setOrthoProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
 }
 
 Window::~Window() {
@@ -34,4 +37,9 @@ bool Window::getIsInitialized() {
 
 bool Window::getShouldClose() {
 	return glfwWindowShouldClose(window);
+}
+
+
+void Window::setTitle(string title) {
+	glfwSetWindowTitle(window, title.c_str());
 }

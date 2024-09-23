@@ -9,6 +9,8 @@ using namespace gllib;
 using namespace std;
 
 // Private
+unsigned int Shader::shapeShaderProgram = 0;
+unsigned int Shader::textureShaderProgram = 0;
 
 string Shader::getShaderType(unsigned int type) {
     switch (type) {
@@ -106,5 +108,9 @@ const char* Shader::loadShader(string filePath) {
 }
 
 void Shader::useShaderProgram(unsigned int shaderProgram) {
+    glUseProgram(shaderProgram);
+}
+
+void Shader::setShaderProgram(unsigned int shaderProgram) {
     glUseProgram(shaderProgram);
 }

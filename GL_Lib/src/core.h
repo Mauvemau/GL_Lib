@@ -1,8 +1,9 @@
 #pragma once
+#include "deps.h"
 
 namespace gllib {
 
-	class LibCore {
+	class DLLExport LibCore {
 	public:
 		LibCore();
 		~LibCore();

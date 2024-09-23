@@ -4,6 +4,12 @@
 
 namespace gllib
 {
+    Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale) {
+        transform.position = translation;
+        transform.rotationQuat = Maths::Euler(rotationEuler);
+        transform.scale = scale;
+    }
+
     Entity::Entity(const Transform& transform): transform(transform)
     {
     }
@@ -11,19 +17,16 @@ namespace gllib
     Entity::~Entity()
     = default;
 
-    void Entity::move(const Vector3& direction) const
-    {
+    void Entity::move(const Vector3& direction) const {
         transform.position += direction;
     }
 
-    void Entity::rotate(const Quaternion& rotation) const
-    {
-        transform.rotationQuat += rotation;
+    void Entity::rotate(const Vector3& eulerRotation) {
+        Quaternion rotationQuat = Maths::Euler(eulerRotation);
+        transform.rotationQuat += rotationQuat;
     }
 
-    void Entity::updateTransform()
-    {
-        transform.rotationQuat = Maths::Euler(transform.rotation);
+    void Entity::updateTransform() {
         transform.forward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 0, 1));
         transform.upward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 1, 0));
         transform.right = Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 0, 0));
@@ -58,7 +61,7 @@ namespace gllib
 
     Vector3 Entity::getRotationEuler() const
     {
-        return transform.rotation;
+        return Maths::Quat2Vec3( transform.rotationQuat, Vector3(1, 1, 1));
     }
 
     Quaternion Entity::getRotationQuat() const
@@ -83,12 +86,7 @@ namespace gllib
     }
 
     void Entity::setRotationEuler(const Vector3& rotation)	{
-        transform.rotation = rotation;
-    }
-
-    void Entity::setColor(const Color& color)
-    {
-        transform.color = color;
+        transform.rotationQuat = Maths::Euler(rotation);
     }
 
     bool Entity::isColliding(const Transform& _transform) const

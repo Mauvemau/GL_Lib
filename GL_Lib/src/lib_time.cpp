@@ -27,7 +27,6 @@ void LibTime::updateFrameTime() {
 	previousFrameTime = currentFrameTime;
 	currentFrameTime = getElapsedTime();
 
-	// Calculating FPS
 	frameCount++;
 	if (currentFrameTime - fpsUpdateTime >= 1.0) {
 		fps = (double)(frameCount);
