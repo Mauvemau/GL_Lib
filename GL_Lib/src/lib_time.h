@@ -1,8 +1,10 @@
 #pragma once
 
+#include "deps.h"
+
 namespace gllib {
 
-	class LibTime {
+	class DLLExport LibTime {
 	private:
 		static double previousFrameTime;
 		static double currentFrameTime;
