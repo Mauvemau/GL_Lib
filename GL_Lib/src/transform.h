@@ -24,6 +24,11 @@ namespace gllib
             return {x + vector.x, y + vector.y, z + vector.z};
         }
 
+        Vector3 operator/(float scalar) const
+        {
+            return {x / scalar, y / scalar, z / scalar};
+        }
+
         Vector3(float iX, float iY, float iZ)
         {
             x = iX;
@@ -46,9 +51,13 @@ namespace gllib
         float y;
         float z;
         
-        Quaternion operator+=(Quaternion quaternion) const
+        Quaternion& operator+=(const Quaternion& quaternion)
         {
-            return {w + quaternion.w, x + quaternion.x, y + quaternion.y, z + quaternion.z};
+            w += quaternion.w;
+            x += quaternion.x;
+            y += quaternion.y;
+            z += quaternion.z;
+            return *this;
         }
     };
 
@@ -88,6 +97,17 @@ namespace gllib
         Vector3 forward;
         Vector3 upward;
         Vector3 right;
+        Transform operator/(float i) const
+        {
+            return {
+                position / i,
+                scale / i,
+                {rotationQuat.w / i, rotationQuat.x / i, rotationQuat.y / i, rotationQuat.z / i},
+                forward / i,
+                upward / i,
+                right / i
+            };
+        }
     };
     
     struct DLLExport ModelMatrix
@@ -101,3 +121,4 @@ namespace gllib
     };
     
 }
+        

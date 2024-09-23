@@ -21,7 +21,7 @@ namespace gllib
         transform.position += direction;
     }
 
-    void Entity::rotate(const Vector3& eulerRotation) const {
+    void Entity::rotate(const Vector3& eulerRotation) {
         Quaternion rotationQuat = Maths::Euler(eulerRotation);
         transform.rotationQuat += rotationQuat;
     }
