@@ -108,7 +108,18 @@ namespace gllib
                 right / i
             };
         }
-    };
+
+        Transform operator*(float i) const
+        {
+            return {
+                position * i,
+                scale * i,
+                {rotationQuat.w * i, rotationQuat.x * i, rotationQuat.y * i, rotationQuat.z * i},
+                forward * i,
+                upward * i,
+                right * i
+            };
+        }    };
     
     struct DLLExport ModelMatrix
     {
