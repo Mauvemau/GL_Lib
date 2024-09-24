@@ -34,10 +34,9 @@ Game::~Game() {
 }
 
 void Game::init() {
-    cout << "External init!!!!\n";
+    cout << "External init!\n";
 
-    srand(time(nullptr));
-    window->setTitle("Example game lmao");
+    window->setTitle("Parcial Barra");
 }
 
 void Game::update() {
@@ -56,7 +55,7 @@ void Game::update() {
 
 
 void Game::uninit() {
-    cout << "External uninit!!!\n";
+    cout << "External uninit!\n";
     delete rectangle;
 }
 
