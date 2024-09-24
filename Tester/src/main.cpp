@@ -23,9 +23,9 @@ Game::Game() {
     cout << "Game created!\n";
 
     gllib::Transform trs;
-    trs.position = { 0.0f, 200.0f, 0.0f };
+    trs.position = { 0.0f, window->getHeight()/2.f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs.scale = { 1000.0f, 1000.0f, 0.0f };
+    trs.scale = { window->getWidth()/2.f, window->getWidth()/2.f, 0.0f };
     rectangle = new gllib::Rectangle(trs, { 0.0f, 0.0f, 1.0f, 1.0f });
 }
 
