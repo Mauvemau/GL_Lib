@@ -7,12 +7,12 @@ using namespace std;
 class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
-    gllib::Triangle* triangle2;
+    gllib::Rectangle* rectangle;
 
     bool movingRight;
     float color = 0;
 
-    void moveTriangle2(float speed);
+    void moveRectangle(float speed);
 
 protected:
     void init() override;
@@ -32,7 +32,13 @@ Game::Game() {
     trs.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
 
-    triangle2 = new gllib::Triangle(trs * 2, { 1.0f, 1.0f, 1.0f, 1.0f });
+    gllib::Transform trs2;
+    trs2.position = { 200.0f, 200.0f, 0.0f };
+    trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs2.scale = { 100.0f, 100.0f, 0.0f };
+    rectangle = new gllib::Rectangle(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    movingRight = false;
 }
 
 Game::~Game() {
@@ -54,22 +60,22 @@ void Game::update() {
 
 
     gllib::Vector3 rotEuler = gllib::Vector3(0, 0, 10);
-    triangle2->rotate(rotEuler);
+    //rectangle->rotate(rotEuler);
     color += 0.5 * gllib::LibTime::getDeltaTime();
     if (color > 1.0f) color = 0.0f;
-    triangle2->setColor({ color, color, 1, 1.0f });
+    rectangle->setColor({ color, color, 1, 1.0f });
 
-    moveTriangle2(50);
+    moveRectangle(50);
 
     // Draw
     gllib::Renderer::clear();
 
     triangle->draw();
-    triangle2->draw();
+    rectangle->draw();
 }
 
-void Game::moveTriangle2(float speed) {
-    gllib::Vector3 position = triangle2->getPosition();
+void Game::moveRectangle(float speed) {
+    gllib::Vector3 position = rectangle->getPosition();
     if (movingRight)
     {
         position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
@@ -86,14 +92,14 @@ void Game::moveTriangle2(float speed) {
             movingRight = true;
         }
     }
-    triangle2->setPosition(position);
+    rectangle->setPosition(position);
 }
 
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
     delete triangle;
-    delete triangle2;
+    delete rectangle;
 }
 
 int main() {

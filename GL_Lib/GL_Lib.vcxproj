@@ -26,6 +26,7 @@
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
+    <ClCompile Include="src\rectangle.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\myMaths.h" />
+    <ClInclude Include="src\rectangle.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\shape.h" />

@@ -6,6 +6,7 @@
 #include "lib_time.h"
 
 #include "triangle.h"
+#include "rectangle.h"
 
 namespace gllib {
 
