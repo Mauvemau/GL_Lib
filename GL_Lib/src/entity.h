@@ -14,8 +14,8 @@ namespace gllib {
         Entity(const Transform& transform);
         virtual ~Entity();
 
-        void move(const Vector3& direction) const;
-        void rotate(const Vector3& eulerRotation);
+        void move(const Vector3 direction);
+        void rotate(const Vector3 eulerRotation);
         void updateTransform();
 
         Vector3 upward() const;

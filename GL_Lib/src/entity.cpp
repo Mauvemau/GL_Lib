@@ -17,12 +17,15 @@ namespace gllib
     Entity::~Entity()
     = default;
 
-    void Entity::move(const Vector3& direction) const {
+    void Entity::move(const Vector3 direction) {
         transform.position += direction;
     }
 
-    void Entity::rotate(const Vector3& eulerRotation) {
-        Quaternion rotationQuat = Maths::Euler(eulerRotation);
+    void Entity::rotate(const Vector3 eulerRotation) {
+        Quaternion rotationQuat;
+        rotationQuat.x = eulerRotation.x;
+        rotationQuat.y = eulerRotation.y;
+        rotationQuat.z = eulerRotation.z;
         transform.rotationQuat += rotationQuat;
     }
 

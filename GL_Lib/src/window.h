@@ -32,6 +32,14 @@ namespace gllib {
 		/// </summary>
 		GLFWwindow* getReference();
 		/// <summary>
+		/// Returns the width of the window in pixels
+		/// </summary>
+		int getWidth();
+		/// <summary>
+		/// Returns the height of the window in pixels
+		/// </summary>
+		int getHeight();
+		/// <summary>
 		/// Used to confirm if the window has been properly initialized
 		/// </summary>
 		/// <returns></returns>
@@ -44,6 +52,10 @@ namespace gllib {
 		/// Changes the title of the window to a specific string
 		/// </summary>
 		void setTitle(std::string title);
+		/// <summary>
+		/// If enabled it syncs the fps output to the refresh rate of the monitor
+		/// </summary>
+		void setVsyncEnabled(bool set);
 	};
 
 }
