@@ -31,6 +31,18 @@ GLFWwindow* Window::getReference() {
 	return window;
 }
 
+int Window::getWidth() {
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	return width;
+}
+
+int Window::getHeight() {
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	return height;
+}
+
 bool Window::getIsInitialized() {
 	return (window);
 }
@@ -39,7 +51,10 @@ bool Window::getShouldClose() {
 	return glfwWindowShouldClose(window);
 }
 
-
 void Window::setTitle(string title) {
 	glfwSetWindowTitle(window, title.c_str());
+}
+
+void Window::setVsyncEnabled(bool set) {
+	glfwSwapInterval(set);
 }

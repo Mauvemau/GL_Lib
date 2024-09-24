@@ -25,6 +25,7 @@ public:
 };
 
 Game::Game() {
+    window->setVsyncEnabled(true);
     cout << "Game created!\n";
     gllib::Transform trs;
     trs.position = { 100.0f, 100.0f, 0.0f };
@@ -58,9 +59,7 @@ void Game::update() {
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
     triangle->setRotationQuat(rot);
 
-
-    gllib::Vector3 rotEuler = gllib::Vector3(0, 0, 10);
-    //rectangle->rotate(rotEuler);
+    rectangle->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * 100.0f)});
     color += 0.5 * gllib::LibTime::getDeltaTime();
     if (color > 1.0f) color = 0.0f;
     rectangle->setColor({ color, color, 1, 1.0f });
@@ -79,7 +78,7 @@ void Game::moveRectangle(float speed) {
     if (movingRight)
     {
         position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
-        if (position.x >= 640.0f)
+        if (position.x >= window->getWidth() - 100.0f)
         {
             movingRight = false;
         }
