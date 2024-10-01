@@ -27,6 +27,8 @@ public:
 Game::Game() {
     window->setVsyncEnabled(true);
     cout << "Game created!\n";
+
+   
     gllib::Transform trs;
     trs.position = { 100.0f, 100.0f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -55,6 +57,17 @@ void Game::init() {
 
 void Game::update() {
     // Update
+
+    if(Input::getKeyDown(Keys::Key_A))
+    {
+        cout << "A key is pressed!\n";
+    }
+
+    if(Input::getKeyUp(Key_A))
+    {
+        cout << "A key is released!\n";
+        
+    }
     gllib::Quaternion rot = triangle->getRotationQuat();
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
     triangle->setRotationQuat(rot);

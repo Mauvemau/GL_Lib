@@ -1,6 +1,7 @@
 #include "deps.h"
 
 #include "core.h"
+#include "Input.h"
 #include "window.h"
 #include "renderer.h"
 #include "lib_time.h"
@@ -13,7 +14,8 @@ namespace gllib {
 	class DLLExport BaseGame {
 	private:
 		LibCore libCore;
-
+		Input* input;
+		
 		bool initInternal();
 		void updateInternal();
 		void uninitInternal();

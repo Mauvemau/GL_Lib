@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "Input.h"
+
 using namespace gllib;
 using namespace std;
 
@@ -20,12 +22,14 @@ BaseGame::BaseGame() {
 	}
 	// Make the window's context current
 	window->makeContextCurrent();
-
 	// Initialize the GLAD library
 	gllib::LibCore::initGlad();
+	
+	input = new Input(window->getReference());
 }
 
 BaseGame::~BaseGame() {
+	delete input;
 	delete window;
 }
 

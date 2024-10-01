@@ -23,6 +23,7 @@
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
     <ClInclude Include="src\entity.h" />
+    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\myMaths.h" />
