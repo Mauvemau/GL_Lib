@@ -87,7 +87,7 @@ void Game::update() {
 }
 
 void Game::moveRectangle(float speed) {
-    gllib::Vector3 position = rectangle->getPosition();
+    gllib::Vector3 position = gllib::Vector3(0,0,0);
     if (movingRight)
     {
         position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
@@ -104,7 +104,7 @@ void Game::moveRectangle(float speed) {
             movingRight = true;
         }
     }
-    rectangle->setPosition(position);
+    rectangle->move(position);
 }
 
 
