@@ -1,5 +1,7 @@
 ﻿#include "Input.h"
 
+#include <unordered_map>
+
 GLFWwindow* Input::window = nullptr;
 
 Input::Input(GLFWwindow* window)
@@ -50,5 +52,25 @@ bool Input::isAnyKeyDown()
             return true;
         }
     }
+    return false;
+}
+
+bool Input::onKeyReleased(int key)
+{
+    static std::unordered_map<int, bool> keyStates;
+
+    if (glfwGetKey(window, key) == GLFW_RELEASE)
+    {
+        if (keyStates[key])
+        {
+            keyStates[key] = false;
+            return true;
+        }
+    }
+    else
+    {
+        keyStates[key] = true;
+    }
+
     return false;
 }

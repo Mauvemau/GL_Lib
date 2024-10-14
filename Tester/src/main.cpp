@@ -63,7 +63,7 @@ void Game::update() {
         cout << "A key is pressed!\n";
     }
 
-    if(Input::getKeyUp(Key_A))
+    if(Input::onKeyReleased(Key_A))
     {
         cout << "A key is released!\n";
         

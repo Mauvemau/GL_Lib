@@ -40,6 +40,7 @@ public:
     // Key input functions
     static bool getKeyDown(int key);
     static bool getKeyUp(int key);
+    static bool onKeyReleased(int key);
 
     // Mouse input functions
     static bool getMouseButtonDown(int button);
