@@ -9,14 +9,9 @@ Input::Input(GLFWwindow* window)
     Input::window = window;
 }
 
-bool Input::getKeyDown(int key)
+bool Input::getKeyPressed(int key)
 {
     return (glfwGetKey(window, key) == GLFW_PRESS);
-}
-
-bool Input::getKeyUp(int key)
-{
-    return (glfwGetKey(window, key) == GLFW_RELEASE);
 }
 
 bool Input::getMouseButtonDown(int button)
@@ -43,7 +38,7 @@ float Input::getMouseY()
     return ypos;
 }
 
-bool Input::isAnyKeyDown()
+bool Input::isAnyKeyPressed()
 {
     for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; ++key)
     {
@@ -55,7 +50,7 @@ bool Input::isAnyKeyDown()
     return false;
 }
 
-bool Input::onKeyReleased(int key)
+bool Input::getKeyReleased(int key)
 {
     static std::unordered_map<int, bool> keyStates;
 

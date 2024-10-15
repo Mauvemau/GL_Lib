@@ -38,9 +38,8 @@ public:
     Input(GLFWwindow* window);
 
     // Key input functions
-    static bool getKeyDown(int key);
-    static bool getKeyUp(int key);
-    static bool onKeyReleased(int key);
+    static bool getKeyPressed(int key);
+    static bool getKeyReleased(int key);
 
     // Mouse input functions
     static bool getMouseButtonDown(int button);
@@ -48,7 +47,7 @@ public:
     
     static float getMouseX();
     static float getMouseY();
-    static bool isAnyKeyDown();
+    static bool isAnyKeyPressed();
 private:
     static GLFWwindow* window;
     bool keys[GLFW_KEY_LAST + 1] = { false };
