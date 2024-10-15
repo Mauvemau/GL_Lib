@@ -91,7 +91,7 @@ void Game::moveRectangle(float speed) {
     if (movingRight)
     {
         position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
-        if (position.x >= window->getWidth() - 100.0f)
+        if (triangle->getPosition().x >= window->getWidth() - 100.0f)
         {
             movingRight = false;
         }
@@ -99,7 +99,7 @@ void Game::moveRectangle(float speed) {
     else
     {
         position.x -= gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
-        if (position.x <= 100.0f)
+        if (triangle->getPosition().x <= 100.0f)
         {
             movingRight = true;
         }
