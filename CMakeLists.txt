@@ -17,11 +17,3 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 endif()
 
 target_link_libraries(glLib PRIVATE ${OPENGL_LIBRARIES} glfw glm::glm m)
-
-# Tester
-project(Tester)
-
-file(GLOB_RECURSE TESTER_SOURCES "Tester/src/*.cpp")
-
-include_directories(Tester/src)
-add_executable(Tester ${TESTER_SOURCES})
