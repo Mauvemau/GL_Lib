@@ -8,6 +8,8 @@
 
 #include "triangle.h"
 #include "rectangle.h"
+#include "sprite.h"
+#include "shader.h"
 
 namespace gllib {
 
@@ -22,6 +24,9 @@ namespace gllib {
 
 	protected:
 		Window* window;
+
+		unsigned int shaderProgramSolidColor;
+		unsigned int shaderProgramTexture;
 
 		virtual void init() {};
 		virtual void update() {};

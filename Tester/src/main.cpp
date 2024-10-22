@@ -8,6 +8,7 @@ class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
     gllib::Rectangle* rectangle;
+    gllib::Sprite* sprite;
 
     bool movingRight;
     float color = 0;
@@ -28,7 +29,6 @@ Game::Game() {
     window->setVsyncEnabled(true);
     cout << "Game created!\n";
 
-   
     gllib::Transform trs;
     trs.position = { 100.0f, 100.0f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -40,6 +40,14 @@ Game::Game() {
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     rectangle = new gllib::Rectangle(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    gllib::Transform trs3;
+    trs3.position = { 400.0f, 400.0f, 0.0f };
+    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs3.scale = { 100.0f, 100.0f, 0.0f };
+    sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    sprite->addTexture("sus.png");
 
     movingRight = false;
 }
@@ -82,8 +90,13 @@ void Game::update() {
     // Draw
     gllib::Renderer::clear();
 
+    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+
     triangle->draw();
     rectangle->draw();
+
+    gllib::Shader::useShaderProgram(shaderProgramTexture);
+    sprite->draw();
 }
 
 void Game::moveRectangle(float speed) {
@@ -112,6 +125,7 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete triangle;
     delete rectangle;
+    delete sprite;
 }
 
 int main() {

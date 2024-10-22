@@ -1,6 +1,5 @@
 #include "sprite.h"
-
-#include <iostream>
+#include "loader.h"
 
 using namespace gllib;
 using namespace std;
@@ -26,10 +25,10 @@ Sprite::~Sprite() {
 void Sprite::updateRenderData(Color color) {
     // Values for the vertices
     float rectangleVertexData[] = {
-         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 1.0f, /* uv */
-         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 0.0f, /* uv */
-         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 0.0f, /* uv */
-         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
+         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 0.0f, /* uv */
+         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 1.0f, /* uv */
+         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
+         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 0.0f, /* uv */
     };
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
@@ -56,8 +55,20 @@ void Sprite::setColor(Color color) {
     updateRenderData(this->color);
 }
 
+void Sprite::addTexture(string path) {
+    Frame tex;
+    tex.textureID = Loader::loadTexture(path);
+    if (tex.textureID == 0) return;
+    tex.uvCoords[0] = { 1.0f, 1.0f };
+    tex.uvCoords[1] = { 1.0f, 0.0f };
+    tex.uvCoords[2] = { 0.0f, 0.0f };
+    tex.uvCoords[3] = { 0.0f, 1.0f };
+    textures.push_back(tex);
+}
+
 void Sprite::draw() {
-    //Renderer::bindTexture(textureID);
-    // Shape has an internal draw function
+    if (!textures.empty()) {
+        Renderer::bindTexture(textures[0].textureID);
+    }
     internalDraw();
 }

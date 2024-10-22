@@ -31,6 +31,7 @@
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
+    <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\triangle.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
@@ -47,6 +48,7 @@
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\shape.h" />
+    <ClInclude Include="src\sprite.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\transform.h" />
     <ClInclude Include="src\triangle.h" />
