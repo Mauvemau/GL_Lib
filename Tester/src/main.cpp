@@ -7,11 +7,7 @@ using namespace std;
 class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
-    gllib::Rectangle* rectangle;
     gllib::Sprite* sprite;
-
-    bool movingRight;
-    float color = 0;
 
     void moveRectangle(float speed);
 
@@ -36,20 +32,12 @@ Game::Game() {
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
 
     gllib::Transform trs2;
-    trs2.position = { 200.0f, 200.0f, 0.0f };
+    trs2.position = { 400.0f, 400.0f, 0.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
-    rectangle = new gllib::Rectangle(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-    gllib::Transform trs3;
-    trs3.position = { 400.0f, 400.0f, 0.0f };
-    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs3.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     sprite->addTexture("sus.png");
-
-    movingRight = false;
 }
 
 Game::~Game() {
@@ -80,12 +68,7 @@ void Game::update() {
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
     triangle->setRotationQuat(rot);
 
-    rectangle->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * 100.0f)});
-    color += 0.5 * gllib::LibTime::getDeltaTime();
-    if (color > 1.0f) color = 0.0f;
-    rectangle->setColor({ color, color, 1, 1.0f });
-
-    moveRectangle(50);
+    moveRectangle(100);
 
     // Draw
     gllib::Renderer::clear();
@@ -93,38 +76,39 @@ void Game::update() {
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 
     triangle->draw();
-    rectangle->draw();
 
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     sprite->draw();
 }
 
+static int x = 1;
+static int y = 1;
+
 void Game::moveRectangle(float speed) {
-    gllib::Vector3 position = gllib::Vector3(0,0,0);
-    if (movingRight)
-    {
-        position.x += gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
-        if (triangle->getPosition().x >= window->getWidth() - 100.0f)
-        {
-            movingRight = false;
-        }
+    if (sprite->getPosition().x - (sprite->getScale().x * .5) <= 0) {
+        x = 1;
     }
-    else
-    {
-        position.x -= gllib::LibTime::getDeltaTime() * speed; // Adjust speed as needed
-        if (triangle->getPosition().x <= 100.0f)
-        {
-            movingRight = true;
-        }
+    if (sprite->getPosition().x + (sprite->getScale().x * .5) >= window->getWidth()) {
+        x = -1;
     }
-    rectangle->move(position);
+
+    if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0) {
+        y = 1;
+    }
+    if (sprite->getPosition().y + (sprite->getScale().y * .5) >= window->getHeight()) {
+        y = -1;
+    }
+    
+    sprite->move({static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())), 
+                  static_cast<float>(y * (speed * gllib::LibTime::getDeltaTime())), 
+                  0.0f});
+    sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
 }
 
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
     delete triangle;
-    delete rectangle;
     delete sprite;
 }
 
