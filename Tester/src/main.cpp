@@ -9,6 +9,7 @@ private:
     gllib::Triangle* triangle;
     gllib::Sprite* sprite;
     gllib::Sprite* coin;
+    float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
 
@@ -40,8 +41,20 @@ Game::Game() {
     coin = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     sprite->addTexture("sus.png");
+    int textureWidth = 15;
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png");
-    coin->addTexture(coinTex, 0, 0, 15, 16);
+    coin->addTexture(coinTex, 0, 0, textureWidth, 16);
+    coin->addTexture(coinTex, textureWidth + 1, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 2) + 2, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 3) + 3, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 4) + 4, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 5) + 5, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 6) + 6, 0, textureWidth, 16);
+    coin->addTexture(coinTex, (textureWidth * 7) + 7, 0, textureWidth, 16);
+    coin->setCurrentTexture(0);
+
+    animSpeed = .075f;
+    nextFrame = 0;
 }
 
 Game::~Game() {
@@ -58,16 +71,11 @@ void Game::init() {
 void Game::update() {
     // Update
 
-    if(Input::getKeyPressed(Keys::Key_A))
-    {
-        cout << "A key is pressed!\n";
-    }
-
-    if(Input::getKeyReleased(Key_A))
-    {
-        cout << "A key is released!\n";
+    if (gllib::LibTime::getElapsedTime() > nextFrame) {
+        nextFrame = gllib::LibTime::getElapsedTime() + animSpeed;
         coin->setNextTexture();
     }
+
     gllib::Quaternion rot = triangle->getRotationQuat();
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
     triangle->setRotationQuat(rot);
