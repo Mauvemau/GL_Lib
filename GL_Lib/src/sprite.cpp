@@ -81,6 +81,16 @@ void Sprite::setNextTexture() {
     updateRenderData();
 }
 
+std::vector<Frame> Sprite::getTextures() const
+{
+    return textures;
+}
+
+void Sprite::addFrame(Frame frame)
+{
+    textures.push_back(frame);
+}
+
 void Sprite::addTexture(unsigned int textureID) {
     Frame tex;
     tex.textureID = textureID;

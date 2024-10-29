@@ -32,7 +32,9 @@ namespace gllib {
 		void setColor(Color color);
 		void setCurrentTexture(unsigned int index);
 		void setNextTexture();
+		std::vector<Frame> getTextures() const;
 
+		void addFrame(Frame frame);
 		void addTexture(unsigned int textureID);
 		void addTexture(std::string path);
 		void addTexture(unsigned int textureID, int offsetX, int offsetY, int width, int height);
