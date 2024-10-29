@@ -28,11 +28,12 @@ namespace gllib {
 		virtual ~Sprite() override;
 
 		Color getColor();
+		int getCurrentTexture() const;
+		std::vector<Frame> getTextures() const;
 
 		void setColor(Color color);
 		void setCurrentTexture(unsigned int index);
 		void setNextTexture();
-		std::vector<Frame> getTextures() const;
 
 		void addFrame(Frame frame);
 		void addTexture(unsigned int textureID);

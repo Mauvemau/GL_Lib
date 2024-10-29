@@ -64,6 +64,11 @@ Color Sprite::getColor() {
     return color;
 }
 
+int Sprite::getCurrentTexture() const
+{
+    return currentTexture;
+}
+
 void Sprite::setColor(Color color) {
     this->color = color;
     updateRenderData();

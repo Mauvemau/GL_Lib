@@ -31,27 +31,25 @@ namespace gllib {
 		int framesPerSecond = static_cast<int>(totalFrames / durationInSecs);
 		int currentFrame = static_cast<int>(normalizedTime * framesPerSecond) % totalFrames;
 
+
 		if (mirrorX) {
 			currentFrameIndex = totalFrames - 1 - currentFrame;
 		}
 		else {
 			currentFrameIndex = currentFrame;
 		}
+		
+		if(sprite.getCurrentTexture() < currentFrame)
+		{
+			sprite.setCurrentTexture(currentFrameIndex);
+		} 
 	}
 
 	void animation::addFrame(unsigned int textureID, float offsetX, float offsetY, float width, float height, int frameAmount) {
-		Frame frame;
-		frame.textureID = textureID;
 
 		for (int i = 0; i < frameAmount; i++)
 		{
-			
-			frame.uvCoords[0] = { offsetX + width, offsetY + height };
-			frame.uvCoords[1] = { offsetX + width, offsetY };
-			frame.uvCoords[2] = { offsetX, offsetY };
-			frame.uvCoords[3] = { offsetX, offsetY + height };
-	
-			sprite.addFrame(frame);
+			sprite.addTexture(textureID, offsetX, offsetY, width, height);
 			offsetX += width;
 			offsetY += height;
 		}
@@ -62,7 +60,6 @@ namespace gllib {
 
 		float frameWidth = 1.0f / amountColumns;
 		float frameHeight = 1.0f / amountRows;
-		int amountFrames = amountColumns * amountRows;
 		this->durationInSecs = durationInSecs;
 
 		for (int row = 0; row < amountRows; ++row) {
