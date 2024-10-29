@@ -8,7 +8,7 @@ Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color
     Shape(translation, rotation, scale) {
     this->color = color;
     currentTexture = 0;
-    updateRenderData(this->color);
+    updateRenderData();
     cout << "Created rectangle.\n";
 }
 
@@ -16,7 +16,7 @@ Sprite::Sprite(Transform transform, Color color) :
     Shape(transform) {
     this->color = color;
     currentTexture = 0;
-    updateRenderData(this->color);
+    updateRenderData();
     cout << "Created rectangle.\n";
 }
 
@@ -24,13 +24,25 @@ Sprite::~Sprite() {
     cout << "Destroyed rectangle.\n";
 }
 
-void Sprite::updateRenderData(Color color) {
+void Sprite::updateRenderData() {
+    float uMin = 0.0f;
+    float vMin = 0.0f;
+    float uMax = 1.0f;
+    float vMax = 1.0f;
+
+    if (!textures.empty()) {
+        uMin = textures[currentTexture].uvCoords[2].u;
+        vMin = textures[currentTexture].uvCoords[2].v;
+        uMax = textures[currentTexture].uvCoords[0].u;
+        vMax = textures[currentTexture].uvCoords[0].v;
+    }
+
     // Values for the vertices
     float rectangleVertexData[] = {
-         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 0.0f, /* uv */
-         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 1.0f, /* uv */
-         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
-         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 0.0f, /* uv */
+         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMax, vMin, /* uv */
+         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMax, vMax, /* uv */
+         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMin, vMax, /* uv */
+         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMin, vMin, /* uv */
     };
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
@@ -54,7 +66,7 @@ Color Sprite::getColor() {
 
 void Sprite::setColor(Color color) {
     this->color = color;
-    updateRenderData(this->color);
+    updateRenderData();
 }
 
 void Sprite::addTexture(unsigned int textureID) {
@@ -67,6 +79,7 @@ void Sprite::addTexture(unsigned int textureID) {
     tex.uvCoords[3] = { 0.0f, 1.0f };
     textures.push_back(tex);
     currentTexture = textures.size() - 1;
+    updateRenderData();
 }
 
 void Sprite::addTexture(string path) {
@@ -78,9 +91,9 @@ void Sprite::addTexture(unsigned int textureID, int offsetX, int offsetY, int wi
     Frame tex;
     tex.textureID = textureID;
     if (tex.textureID == 0) return;
-    int textureWidth, textureHeight;
+    int textureWidth = 0, textureHeight = 0;
     Renderer::getTextureSize(tex.textureID, &textureWidth, &textureHeight);
-    
+
     float uMin = static_cast<float>(offsetX) / textureWidth;
     float vMin = static_cast<float>(offsetY) / textureHeight;
     float uMax = static_cast<float>(offsetX + width) / textureWidth;
@@ -93,6 +106,7 @@ void Sprite::addTexture(unsigned int textureID, int offsetX, int offsetY, int wi
 
     textures.push_back(tex);
     currentTexture = textures.size() - 1;
+    updateRenderData();
 }
 
 void Sprite::draw() {

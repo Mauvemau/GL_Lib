@@ -8,6 +8,7 @@ class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
     gllib::Sprite* sprite;
+    gllib::Sprite* coin;
 
     void moveRectangle(float speed);
 
@@ -36,8 +37,11 @@ Game::Game() {
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+    coin = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     sprite->addTexture("sus.png");
+    unsigned int coinTex = gllib::Loader::loadTexture("coin.png");
+    coin->addTexture(coinTex, 0, 0, 15, 16);
 }
 
 Game::~Game() {
@@ -79,6 +83,7 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     sprite->draw();
+    coin->draw();
 }
 
 static int x = 1;
@@ -110,6 +115,7 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete triangle;
     delete sprite;
+    delete coin;
 }
 
 int main() {

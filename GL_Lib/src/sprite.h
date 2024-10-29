@@ -21,7 +21,7 @@ namespace gllib {
 		Color color;
 		int currentTexture;
 
-		void updateRenderData(Color color);
+		void updateRenderData();
 	public:
 		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
 		Sprite(Transform transform, Color color);

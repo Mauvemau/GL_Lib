@@ -119,8 +119,8 @@ void Renderer::bindTexture(unsigned int textureID) {
 
 void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(textureID);
-    glGetTexLevelParameteriv(GL_TEXTURE, 0, GL_TEXTURE_WIDTH, width);
-    glGetTexLevelParameteriv(GL_TEXTURE, 0, GL_TEXTURE_HEIGHT, height);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height);
     bindTexture(0);
 }
 

@@ -5,6 +5,7 @@
 #include "window.h"
 #include "renderer.h"
 #include "lib_time.h"
+#include "loader.h"
 
 #include "triangle.h"
 #include "rectangle.h"
