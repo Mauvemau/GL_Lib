@@ -66,7 +66,7 @@ void Game::update() {
     if(Input::getKeyReleased(Key_A))
     {
         cout << "A key is released!\n";
-        
+        coin->setNextTexture();
     }
     gllib::Quaternion rot = triangle->getRotationQuat();
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;

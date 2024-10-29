@@ -30,6 +30,8 @@ namespace gllib {
 		Color getColor();
 
 		void setColor(Color color);
+		void setCurrentTexture(unsigned int index);
+		void setNextTexture();
 
 		void addTexture(unsigned int textureID);
 		void addTexture(std::string path);

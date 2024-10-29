@@ -69,6 +69,18 @@ void Sprite::setColor(Color color) {
     updateRenderData();
 }
 
+void Sprite::setCurrentTexture(unsigned int index) {
+    if (index > textures.size() - 1) return;
+    currentTexture = index;
+    updateRenderData();
+}
+
+void Sprite::setNextTexture() {
+    currentTexture++;
+    if (currentTexture == textures.size()) currentTexture = 0;
+    updateRenderData();
+}
+
 void Sprite::addTexture(unsigned int textureID) {
     Frame tex;
     tex.textureID = textureID;
