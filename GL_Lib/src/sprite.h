@@ -19,6 +19,7 @@ namespace gllib {
 	private:
 		std::vector<Frame> textures;
 		Color color;
+		int currentTexture;
 
 		void updateRenderData(Color color);
 	public:
@@ -30,7 +31,9 @@ namespace gllib {
 
 		void setColor(Color color);
 
+		void addTexture(unsigned int textureID);
 		void addTexture(std::string path);
+		void addTexture(unsigned int textureID, int offsetX, int offsetY, int width, int height);
 
 		virtual void draw() override;
 	};

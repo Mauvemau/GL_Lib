@@ -117,6 +117,13 @@ void Renderer::bindTexture(unsigned int textureID) {
     glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
+void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
+    bindTexture(textureID);
+    glGetTexLevelParameteriv(GL_TEXTURE, 0, GL_TEXTURE_WIDTH, width);
+    glGetTexLevelParameteriv(GL_TEXTURE, 0, GL_TEXTURE_HEIGHT, height);
+    bindTexture(0);
+}
+
 void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
     modelMatrix = newModelMatrix;
 }
