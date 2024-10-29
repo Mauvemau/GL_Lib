@@ -1,8 +1,8 @@
 #include "base_game.h"
 
-#include "shader.h"
-
 #include <iostream>
+
+#include "Input.h"
 
 using namespace gllib;
 using namespace std;
@@ -20,12 +20,14 @@ BaseGame::BaseGame() {
 	}
 	// Make the window's context current
 	window->makeContextCurrent();
-
 	// Initialize the GLAD library
 	gllib::LibCore::initGlad();
+	
+	input = new Input(window->getReference());
 }
 
 BaseGame::~BaseGame() {
+	delete input;
 	delete window;
 }
 
@@ -36,16 +38,20 @@ bool BaseGame::initInternal() {
 	cout << glGetString(GL_VERSION) << "\n";
 
 	// Load vertex and fragment shaders from files
-	const char* vertexSource = gllib::Shader::loadShader("solidColorV.glsl");
-	const char* fragmentSource = gllib::Shader::loadShader("solidColorF.glsl");
+	const char* vertexSource1 = gllib::Shader::loadShader("solidColorV.glsl");
+	const char* fragmentSource1 = gllib::Shader::loadShader("solidColorF.glsl");
+	const char* vertexSource2 = gllib::Shader::loadShader("textureV.glsl");
+	const char* fragmentSource2 = gllib::Shader::loadShader("textureF.glsl");
 	// Create shader program
-	unsigned int spSolidColor = gllib::Shader::createShader(vertexSource, fragmentSource);
+	shaderProgramSolidColor = gllib::Shader::createShader(vertexSource1, fragmentSource1);
+	shaderProgramTexture = gllib::Shader::createShader(vertexSource2, fragmentSource2);
 	// Set current shader program
-	gllib::Shader::useShaderProgram(spSolidColor);
+	Shader::useShaderProgram(shaderProgramSolidColor);
 
 	init();
 	updateInternal();
-	Shader::destroyShader(spSolidColor);
+	Shader::destroyShader(shaderProgramSolidColor);
+	Shader::destroyShader(shaderProgramTexture);
 	return true;
 }
 

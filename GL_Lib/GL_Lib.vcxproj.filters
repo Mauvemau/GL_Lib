@@ -52,6 +52,12 @@
     <ClCompile Include="src\rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer.h">
@@ -97,6 +103,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rectangle.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sprite.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

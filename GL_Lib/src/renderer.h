@@ -43,6 +43,10 @@ namespace gllib {
 		static void destroyRenderData(RenderData rData);
 
 		static void drawElements(RenderData rData, GLsizei indexSize);
+		static void drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID);
+
+		static void bindTexture(unsigned int textureID);
+		static void getTextureSize(unsigned int textureID, int* width, int* height);
 
 		static void setModelMatrix(glm::mat4 newModelMatrix);
 		static void setOrthoProjectionMatrix(float width, float height);

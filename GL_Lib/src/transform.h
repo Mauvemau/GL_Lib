@@ -14,17 +14,20 @@ namespace gllib
         float y; // height | yaw
         float z; // depth | roll
 
-        Vector3 operator*(float scalar) const
+        Vector3 operator*(float scalar)
         {
             return {x * scalar, y * scalar, z * scalar};
         }
 
-        Vector3 operator+=(Vector3 vector) const
+        Vector3& operator+=(Vector3 vector)
         {
-            return {x + vector.x, y + vector.y, z + vector.z};
+            x += vector.x;
+            y += vector.y;
+            z += vector.z;
+            return *this;
         }
 
-        Vector3 operator/(float scalar) const
+        Vector3 operator/(float scalar)
         {
             return {x / scalar, y / scalar, z / scalar};
         }
@@ -97,7 +100,7 @@ namespace gllib
         Vector3 forward;
         Vector3 upward;
         Vector3 right;
-        Transform operator/(float i) const
+        Transform operator/(float i) 
         {
             return {
                 position / i,
@@ -109,7 +112,7 @@ namespace gllib
             };
         }
 
-        Transform operator*(float i) const
+        Transform operator*(float i)
         {
             return {
                 position * i,

@@ -102,8 +102,26 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
 
     glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
 
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID)
+{
+    bindTexture(textureID);
+    drawElements(rData, indexSize);
+}
+
+void Renderer::bindTexture(unsigned int textureID) {
+    glBindTexture(GL_TEXTURE_2D, textureID);
+}
+
+void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
+    bindTexture(textureID);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height);
+    bindTexture(0);
 }
 
 void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
