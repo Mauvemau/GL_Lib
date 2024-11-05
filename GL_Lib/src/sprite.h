@@ -37,8 +37,7 @@ namespace gllib {
 		Color getColor();
 
 		void setColor(Color color);
-		void setCurrentTexture(unsigned int index);
-		void setCurrectFrame(int frame);
+		void setCurrentFrame(unsigned int frame);
 		void setCurrentFrameNext();
 		void setMirroredX(bool mirrored);
 		void setMirroredY(bool mirrored);

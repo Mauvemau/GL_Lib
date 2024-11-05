@@ -97,15 +97,9 @@ void Sprite::setColor(Color color) {
     updateRenderData();
 }
 
-void Sprite::setCurrentTexture(unsigned int index) {
+void Sprite::setCurrentFrame(unsigned int index) {
     if (index > textures.size() - 1) return;
     currentFrame = index;
-    updateRenderData();
-}
-
-void Sprite::setCurrectFrame(int frame) {
-    if (frame < 0 || frame >= textures.size()) return;
-    currentFrame = frame;
     updateRenderData();
 }
 
@@ -140,6 +134,7 @@ void Sprite::addTexture(unsigned int textureID) {
     tex.uvCoords[3] = { 0.0f, 1.0f };
     textures.push_back(tex);
     currentFrame = textures.size() - 1;
+    frameCount = currentFrame;
     updateRenderData();
 }
 
@@ -167,6 +162,7 @@ void Sprite::addTexture(unsigned int textureID, int offsetX, int offsetY, int wi
 
     textures.push_back(tex);
     currentFrame = textures.size() - 1;
+    frameCount = currentFrame;
     updateRenderData();
 }
 

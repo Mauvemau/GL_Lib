@@ -9,7 +9,6 @@ namespace gllib
 {
     class DLLExport Animation : public Sprite {
     private:
-        int currentFrameIndex;
         double durationInSecs;
         double elapsedTime;
 
@@ -17,6 +16,8 @@ namespace gllib
         Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
         Animation(Transform transform, Color color);
         virtual ~Animation() override;
+
+        void setDurationInSecs(double durationInSecs);
 
         void update();
     };

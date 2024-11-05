@@ -8,7 +8,7 @@ class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
     gllib::Sprite* sprite;
-    gllib::Sprite* coin;
+    gllib::Animation* coin;
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
@@ -38,7 +38,7 @@ Game::Game() {
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
-    coin = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+    coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     sprite->addTexture("sus.png");
     sprite->setMirroredX(true);
@@ -52,7 +52,9 @@ Game::Game() {
     coin->addTexture(coinTex, (textureWidth * 5) + 5, 0, textureWidth, 16);
     coin->addTexture(coinTex, (textureWidth * 6) + 6, 0, textureWidth, 16);
     coin->addTexture(coinTex, (textureWidth * 7) + 7, 0, textureWidth, 16);
-    coin->setCurrentTexture(0);
+    coin->setCurrentFrame(0);
+
+    coin->setDurationInSecs(.6);
 
     animSpeed = .075f;
     nextFrame = 0;
@@ -72,10 +74,7 @@ void Game::init() {
 void Game::update() {
     // Update
 
-    if (gllib::LibTime::getElapsedTime() > nextFrame) {
-        nextFrame = gllib::LibTime::getElapsedTime() + animSpeed;
-        coin->setCurrentFrameNext();
-    }
+    coin->update();
 
     gllib::Quaternion rot = triangle->getRotationQuat();
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
@@ -106,15 +105,23 @@ void Game::moveRectangle(float speed) {
     if (sprite->getPosition().x + (sprite->getScale().x * .5) >= window->getWidth()) {
         x = -1;
         sprite->setMirroredX(false);
+        gllib::Vector3 scale = coin->getScale();
     }
 
     if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0) {
         y = 1;
+        sprite->setMirroredY(true);
     }
     if (sprite->getPosition().y + (sprite->getScale().y * .5) >= window->getHeight()) {
         y = -1;
+        sprite->setMirroredY(false);
     }
     
+    gllib::Vector3 scale = coin->getScale();
+    scale.x += (25.0f * gllib::LibTime::getDeltaTime()) * x;
+    scale.y += (25.0f * gllib::LibTime::getDeltaTime()) * x;
+    coin->setScale(scale);
+
     sprite->move({static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())), 
                   static_cast<float>(y * (speed * gllib::LibTime::getDeltaTime())), 
                   0.0f});

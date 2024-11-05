@@ -9,7 +9,6 @@ using namespace std;
 namespace gllib {
     Animation::Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) : 
         Sprite(translation, rotation, scale, color) {
-        currentFrameIndex = .0f;
         durationInSecs = .0f;
         elapsedTime = .0f;
 
@@ -18,7 +17,6 @@ namespace gllib {
 
     Animation::Animation(Transform transform, Color color) : 
         Sprite(transform, color) {
-        currentFrameIndex = .0f;
         durationInSecs = .0f;
         elapsedTime = .0f;
 
@@ -31,11 +29,15 @@ namespace gllib {
 
     // public
 
+    void Animation::setDurationInSecs(double durationInSecs) {
+        this->durationInSecs = durationInSecs;
+    }
+
     void Animation::update() {
         elapsedTime += LibTime::getDeltaTime();
 
         double normalizedTime = fmod(elapsedTime, durationInSecs);
-        int totalFrames = static_cast<int>(getFrameCount());
+        int totalFrames = getFrameCount();
 
         if (totalFrames < 1)
             return;
@@ -43,7 +45,7 @@ namespace gllib {
         int framesPerSecond = static_cast<int>(totalFrames / durationInSecs);
         int currentFrame = static_cast<int>(normalizedTime * framesPerSecond) % totalFrames;
 
-        setCurrectFrame(currentFrame);
+        setCurrentFrame(currentFrame);
     }
 
 }
