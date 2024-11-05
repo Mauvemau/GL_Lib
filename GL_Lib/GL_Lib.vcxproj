@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\base_game.cpp" />
+    <ClCompile Include="src\collisionManager.cpp" />
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\glad\src\glad.c" />
@@ -39,6 +40,7 @@
   <ItemGroup>
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\base_game.h" />
+    <ClInclude Include="src\collisionManager.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\deps.h" />
     <ClInclude Include="src\entity.h" />
