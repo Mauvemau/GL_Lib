@@ -1,115 +1,49 @@
 ﻿#include "animation.h"
 
+#include <iostream>
+
 #include "lib_time.h"
-#include "transform.h"
+
+using namespace std;
 
 namespace gllib {
+    Animation::Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) : 
+        Sprite(translation, rotation, scale, color) {
+        currentFrameIndex = .0f;
+        durationInSecs = .0f;
+        elapsedTime = .0f;
 
-	animation::animation(Vector3 position, Vector3 scale, Color color): sprite(position, {0, 0, 0}, scale, color)
-	{
-		currentFrameIndex = 0;
+        cout << "Created rectangle.\n";
+    }
 
-		elapsedTime = 0.00;
-		durationInSecs = 0.00;
+    Animation::Animation(Transform transform, Color color) : 
+        Sprite(transform, color) {
+        currentFrameIndex = .0f;
+        durationInSecs = .0f;
+        elapsedTime = .0f;
 
-		mirrorX = false;
-		mirrorY = false;
-	}
+        cout << "Created rectangle.\n";
+    }
 
-	animation::~animation() {
-	}
-	
-	void animation::update() {
-		elapsedTime += LibTime::getDeltaTime();
+    Animation::~Animation() {
 
-		double normalizedTime = fmod(elapsedTime, durationInSecs);
-		int totalFrames = static_cast<int>(sprite.getTextures().size());
+    }
 
-		if (totalFrames < 1)
-			return;
+    // public
 
-		int framesPerSecond = static_cast<int>(totalFrames / durationInSecs);
-		int currentFrame = static_cast<int>(normalizedTime * framesPerSecond) % totalFrames;
+    void Animation::update() {
+        elapsedTime += LibTime::getDeltaTime();
 
+        double normalizedTime = fmod(elapsedTime, durationInSecs);
+        int totalFrames = static_cast<int>(getFrameCount());
 
-		if (mirrorX) {
-			currentFrameIndex = totalFrames - 1 - currentFrame;
-		}
-		else {
-			currentFrameIndex = currentFrame;
-		}
-		
-		if(sprite.getCurrentTexture() < currentFrame)
-		{
-			sprite.setCurrentTexture(currentFrameIndex);
-		} 
-	}
+        if (totalFrames < 1)
+            return;
 
-	void animation::addFrame(unsigned int textureID, float offsetX, float offsetY, float width, float height, int frameAmount) {
+        int framesPerSecond = static_cast<int>(totalFrames / durationInSecs);
+        int currentFrame = static_cast<int>(normalizedTime * framesPerSecond) % totalFrames;
 
-		for (int i = 0; i < frameAmount; i++)
-		{
-			sprite.addTexture(textureID, offsetX, offsetY, width, height);
-			offsetX += width;
-			offsetY += height;
-		}
-	}
-	
-
-	void animation::setSpriteSheet(unsigned int spriteSheetID, int amountColumns, int amountRows, double durationInSecs) {
-
-		float frameWidth = 1.0f / amountColumns;
-		float frameHeight = 1.0f / amountRows;
-		this->durationInSecs = durationInSecs;
-
-		for (int row = 0; row < amountRows; ++row) {
-			for (int col = 0; col < amountColumns; ++col) {
-				float offsetX = col * frameWidth;
-				float offsetY = row * frameHeight;
-				addFrame(spriteSheetID, offsetX, offsetY, frameWidth, frameHeight, 1);
-			}
-		}
-	}
-
-	void animation::setDurationInSecs(double durationInSecs) {
-		this->durationInSecs = durationInSecs;
-	}
-
-	void animation::setCurrentFrame(int frame) {
-		if (frame > 0 && frame < sprite.getTextures().size()) {
-			currentFrameIndex = frame;
-		}
-		else {
-			std::cout << "Frame out of bounds!\n";
-		}
-	}
-
-	void animation::setMirrorX(bool mirrorX) {
-		if (this->mirrorX == mirrorX) return;
-		this->mirrorX = mirrorX;
-		for (auto& anim : sprite.getTextures()) {
-			for (auto& frame : anim) {
-				for (int i = 0; i < 4; ++i) {
-					frame.uvCoords[i].u = 1.0f - frame.uvCoords[i].u;
-				}
-			}
-		}
-	}
-
-	void animation::setMirrorY(bool mirrorY) {
-		if (this->mirrorY == mirrorY) return;
-		this->mirrorY = mirrorY;
-		for (auto& anim : sprite.getTextures()) {
-			for (auto& frame : anim) {
-				for (int i = 0; i < 4; ++i) {
-					frame.uvCoords[i].v = 1.0f - frame.uvCoords[i].v;
-				}
-			}
-		}
-	}
-
-	void animation::draw() {
-		sprite.draw(); 
-	}
+        setCurrectFrame(currentFrame);
+    }
 
 }

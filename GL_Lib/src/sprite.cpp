@@ -7,7 +7,8 @@ using namespace std;
 Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) :
     Shape(translation, rotation, scale) {
     this->color = color;
-    currentTexture = 0;
+    currentFrame = 0;
+    frameCount = 0;
     updateRenderData();
     cout << "Created rectangle.\n";
 }
@@ -15,7 +16,8 @@ Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color
 Sprite::Sprite(Transform transform, Color color) :
     Shape(transform) {
     this->color = color;
-    currentTexture = 0;
+    currentFrame = 0;
+    frameCount = 0;
     updateRenderData();
     cout << "Created rectangle.\n";
 }
@@ -24,6 +26,8 @@ Sprite::~Sprite() {
     cout << "Destroyed rectangle.\n";
 }
 
+// Private
+
 void Sprite::updateRenderData() {
     float uMin = 0.0f;
     float vMin = 0.0f;
@@ -31,10 +35,10 @@ void Sprite::updateRenderData() {
     float vMax = 1.0f;
 
     if (!textures.empty()) {
-        uMin = textures[currentTexture].uvCoords[2].u;
-        vMin = textures[currentTexture].uvCoords[2].v;
-        uMax = textures[currentTexture].uvCoords[0].u;
-        vMax = textures[currentTexture].uvCoords[0].v;
+        uMin = textures[currentFrame].uvCoords[2].u;
+        vMin = textures[currentFrame].uvCoords[2].v;
+        uMax = textures[currentFrame].uvCoords[0].u;
+        vMax = textures[currentFrame].uvCoords[0].v;
     }
 
     // Values for the vertices
@@ -60,13 +64,24 @@ void Sprite::updateRenderData() {
     setRenderData(rectangleVertexData, vertexDataSize, rectangleIndex, indexSize);
 }
 
-Color Sprite::getColor() {
-    return color;
+// protected
+
+int Sprite::getCurrentFrame() {
+    return currentFrame;
 }
 
-int Sprite::getCurrentTexture() const
-{
-    return currentTexture;
+int Sprite::getFrameCount() {
+    return frameCount;
+}
+
+void Sprite::setCurrectFrame(int frame) {
+    currentFrame = frame;
+}
+
+// public
+
+Color Sprite::getColor() {
+    return color;
 }
 
 void Sprite::setColor(Color color) {
@@ -76,19 +91,14 @@ void Sprite::setColor(Color color) {
 
 void Sprite::setCurrentTexture(unsigned int index) {
     if (index > textures.size() - 1) return;
-    currentTexture = index;
+    currentFrame = index;
     updateRenderData();
 }
 
 void Sprite::setNextTexture() {
-    currentTexture++;
-    if (currentTexture == textures.size()) currentTexture = 0;
+    currentFrame++;
+    if (currentFrame == textures.size()) currentFrame = 0;
     updateRenderData();
-}
-
-std::vector<Frame> Sprite::getTextures() const
-{
-    return textures;
 }
 
 void Sprite::addFrame(Frame frame)
@@ -105,7 +115,7 @@ void Sprite::addTexture(unsigned int textureID) {
     tex.uvCoords[2] = { 0.0f, 0.0f };
     tex.uvCoords[3] = { 0.0f, 1.0f };
     textures.push_back(tex);
-    currentTexture = textures.size() - 1;
+    currentFrame = textures.size() - 1;
     updateRenderData();
 }
 
@@ -132,13 +142,13 @@ void Sprite::addTexture(unsigned int textureID, int offsetX, int offsetY, int wi
     tex.uvCoords[3] = { uMin, vMax };
 
     textures.push_back(tex);
-    currentTexture = textures.size() - 1;
+    currentFrame = textures.size() - 1;
     updateRenderData();
 }
 
 void Sprite::draw() {
     if (!textures.empty()) {
-        Renderer::bindTexture(textures[currentTexture].textureID);
+        Renderer::bindTexture(textures[currentFrame].textureID);
     }
     internalDraw();
 }

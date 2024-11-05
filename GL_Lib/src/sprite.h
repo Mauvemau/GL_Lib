@@ -19,17 +19,21 @@ namespace gllib {
 	private:
 		std::vector<Frame> textures;
 		Color color;
-		int currentTexture;
+		int currentFrame;
+		int frameCount;
 
 		void updateRenderData();
+	protected:
+		int getCurrentFrame();
+		int getFrameCount();
+
+		void setCurrectFrame(int frame);
 	public:
 		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
 		Sprite(Transform transform, Color color);
 		virtual ~Sprite() override;
 
 		Color getColor();
-		int getCurrentTexture() const;
-		std::vector<Frame> getTextures() const;
 
 		void setColor(Color color);
 		void setCurrentTexture(unsigned int index);
