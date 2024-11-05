@@ -100,9 +100,11 @@ static int y = 1;
 void Game::moveRectangle(float speed) {
     if (sprite->getPosition().x - (sprite->getScale().x * .5) <= 0) {
         x = 1;
+        sprite->setMirroredX(true);
     }
     if (sprite->getPosition().x + (sprite->getScale().x * .5) >= window->getWidth()) {
         x = -1;
+        sprite->setMirroredX(false);
     }
 
     if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0) {
@@ -115,7 +117,7 @@ void Game::moveRectangle(float speed) {
     sprite->move({static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())), 
                   static_cast<float>(y * (speed * gllib::LibTime::getDeltaTime())), 
                   0.0f});
-    sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
+    //sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
 }
 
 

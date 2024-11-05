@@ -106,6 +106,7 @@ void Sprite::setCurrentTexture(unsigned int index) {
 void Sprite::setCurrectFrame(int frame) {
     if (frame < 0 || frame >= textures.size()) return;
     currentFrame = frame;
+    updateRenderData();
 }
 
 void Sprite::setCurrentFrameNext() {
@@ -116,10 +117,12 @@ void Sprite::setCurrentFrameNext() {
 
 void Sprite::setMirroredX(bool mirrored) {
     mirrorX = mirrored;
+    updateRenderData();
 }
 
 void Sprite::setMirroredY(bool mirrored) {
     mirrorY = mirrored;
+    updateRenderData();
 }
 
 void Sprite::addFrame(Frame frame)
