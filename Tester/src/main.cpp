@@ -41,6 +41,7 @@ Game::Game() {
     coin = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     sprite->addTexture("sus.png");
+    sprite->setMirroredX(true);
     int textureWidth = 15;
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png");
     coin->addTexture(coinTex, 0, 0, textureWidth, 16);
