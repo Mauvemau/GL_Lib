@@ -138,8 +138,8 @@ void Sprite::addTexture(unsigned int textureID) {
     updateRenderData();
 }
 
-void Sprite::addTexture(string path) {
-    unsigned int texID = Loader::loadTexture(path);
+void Sprite::addTexture(string path, bool transparent) {
+    unsigned int texID = Loader::loadTexture(path, transparent);
     addTexture(texID);
 }
 

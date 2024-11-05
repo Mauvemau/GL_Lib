@@ -15,7 +15,7 @@ bool Loader::fileExists(string filePath) {
     return file.good();
 }
 
-unsigned int Loader::loadTextureAdvanced(string filePath, GLint wrapping, GLint filtering) {
+unsigned int Loader::loadTextureAdvanced(string filePath, GLint wrapping, GLint filtering, bool transparent) {
     cout << "Loading texture at " << filePath << "...\n";
     if (!fileExists(filePath)) {
         cerr << "No texture was found at the specified path!\n";
@@ -36,7 +36,12 @@ unsigned int Loader::loadTextureAdvanced(string filePath, GLint wrapping, GLint 
     unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
 
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        if (transparent) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        }
+        else {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        }
         glGenerateMipmap(GL_TEXTURE_2D);
 
         cout << "The texture (" << texture << ") " << filePath << " was loaded!\n";
@@ -52,8 +57,8 @@ unsigned int Loader::loadTextureAdvanced(string filePath, GLint wrapping, GLint 
     return texture;
 }
 
-unsigned int Loader::loadTexture(string filePath) {
-    return loadTextureAdvanced(filePath, GL_REPEAT, GL_NEAREST);
+unsigned int Loader::loadTexture(string filePath, bool transparent) {
+    return loadTextureAdvanced(filePath, GL_REPEAT, GL_NEAREST, transparent);
 }
 
 const char* Loader::loadTextFile(string filePath) {

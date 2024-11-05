@@ -44,7 +44,7 @@ namespace gllib {
 
 		void addFrame(Frame frame);
 		void addTexture(unsigned int textureID);
-		void addTexture(std::string path);
+		void addTexture(std::string path, bool transparent);
 		void addTexture(unsigned int textureID, int offsetX, int offsetY, int width, int height);
 
 		virtual void draw() override;
