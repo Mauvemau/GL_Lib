@@ -73,7 +73,7 @@ void Game::update() {
 
     if (gllib::LibTime::getElapsedTime() > nextFrame) {
         nextFrame = gllib::LibTime::getElapsedTime() + animSpeed;
-        coin->setNextTexture();
+        coin->setCurrentFrameNext();
     }
 
     gllib::Quaternion rot = triangle->getRotationQuat();

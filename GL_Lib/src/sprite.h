@@ -21,13 +21,14 @@ namespace gllib {
 		Color color;
 		int currentFrame;
 		int frameCount;
+		bool mirrorX;
+		bool mirrorY;
 
 		void updateRenderData();
 	protected:
 		int getCurrentFrame();
 		int getFrameCount();
 
-		void setCurrectFrame(int frame);
 	public:
 		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
 		Sprite(Transform transform, Color color);
@@ -37,7 +38,10 @@ namespace gllib {
 
 		void setColor(Color color);
 		void setCurrentTexture(unsigned int index);
-		void setNextTexture();
+		void setCurrectFrame(int frame);
+		void setCurrentFrameNext();
+		void setMirroredX(bool mirrored);
+		void setMirroredY(bool mirrored);
 
 		void addFrame(Frame frame);
 		void addTexture(unsigned int textureID);

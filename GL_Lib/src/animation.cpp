@@ -13,7 +13,7 @@ namespace gllib {
         durationInSecs = .0f;
         elapsedTime = .0f;
 
-        cout << "Created rectangle.\n";
+        cout << "Created animation.\n";
     }
 
     Animation::Animation(Transform transform, Color color) : 
@@ -22,11 +22,11 @@ namespace gllib {
         durationInSecs = .0f;
         elapsedTime = .0f;
 
-        cout << "Created rectangle.\n";
+        cout << "Created animation.\n";
     }
 
     Animation::~Animation() {
-
+        cout << "Destroyed animation.\n";
     }
 
     // public

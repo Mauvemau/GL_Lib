@@ -7,23 +7,27 @@ using namespace std;
 Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) :
     Shape(translation, rotation, scale) {
     this->color = color;
+    mirrorX = false;
+    mirrorY = false;
     currentFrame = 0;
     frameCount = 0;
     updateRenderData();
-    cout << "Created rectangle.\n";
+    cout << "Created sprite.\n";
 }
 
 Sprite::Sprite(Transform transform, Color color) :
     Shape(transform) {
     this->color = color;
+    mirrorX = false;
+    mirrorY = false;
     currentFrame = 0;
     frameCount = 0;
     updateRenderData();
-    cout << "Created rectangle.\n";
+    cout << "Created sprite.\n";
 }
 
 Sprite::~Sprite() {
-    cout << "Destroyed rectangle.\n";
+    cout << "Destroyed sprite.\n";
 }
 
 // Private
@@ -39,6 +43,14 @@ void Sprite::updateRenderData() {
         vMin = textures[currentFrame].uvCoords[2].v;
         uMax = textures[currentFrame].uvCoords[0].u;
         vMax = textures[currentFrame].uvCoords[0].v;
+    }
+
+    // Check for mirroring 
+    if (mirrorX) { 
+        std::swap(uMin, uMax); 
+    } 
+    if (mirrorY) { 
+        std::swap(vMin, vMax); 
     }
 
     // Values for the vertices
@@ -74,10 +86,6 @@ int Sprite::getFrameCount() {
     return frameCount;
 }
 
-void Sprite::setCurrectFrame(int frame) {
-    currentFrame = frame;
-}
-
 // public
 
 Color Sprite::getColor() {
@@ -95,10 +103,23 @@ void Sprite::setCurrentTexture(unsigned int index) {
     updateRenderData();
 }
 
-void Sprite::setNextTexture() {
+void Sprite::setCurrectFrame(int frame) {
+    if (frame < 0 || frame >= textures.size()) return;
+    currentFrame = frame;
+}
+
+void Sprite::setCurrentFrameNext() {
     currentFrame++;
     if (currentFrame == textures.size()) currentFrame = 0;
     updateRenderData();
+}
+
+void Sprite::setMirroredX(bool mirrored) {
+    mirrorX = mirrored;
+}
+
+void Sprite::setMirroredY(bool mirrored) {
+    mirrorY = mirrored;
 }
 
 void Sprite::addFrame(Frame frame)
