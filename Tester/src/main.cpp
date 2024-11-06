@@ -42,16 +42,10 @@ Game::Game() {
 
     sprite->addTexture("sus.png", true);
     sprite->setMirroredX(true);
-    int textureWidth = 15;
+    int textureWidth = 16;
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
-    coin->addTexture(coinTex, 0, 0, textureWidth, 16);
-    coin->addTexture(coinTex, textureWidth + 1, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 2) + 2, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 3) + 3, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 4) + 4, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 5) + 5, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 6) + 6, 0, textureWidth, 16);
-    coin->addTexture(coinTex, (textureWidth * 7) + 7, 0, textureWidth, 16);
+    coin->addFrames(coinTex, textureWidth, 16, 8, 1);
+    
     coin->setCurrentFrame(0);
 
     coin->setDurationInSecs(.6);

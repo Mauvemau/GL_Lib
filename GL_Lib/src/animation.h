@@ -17,6 +17,9 @@ namespace gllib
         Animation(Transform transform, Color color);
         virtual ~Animation() override;
 
+        void addFramesFromAtlas(unsigned int textureID, int startX, int startY, int frameWidth,
+                                int frameHeight, int columns, int rows);
+        void addFrames(unsigned int textureID, int frameWidth, int frameHeight, int columns, int rows);
         void setDurationInSecs(double durationInSecs);
 
         void update();
