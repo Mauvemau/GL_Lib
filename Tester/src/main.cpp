@@ -22,6 +22,7 @@ private:
 
 protected:
     void init() override;
+    void drawObjects();
     void update() override;
     void uninit() override;
 
@@ -51,11 +52,11 @@ Game::Game()
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
     gllib::Transform trs3;
-    trs3.position = { 100, 100, 0.0f };
+    trs3.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
     trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs3.scale = { 640.0f, 480.0f, 0.0f };
     background = new gllib::Sprite(trs3, { 1.0f, 1.0f, 1.0f, 1.0f });
-    background->addTexture("background.png", false);
+    background->addTexture("background.png", true);
 
     gllib::Transform trs4;
     trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 0};
@@ -96,10 +97,10 @@ void Game::init() {
     window->setTitle("Example game lmao");
 }
 
+
 void Game::update() {
     // Update
     movement(player);
-    background->draw();
 
     coin->update();
     player->update();
@@ -114,11 +115,17 @@ void Game::update() {
     gllib::Renderer::clear();
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
-
-    triangle->draw();
     
-
     gllib::Shader::useShaderProgram(shaderProgramTexture);
+    
+    drawObjects();
+}
+
+
+void Game::drawObjects()
+{
+    triangle->draw();
+    background->draw();
     sprite->draw();
     coin->draw();
     player->draw();
