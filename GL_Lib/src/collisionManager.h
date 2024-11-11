@@ -5,7 +5,7 @@
 
 namespace gllib
 {
-    class collisionManager
+    class DLLExport collisionManager
     {
     public:
         collisionManager(const std::vector<Entity*>& obstacles);

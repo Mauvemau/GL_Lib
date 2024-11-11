@@ -26,6 +26,19 @@ Sprite::Sprite(Transform transform, Color color) :
     cout << "Created sprite.\n";
 }
 
+Sprite::Sprite(Sprite const& other) :
+    Shape(other.transform),
+    textures(other.textures),
+    color(other.color),
+    currentFrame(other.currentFrame),
+    frameCount(other.frameCount),
+    mirrorX(other.mirrorX),
+    mirrorY(other.mirrorY)
+{
+    updateRenderData();
+    cout << "Created sprite.\n";
+}
+
 Sprite::~Sprite() {
     cout << "Destroyed sprite.\n";
 }

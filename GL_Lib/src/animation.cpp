@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "lib_time.h"
+#include "loader.h"
 
 using namespace std;
 
@@ -26,20 +27,27 @@ namespace gllib
         cout << "Created animation.\n";
     }
 
+    Animation::Animation(Sprite sprite) :
+        Sprite(sprite)
+    {
+        cout << "Created animation.\n";
+    }
+
     Animation::~Animation()
     {
         cout << "Destroyed animation.\n";
     }
 
-    void Animation::addFramesFromAtlas(unsigned int textureID, int startX, int startY, int frameWidth, int frameHeight, int columns, int rows)
+    void Animation::addFramesFromAtlas(string path, int startX, int startY, int frameWidth, int frameHeight, int columns, int rows, bool transparent)
     {
+        unsigned int texID = Loader::loadTexture(path, transparent);
         for (int y = 0; y < rows; ++y)
         {
             for (int x = 0; x < columns; ++x)
             {
                 int offsetX = startX + x * frameWidth;
                 int offsetY = startY + y * frameHeight;
-                addTexture(textureID, offsetX, offsetY, frameWidth, frameHeight);
+                addTexture(texID, offsetX, offsetY, frameWidth, frameHeight);
             }
         }
     }

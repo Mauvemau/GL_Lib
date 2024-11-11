@@ -2,16 +2,23 @@
 
 #include <iostream>
 
+#include "collisionManager.h"
+
 using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
     gllib::Triangle* triangle;
     gllib::Sprite* sprite;
+    gllib::Sprite* background;
     gllib::Animation* coin;
+    gllib::Animation* player;
+    gllib::Rectangle* floorCollision;
+    gllib::collisionManager* collisionManager;
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
+    void movement(gllib::Animation* player);
 
 protected:
     void init() override;
@@ -23,7 +30,8 @@ public:
     ~Game() override;
 };
 
-Game::Game() {
+Game::Game()
+{
     window->setVsyncEnabled(false);
     cout << "Game created!\n";
 
@@ -32,19 +40,42 @@ Game::Game() {
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
-
+    
     gllib::Transform trs2;
     trs2.position = { 400.0f, 400.0f, 0.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+    trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
+    player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
 
+    gllib::Transform trs3;
+    trs3.position = { 100, 100, 0.0f };
+    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs3.scale = { 640.0f, 480.0f, 0.0f };
+    background = new gllib::Sprite(trs3, { 1.0f, 1.0f, 1.0f, 1.0f });
+    background->addTexture("background.png", false);
+
+    gllib::Transform trs4;
+    trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 0};
+    trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs4.scale = {static_cast<float>(window->getWidth()), 80, 0};
+    floorCollision = new gllib::Rectangle(trs4, {0.8f, 0.0f, 1.0f, 0.5f});
+
+    collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
+    
     sprite->addTexture("sus.png", true);
     sprite->setMirroredX(true);
     int textureWidth = 16;
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
+
+    player->addFramesFromAtlas("Sonic_Atlas.png", 277, 118,
+                                    35, 40, 12, 1, true);
+
+    player->setCurrentFrame(0);
+    player->setDurationInSecs(2.f);
     
     coin->setCurrentFrame(0);
 
@@ -67,8 +98,11 @@ void Game::init() {
 
 void Game::update() {
     // Update
+    movement(player);
+    background->draw();
 
     coin->update();
+    player->update();
 
     gllib::Quaternion rot = triangle->getRotationQuat();
     rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
@@ -82,10 +116,12 @@ void Game::update() {
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 
     triangle->draw();
+    
 
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     sprite->draw();
     coin->draw();
+    player->draw();
 }
 
 static int x = 1;
@@ -122,6 +158,63 @@ void Game::moveRectangle(float speed) {
     //sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
 }
 
+void Game::movement(gllib::Animation* player)
+{
+    gllib::Transform transform2 = player->getTransform();
+    transform2.position.y += 1.f;
+    float speed = 80 * gllib::LibTime::getDeltaTime();
+    float gravity = 40 * gllib::LibTime::getDeltaTime();
+    if (!collisionManager->checkCollision(transform2))
+    {
+        player->move({0.f, gravity, 0});
+    }
+    if (!Input::isAnyKeyPressed()) return;
+    gllib::Transform transform = player->getTransform();
+
+    if (Input::getKeyPressed(Key_D))
+    {
+        // D
+        transform.position.x += 2.0f;
+        player->setMirroredX(false);
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({speed, 0.f, 0.f});
+        }
+    }
+
+    if (Input::getKeyPressed(Key_A))
+    {
+        // A
+        transform.position.x -= 2.0f;
+        player->setMirroredX(true);
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({-speed, 0.f, 0.f});
+        }
+    }
+    
+    if (Input::getKeyPressed(Key_W))
+    {
+        // W
+        transform.position.y -= 2.0f;
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({0.f, -speed, 0.f});
+        }
+    }
+
+    if (Input::getKeyPressed(Key_S))
+    {
+        // S
+        transform.position.y += 2.0f;
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({0.f, speed, 0.f});
+        }
+    }
+
+    
+}
 
 void Game::uninit() {
     cout << "External uninit!!!\n";

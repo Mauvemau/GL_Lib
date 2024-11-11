@@ -32,6 +32,7 @@ namespace gllib {
 	public:
 		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
 		Sprite(Transform transform, Color color);
+		Sprite(Sprite const& other);
 		virtual ~Sprite() override;
 
 		Color getColor();

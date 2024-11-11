@@ -15,10 +15,11 @@ namespace gllib
     public:
         Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
         Animation(Transform transform, Color color);
+        Animation(Sprite sprite);
         virtual ~Animation() override;
 
-        void addFramesFromAtlas(unsigned int textureID, int startX, int startY, int frameWidth,
-                                int frameHeight, int columns, int rows);
+        void addFramesFromAtlas(std::string path, int startX, int startY, int frameWidth,
+                                int frameHeight, int columns, int rows, bool transparent);
         void addFrames(unsigned int textureID, int frameWidth, int frameHeight, int columns, int rows);
         void setDurationInSecs(double durationInSecs);
 
