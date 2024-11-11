@@ -112,11 +112,7 @@ void Game::update() {
     moveRectangle(100);
 
     // Draw
-    gllib::Renderer::clear();
-
-    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     
-    gllib::Shader::useShaderProgram(shaderProgramTexture);
     
     drawObjects();
 }
@@ -124,11 +120,16 @@ void Game::update() {
 
 void Game::drawObjects()
 {
-    triangle->draw();
+    gllib::Renderer::clear();
+
+    gllib::Shader::useShaderProgram(shaderProgramTexture);
     background->draw();
     sprite->draw();
     coin->draw();
     player->draw();
+
+    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    triangle->draw();
 }
 
 static int x = 1;
