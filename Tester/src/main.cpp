@@ -27,6 +27,7 @@ private:
 
 protected:
     void init() override;
+    void gravity(gllib::Entity* player);
     void drawObjects();
     void UpdatePlayerPosition();
     void update() override;
@@ -64,7 +65,6 @@ Game::Game()
     trs4.scale = {static_cast<float>(window->getWidth()), 80, 0};
     floorCollision = new gllib::Rectangle(trs4, {0.8f, 0.0f, 1.0f, 0.5f});
 
-    collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
     unsigned int rockTex = gllib::Loader::loadTexture("Rock.jpg", false);
     gllib::Transform trs5;
@@ -104,6 +104,7 @@ Game::Game()
     colliding->setDurationInSecs(1.f);
     attack->setCurrentFrame(0);
     attack->setDurationInSecs(.3f);
+    collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 }
 
 Game::~Game()
@@ -120,9 +121,12 @@ void Game::init()
 }
 
 
+
 void Game::update()
 {
     // Update
+    gravity(moving);
+    
     movement(moving);
 
     // Draw
@@ -159,35 +163,11 @@ void Game::drawObjects()
     rock->draw();
 }
 
-void Game::UpdatePlayerPosition()
-{
-    idle->setPosition(moving->getPosition());
-    colliding->setPosition(moving->getPosition());
-    attack->setPosition(moving->getPosition());
-}
-
-void Game::UpdatePlayerMirror(bool cond)
-{
-    moving->setMirroredX(cond);
-    idle->setMirroredX(cond);
-    colliding->setMirroredX(cond);
-    attack->setMirroredX(cond);
-}
-
 void Game::movement(gllib::Animation* player)
 {
     rockColliding = false;
     isAttacking = false;
-    gllib::Transform transform2 = player->getTransform();
-    transform2.position.y += 1.f;
     float speed = 200 * gllib::LibTime::getDeltaTime();
-    float gravity = 89 * gllib::LibTime::getDeltaTime();
-    
-    if (!collisionManager->checkCollision(transform2))
-    {
-        player->move({0.f, gravity, 0});
-        UpdatePlayerPosition();
-    }
     
     if (Input::getKeyPressed(Key_F))
     {
@@ -259,6 +239,33 @@ void Game::movement(gllib::Animation* player)
     }
     player->update();
     UpdatePlayerPosition();
+}
+
+void Game::UpdatePlayerPosition()
+{
+    idle->setPosition(moving->getPosition());
+    colliding->setPosition(moving->getPosition());
+    attack->setPosition(moving->getPosition());
+}
+
+void Game::UpdatePlayerMirror(bool cond)
+{
+    moving->setMirroredX(cond);
+    idle->setMirroredX(cond);
+    colliding->setMirroredX(cond);
+    attack->setMirroredX(cond);
+}
+
+void Game::gravity(gllib::Entity* player)
+{
+    gllib::Transform transform2 = player->getTransform();
+    transform2.position.y += 1.f;
+    float gravity = 89 * gllib::LibTime::getDeltaTime();
+    if (!collisionManager->checkCollision(transform2))
+    {
+        player->move({0.f, gravity, 0});
+        UpdatePlayerPosition();
+    }
 }
 
 void Game::uninit()
