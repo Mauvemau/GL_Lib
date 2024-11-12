@@ -10,6 +10,7 @@
 #include "triangle.h"
 #include "rectangle.h"
 #include "sprite.h"
+#include "animation.h"
 #include "shader.h"
 
 namespace gllib {
@@ -17,7 +18,6 @@ namespace gllib {
 	class DLLExport BaseGame {
 	private:
 		LibCore libCore;
-		Input* input;
 		
 		bool initInternal();
 		void updateInternal();
@@ -25,6 +25,7 @@ namespace gllib {
 
 	protected:
 		Window* window;
+		Input* input;
 
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
