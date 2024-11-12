@@ -190,6 +190,16 @@ void Game::movement(gllib::Animation* player)
     {
         player->move({0.f, gravity, 0});
     }
+
+    if (Input::getKeyReleased(Key_R)) {
+        player->setAnimationPaused(true);
+        player->reset();
+    }
+
+    if (Input::getKeyPressed(Key_Q)) {
+        player->setAnimationPaused(false);
+    }
+
     if (!Input::isAnyKeyPressed()) return;
     gllib::Transform transform = player->getTransform();
 
@@ -234,8 +244,6 @@ void Game::movement(gllib::Animation* player)
             player->move({0.f, speed, 0.f});
         }
     }
-
-    
 }
 
 void Game::uninit() {

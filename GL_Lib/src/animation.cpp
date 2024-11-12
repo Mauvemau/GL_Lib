@@ -14,6 +14,7 @@ namespace gllib
     {
         durationInSecs = .0f;
         elapsedTime = .0f;
+        paused = false;
 
         cout << "Created animation.\n";
     }
@@ -23,6 +24,7 @@ namespace gllib
     {
         durationInSecs = .0f;
         elapsedTime = .0f;
+        paused = false;
 
         cout << "Created animation.\n";
     }
@@ -63,8 +65,13 @@ namespace gllib
         this->durationInSecs = durationInSecs;
     }
 
+    void Animation::setAnimationPaused(bool paused) {
+        this->paused = paused;
+    }
+
     void Animation::update()
     {
+        if (paused) return;
         elapsedTime += LibTime::getDeltaTime();
 
         double normalizedTime = fmod(elapsedTime, durationInSecs);
@@ -77,5 +84,10 @@ namespace gllib
         int currentFrame = static_cast<int>(normalizedTime * framesPerSecond) % totalFrames;
 
         setCurrentFrame(currentFrame);
+    }
+
+    void Animation::reset() 
+    {
+        setCurrentFrame(0);
     }
 }
