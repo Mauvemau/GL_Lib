@@ -277,6 +277,7 @@ void Game::uninit()
     delete moving;
     delete colliding;
     delete floorCollision;
+    delete attack;
     delete collisionManager;
 }
 
