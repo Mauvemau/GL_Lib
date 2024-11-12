@@ -111,6 +111,7 @@ void Sprite::setColor(Color color) {
 }
 
 void Sprite::setCurrentFrame(unsigned int index) {
+    if (currentFrame == index) return;
     if (index > textures.size() - 1) return;
     currentFrame = index;
     updateRenderData();
@@ -132,11 +133,6 @@ void Sprite::setMirroredY(bool mirrored) {
     updateRenderData();
 }
 
-void Sprite::addFrame(Frame frame)
-{
-    textures.push_back(frame);
-}
-
 void Sprite::addTexture(unsigned int textureID) {
     Frame tex;
     tex.textureID = textureID;
@@ -156,7 +152,7 @@ void Sprite::addTexture(string path, bool transparent) {
     addTexture(texID);
 }
 
-void Sprite::addTexture(unsigned int textureID, int offsetX, int offsetY, int width, int height) {
+void Sprite::addFrame(unsigned int textureID, int offsetX, int offsetY, int width, int height) {
     Frame tex;
     tex.textureID = textureID;
     if (tex.textureID == 0) return;

@@ -27,27 +27,20 @@ namespace gllib
         cout << "Created animation.\n";
     }
 
-    Animation::Animation(Sprite sprite) :
-        Sprite(sprite)
-    {
-        cout << "Created animation.\n";
-    }
-
     Animation::~Animation()
     {
         cout << "Destroyed animation.\n";
     }
 
-    void Animation::addFramesFromAtlas(string path, int startX, int startY, int frameWidth, int frameHeight, int columns, int rows, bool transparent)
+    void Animation::addFramesFromAtlas(unsigned int textureID, int startX, int startY, int frameWidth, int frameHeight, int columns, int rows)
     {
-        unsigned int texID = Loader::loadTexture(path, transparent);
         for (int y = 0; y < rows; ++y)
         {
             for (int x = 0; x < columns; ++x)
             {
                 int offsetX = startX + x * frameWidth;
                 int offsetY = startY + y * frameHeight;
-                addTexture(texID, offsetX, offsetY, frameWidth, frameHeight);
+                addFrame(textureID, offsetX, offsetY, frameWidth, frameHeight);
             }
         }
     }
@@ -60,10 +53,11 @@ namespace gllib
             {
                 int offsetX = x * frameWidth;
                 int offsetY = y * frameHeight;
-                addTexture(textureID, offsetX, offsetY, frameWidth, frameHeight);
+                addFrame(textureID, offsetX, offsetY, frameWidth, frameHeight);
             }
         }
     }
+
     void Animation::setDurationInSecs(double durationInSecs)
     {
         this->durationInSecs = durationInSecs;
@@ -74,7 +68,7 @@ namespace gllib
         elapsedTime += LibTime::getDeltaTime();
 
         double normalizedTime = fmod(elapsedTime, durationInSecs);
-        int totalFrames = getFrameCount();
+        int totalFrames = getFrameCount() + 1;
 
         if (totalFrames < 1)
             return;

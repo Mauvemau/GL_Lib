@@ -43,10 +43,10 @@ namespace gllib {
 		void setMirroredX(bool mirrored);
 		void setMirroredY(bool mirrored);
 
-		void addFrame(Frame frame);
 		void addTexture(unsigned int textureID);
 		void addTexture(std::string path, bool transparent);
-		void addTexture(unsigned int textureID, int offsetX, int offsetY, int width, int height);
+
+		void addFrame(unsigned int textureID, int offsetX, int offsetY, int width, int height);
 
 		virtual void draw() override;
 	};

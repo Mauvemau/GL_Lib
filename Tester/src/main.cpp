@@ -71,12 +71,26 @@ Game::Game()
     int textureWidth = 16;
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
+    coin->setCurrentFrame(7);
 
-    player->addFramesFromAtlas("Sonic_Atlas.png", 277, 118,
-                                    35, 40, 12, 1, true);
+    unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
+    player->addFrame(sonicTex, 273, 118, 33, 41);
+    player->addFrame(sonicTex, 305, 118, 33, 41);
+    player->addFrame(sonicTex, 340, 118, 35, 41);
+    player->addFrame(sonicTex, 379, 118, 38, 41);
+    player->addFrame(sonicTex, 418, 118, 36, 41);
+    player->addFrame(sonicTex, 456, 118, 32, 41);
+    player->addFrame(sonicTex, 488, 118, 32, 41);
+    player->addFrame(sonicTex, 522, 118, 32, 41);
+    player->addFrame(sonicTex, 558, 118, 34, 41);
+    player->addFrame(sonicTex, 595, 118, 37, 41);
+    player->addFrame(sonicTex, 636, 118, 34, 41);
+    player->addFrame(sonicTex, 673, 118, 32, 41);
+
+    //player->addFramesFromAtlas(sonicTex, 277, 118, 35, 40, 12, 1);
 
     player->setCurrentFrame(0);
-    player->setDurationInSecs(2.f);
+    player->setDurationInSecs(1.f);
     
     coin->setCurrentFrame(0);
 
