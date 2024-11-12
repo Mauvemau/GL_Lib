@@ -23,7 +23,7 @@ private:
 
     void moveRectangle(float speed);
     void UpdatePlayerMirror(bool cond);
-    void movement(gllib::Animation* player);
+    void checkInputs(gllib::Animation* player);
 
 protected:
     void init() override;
@@ -127,7 +127,7 @@ void Game::update()
     // Update
     gravity(moving);
     
-    movement(moving);
+    checkInputs(moving);
 
     // Draw
 
@@ -163,7 +163,7 @@ void Game::drawObjects()
     rock->draw();
 }
 
-void Game::movement(gllib::Animation* player)
+void Game::checkInputs(gllib::Animation* player)
 {
     rockColliding = false;
     isAttacking = false;
