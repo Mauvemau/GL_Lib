@@ -14,7 +14,7 @@ private:
     gllib::Sprite* background;
     gllib::Sprite* idle;
     gllib::Sprite* rock;
-    gllib::Animation* player;
+    gllib::Animation* moving;
     gllib::Animation* colliding;
     gllib::Animation* attack;
     gllib::Rectangle* floorCollision;
@@ -46,7 +46,7 @@ Game::Game()
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {100.0f, 100.0f, 0.0f};
     trs2.position = {window->getWidth() * .5f, window->getHeight() * .5f, 0.0f};
-    player = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
+    moving = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
     idle = new gllib::Sprite(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
     colliding = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
     attack = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
@@ -78,14 +78,14 @@ Game::Game()
 
     unsigned int knucklesSpriteSheet = gllib::Loader::loadTexture("Knuckles_Sprite_Sheet.png", true);
     idle->addFrame(knucklesSpriteSheet, 0, 3, 31, 39);
-    player->addFrame(knucklesSpriteSheet, 3, 45, 27, 36);
-    player->addFrame(knucklesSpriteSheet, 35, 46, 31, 37);
-    player->addFrame(knucklesSpriteSheet, 76, 45, 41, 39);
-    player->addFrame(knucklesSpriteSheet, 125, 44, 37, 38);
-    player->addFrame(knucklesSpriteSheet, 175, 45, 27, 36);
-    player->addFrame(knucklesSpriteSheet, 209, 45, 29, 37);
-    player->addFrame(knucklesSpriteSheet, 247, 44, 40, 38);
-    player->addFrame(knucklesSpriteSheet, 293, 47, 36, 36);
+    moving->addFrame(knucklesSpriteSheet, 3, 45, 27, 36);
+    moving->addFrame(knucklesSpriteSheet, 35, 46, 31, 37);
+    moving->addFrame(knucklesSpriteSheet, 76, 45, 41, 39);
+    moving->addFrame(knucklesSpriteSheet, 125, 44, 37, 38);
+    moving->addFrame(knucklesSpriteSheet, 175, 45, 27, 36);
+    moving->addFrame(knucklesSpriteSheet, 209, 45, 29, 37);
+    moving->addFrame(knucklesSpriteSheet, 247, 44, 40, 38);
+    moving->addFrame(knucklesSpriteSheet, 293, 47, 36, 36);
     //player->addFrame(knucklesSpriteSheet, 340, 49, 32, 36);
     //player->addFrame(knucklesSpriteSheet, 380, 50, 32, 35);
     //player->addFrame(knucklesSpriteSheet, 420, 49, 32, 36);
@@ -98,8 +98,8 @@ Game::Game()
 
     attack->addFramesFromAtlas(knucklesSpriteSheet, 228, 131, 33, 28, 4, 1);
 
-    player->setCurrentFrame(0);
-    player->setDurationInSecs(0.9f);
+    moving->setCurrentFrame(0);
+    moving->setDurationInSecs(0.9f);
     colliding->setCurrentFrame(0);
     colliding->setDurationInSecs(1.f);
     attack->setCurrentFrame(0);
@@ -116,14 +116,14 @@ void Game::init()
     cout << "External init!!!!\n";
 
     srand(time(nullptr));
-    window->setTitle("Example game lmao");
+    window->setTitle("Segundo Parcial Barra Santiago");
 }
 
 
 void Game::update()
 {
     // Update
-    movement(player);
+    movement(moving);
 
     // Draw
 
@@ -153,7 +153,7 @@ void Game::drawObjects()
         }
         else
         {
-            player->draw();
+            moving->draw();
         }
     }
     rock->draw();
@@ -161,14 +161,14 @@ void Game::drawObjects()
 
 void Game::UpdatePlayerPosition()
 {
-    idle->setPosition(player->getPosition());
-    colliding->setPosition(player->getPosition());
-    attack->setPosition(player->getPosition());
+    idle->setPosition(moving->getPosition());
+    colliding->setPosition(moving->getPosition());
+    attack->setPosition(moving->getPosition());
 }
 
 void Game::UpdatePlayerMirror(bool cond)
 {
-    player->setMirroredX(cond);
+    moving->setMirroredX(cond);
     idle->setMirroredX(cond);
     colliding->setMirroredX(cond);
     attack->setMirroredX(cond);
@@ -188,18 +188,7 @@ void Game::movement(gllib::Animation* player)
         player->move({0.f, gravity, 0});
         UpdatePlayerPosition();
     }
-
-    if (Input::getKeyReleased(Key_R))
-    {
-        player->setAnimationPaused(true);
-        player->reset();
-    }
-
-    if (Input::getKeyPressed(Key_Q))
-    {
-        player->setAnimationPaused(false);
-    }
-
+    
     if (Input::getKeyPressed(Key_F))
     {
         attack->update();
@@ -278,7 +267,7 @@ void Game::uninit()
     delete background;
     delete idle;
     delete rock;
-    delete player;
+    delete moving;
     delete colliding;
     delete floorCollision;
     delete collisionManager;
