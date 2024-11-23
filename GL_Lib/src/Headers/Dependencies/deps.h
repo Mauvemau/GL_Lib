@@ -1,7 +1,7 @@
 // General dependencies
 #pragma once
 
-#include "Headers/Dependencies/glad/glad.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 #ifdef _WIN32

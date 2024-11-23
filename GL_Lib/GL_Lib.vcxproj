@@ -19,44 +19,122 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\animation.cpp" />
-    <ClCompile Include="src\base_game.cpp" />
-    <ClCompile Include="src\collisionManager.cpp" />
-    <ClCompile Include="src\core.cpp" />
-    <ClCompile Include="src\entity.cpp" />
-    <ClCompile Include="src\glad\src\glad.c" />
-    <ClCompile Include="src\Input.cpp" />
-    <ClCompile Include="src\lib_time.cpp" />
-    <ClCompile Include="src\loader.cpp" />
-    <ClCompile Include="src\myMaths.cpp" />
-    <ClCompile Include="src\rectangle.cpp" />
-    <ClCompile Include="src\renderer.cpp" />
-    <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\shape.cpp" />
-    <ClCompile Include="src\sprite.cpp" />
-    <ClCompile Include="src\triangle.cpp" />
-    <ClCompile Include="src\window.cpp" />
+    <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\Headers\Animation\animation.h" />
+    <ClInclude Include="src\Headers\Collision\collisionManager.h" />
+    <ClInclude Include="src\Headers\Core\base_game.h" />
+    <ClInclude Include="src\Headers\Core\window.h" />
+    <ClInclude Include="src\Headers\Dependencies\deps.h" />
+    <ClInclude Include="src\Headers\Dependencies\glad\glad.h" />
+    <ClInclude Include="src\Headers\Dependencies\glad\khrplatform.h" />
+    <ClInclude Include="src\Headers\Entities\entity.h" />
+    <ClInclude Include="src\Headers\Entities\rectangle.h" />
+    <ClInclude Include="src\Headers\Entities\shape.h" />
+    <ClInclude Include="src\Headers\Entities\sprite.h" />
+    <ClInclude Include="src\Headers\Entities\triangle.h" />
+    <ClInclude Include="src\Headers\Maths\myMaths.h" />
+    <ClInclude Include="src\Headers\Maths\transform.h" />
+    <ClInclude Include="src\Headers\Renderer\renderer.h" />
+    <ClInclude Include="src\Headers\Renderer\shader.h" />
+    <ClInclude Include="src\Headers\Utils\core.h" />
+    <ClInclude Include="src\Headers\Utils\Input.h" />
+    <ClInclude Include="src\Headers\Utils\lib_time.h" />
+    <ClInclude Include="src\Headers\Utils\loader.h" />
+    <ClInclude Include="src\Headers\Utils\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\animation.h" />
-    <ClInclude Include="src\base_game.h" />
-    <ClInclude Include="src\collisionManager.h" />
-    <ClInclude Include="src\core.h" />
-    <ClInclude Include="src\deps.h" />
-    <ClInclude Include="src\entity.h" />
-    <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\lib_time.h" />
-    <ClInclude Include="src\loader.h" />
-    <ClInclude Include="src\myMaths.h" />
-    <ClInclude Include="src\rectangle.h" />
-    <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\shader.h" />
-    <ClInclude Include="src\shape.h" />
-    <ClInclude Include="src\sprite.h" />
-    <ClInclude Include="src\stb_image.h" />
-    <ClInclude Include="src\transform.h" />
-    <ClInclude Include="src\triangle.h" />
-    <ClInclude Include="src\window.h" />
+    <ClCompile Include="src\Source\Animation\animation.cpp" />
+    <ClCompile Include="src\Source\Collision\collisionManager.cpp" />
+    <ClCompile Include="src\Source\Core\base_game.cpp" />
+    <ClCompile Include="src\Source\Core\window.cpp" />
+    <ClCompile Include="src\Source\Dependencies\glad.c">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\obj\Win32_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <EnablePREfast>false</EnablePREfast>
+      <OmitFramePointers>false</OmitFramePointers>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\lib\glm;C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN32\include;C:\Users\barra\Documents\Image Campus\Image Campus 2024\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Source\Entities\entity.cpp" />
+    <ClCompile Include="src\Source\Entities\rectangle.cpp" />
+    <ClCompile Include="src\Source\Entities\shape.cpp" />
+    <ClCompile Include="src\Source\Entities\sprite.cpp" />
+    <ClCompile Include="src\Source\Entities\triangle.cpp" />
+    <ClCompile Include="src\Source\Maths\myMaths.cpp" />
+    <ClCompile Include="src\Source\Renderer\renderer.cpp" />
+    <ClCompile Include="src\Source\Renderer\shader.cpp" />
+    <ClCompile Include="src\Source\Utils\core.cpp" />
+    <ClCompile Include="src\Source\Utils\Input.cpp" />
+    <ClCompile Include="src\Source\Utils\lib_time.cpp" />
+    <ClCompile Include="src\Source\Utils\loader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -113,18 +191,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)_$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;$(ProjectDir)src/Headers/Dependencies/glad</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)_$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;$(ProjectDir)src/Headers/Dependencies/glad</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)_$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;$(ProjectDir)src/Headers/Dependencies/glad</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)_$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;$(ProjectDir)src/Headers/Dependencies/glad</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -166,7 +248,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,7 +265,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;$(ProjectDir)src/Headers;$(ProjectDir)src/Headers/Dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

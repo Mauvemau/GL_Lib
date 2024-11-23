@@ -9,7 +9,12 @@ find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-include_directories(GL_Lib/src GL_Lib/src/glad/include)
+include_directories(${CMAKE_SOURCE_DIR}/GL_Lib/GL_Lib/src/Headers/Dependencies)
+include_directories(${CMAKE_SOURCE_DIR}/GL_Lib/src/Headers/Dependencies)
+include_directories(${CMAKE_SOURCE_DIR}/GL_Lib/src/Headers)
+include_directories(${CMAKE_SOURCE_DIR}/GL_Lib/src/Source)
+include_directories(${CMAKE_SOURCE_DIR}/GL_Lib/src/Headers/Dependencies/glad)
+include_directories(GL_Lib/src GL_Lib/src/Headers/Dependencies/glad)
 add_executable(glLib ${GL_LIB_SOURCES} ${GL_LIB_SOURCES_C})
 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
