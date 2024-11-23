@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "deps.h"
+#include "../Dependencies/deps.h"
 #include "../Maths/transform.h"
 
 namespace gllib {

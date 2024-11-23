@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\deps.h" />
     <ClInclude Include="src\Headers\Animation\animation.h" />
     <ClInclude Include="src\Headers\Collision\collisionManager.h" />
     <ClInclude Include="src\Headers\Core\base_game.h" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "deps.h"
+#include "../Dependencies/deps.h"
 #include "window.h"
 #include "../Utils/core.h"
 #include "../Utils/Input.h"

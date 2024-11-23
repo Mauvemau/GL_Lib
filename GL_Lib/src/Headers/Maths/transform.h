@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "deps.h"
+#include "../Dependencies/deps.h"
 #ifdef _WIN32 // Directory is different in linux
 #include "glm.hpp"
 #else

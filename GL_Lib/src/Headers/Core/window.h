@@ -1,5 +1,5 @@
 #pragma once
-#include "deps.h"
+#include "../Dependencies/deps.h"
 
 #include <iostream>
 #include <GLFW/glfw3.h>
