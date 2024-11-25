@@ -169,6 +169,8 @@ void Game::checkInputs(gllib::Animation* player)
             colliding->update();
             rockColliding = true;
         }
+        player->update();
+        UpdatePlayerPosition();
     }
 
     if (Input::getKeyPressed(Key_A))
@@ -187,6 +189,8 @@ void Game::checkInputs(gllib::Animation* player)
             colliding->update();
             rockColliding = true;
         }
+        player->update();
+        UpdatePlayerPosition();
     }
 
     if (Input::getKeyPressed(Key_W))
@@ -197,6 +201,8 @@ void Game::checkInputs(gllib::Animation* player)
         {
             player->move({0.f, -speed, 0.f});
         }
+        player->update();
+        UpdatePlayerPosition();
     }
 
     if (Input::getKeyPressed(Key_S))
@@ -207,9 +213,10 @@ void Game::checkInputs(gllib::Animation* player)
         {
             player->move({0.f, speed, 0.f});
         }
+        player->update();
+        UpdatePlayerPosition();
     }
-    player->update();
-    UpdatePlayerPosition();
+    
 }
 
 void Game::UpdatePlayerPosition()
