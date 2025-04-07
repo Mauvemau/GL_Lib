@@ -50,6 +50,7 @@ namespace gllib {
 
 		static void setModelMatrix(glm::mat4 newModelMatrix);
 		static void setOrthoProjectionMatrix(float width, float height);
+		static void setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane);
 
 		static void clear();
 	};

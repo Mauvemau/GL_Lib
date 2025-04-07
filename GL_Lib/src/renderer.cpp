@@ -5,8 +5,8 @@
 using namespace gllib;
 using namespace std;
 
-glm::mat4 Renderer::projMatrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
 void Renderer::setUpVertexAttributes() {
@@ -130,6 +130,10 @@ void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
 
 void Renderer::setOrthoProjectionMatrix(float width, float height) {
     projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
+}
+
+void Renderer::setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane) {
+    projMatrix = glm::perspective(glm::radians(fov), width / height, 0.1f, farPlane);
 }
 
 void Renderer::clear() {
