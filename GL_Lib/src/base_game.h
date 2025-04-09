@@ -10,6 +10,7 @@
 #include "triangle.h"
 #include "rectangle.h"
 #include "sprite.h"
+#include "box.h"
 #include "animation.h"
 #include "shader.h"
 

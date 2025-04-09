@@ -71,7 +71,7 @@ void Shape::internalDraw() {
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.x), glm::vec3(1.0, 0.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    trs = glm::scale(trs, glm::vec3(transform.scale.x, transform.scale.y, 1.0f));
+    trs = glm::scale(trs, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 
     Renderer::setModelMatrix(trs);
     Renderer::drawElements(renderData, indexSize);
