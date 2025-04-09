@@ -1,7 +1,7 @@
 #include "deps.h"
 
 #include "core.h"
-#include "Input.h"
+#include "input.h"
 #include "window.h"
 #include "renderer.h"
 #include "lib_time.h"
@@ -10,6 +10,7 @@
 #include "triangle.h"
 #include "rectangle.h"
 #include "sprite.h"
+#include "box.h"
 #include "animation.h"
 #include "shader.h"
 

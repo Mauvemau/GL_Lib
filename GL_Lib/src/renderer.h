@@ -35,6 +35,8 @@ namespace gllib {
 		static void setUpVertexAttributes();
 		static void setUpMVP();
 
+		static void setLazyWireframeMode(bool set);
+
 		static unsigned int createVertexArrayObject();
 		static unsigned int createVertexBufferObject(const float vertexData[], GLsizei bufferSize);
 		static unsigned int createElementBufferObject(const int index[], GLsizei bufferSize);
