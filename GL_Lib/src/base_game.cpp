@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Input.h"
-
 using namespace gllib;
 using namespace std;
 
@@ -47,6 +45,8 @@ bool BaseGame::initInternal() {
 	shaderProgramTexture = gllib::Shader::createShader(vertexSource2, fragmentSource2);
 	// Set current shader program
 	Shader::useShaderProgram(shaderProgramSolidColor);
+	// Enabling the Z-Buffer
+	glEnable(GL_DEPTH_TEST);
 
 	init();
 	updateInternal();
