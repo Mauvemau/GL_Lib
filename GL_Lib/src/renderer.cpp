@@ -34,6 +34,10 @@ void Renderer::setUpMVP() {
     glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
+void Renderer::setLazyWireframeMode(bool set){
+    set ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
 unsigned int Renderer::createVertexArrayObject() {
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
