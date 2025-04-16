@@ -6,8 +6,8 @@ using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
-    gllib::Triangle* triangle;
-    gllib::Rectangle* rectangle;
+    gllib::Box* box;
+    bool wireframeMode = true;
 
 protected:
     void init() override;
@@ -22,12 +22,13 @@ public:
 Game::Game() {
     window->setVsyncEnabled(true);
     cout << "Game created!\n";
+    gllib::Renderer::setLazyWireframeMode(wireframeMode);
 
     gllib::Transform trs;
-    trs.position = { 0.0f, 0.0f, -5.0f };
+    trs.position = { 0.0f, 0.0f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs.scale = { .5645f, .5f, 0.0f };
-    triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
+    trs.scale = { 1.0f, 1.0f, 1.0f };
+    box = new gllib::Box(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
 }
 
 Game::~Game() {
@@ -43,30 +44,25 @@ void Game::init() {
 
 void Game::update() {
     // Update
-
-    if (Input::getKeyPressed(Keys::Key_A))
-    {
-        cout << "A key is pressed!\n";
+    if (Input::getKeyReleased(Key_W)) {
+        wireframeMode = !wireframeMode;
+        gllib::Renderer::setLazyWireframeMode(wireframeMode);
     }
 
-    if (Input::getKeyReleased(Key_A))
-    {
-        cout << "A key is released!\n";
-
-    }
-    gllib::Quaternion rot = triangle->getRotationQuat();
-    rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
-    triangle->setRotationQuat(rot);
+    gllib::Quaternion rot = box->getRotationQuat();
+    rot.x += gllib::LibTime::getDeltaTime() * 30.0f;
+    rot.y += gllib::LibTime::getDeltaTime() * 20.0f;
+    box->setRotationQuat(rot);
 
     // Draw
     gllib::Renderer::clear();
 
-    triangle->draw();
+    box->draw();
 }
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
-    delete triangle;
+    delete box;
 }
 
 int main() {

@@ -64,6 +64,9 @@
     <ClCompile Include="src\collisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\renderer.h">
@@ -121,6 +124,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\collisionManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\box.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
