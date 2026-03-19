@@ -5,7 +5,7 @@
 namespace gllib {
 	class DLLExport Rectangle : public Shape {
 	private:
-		Color color;
+		Color color{};
 
 		void updateRenderData(Color color);
 	public:

@@ -47,6 +47,7 @@ bool BaseGame::initInternal() {
 	Shader::useShaderProgram(shaderProgramSolidColor);
 	// Enabling the Z-Buffer
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
 	init();
 	updateInternal();

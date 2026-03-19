@@ -7,7 +7,7 @@ namespace gllib {
 
     class DLLExport Shape : public Entity {
     private:
-        RenderData renderData;
+        RenderData renderData{};
         unsigned int indexSize;
 
     protected:

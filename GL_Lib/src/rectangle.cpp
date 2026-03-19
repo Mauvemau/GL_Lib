@@ -34,7 +34,7 @@ void Rectangle::updateRenderData(Color color) {
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
         0, 1, 3, // First triangle
-        1, 2, 3  // Second traingle
+        1, 2, 3  // Second triangle
     };
 
     alignVertex(rectangleVertexData, 4, 9);

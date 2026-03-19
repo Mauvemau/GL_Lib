@@ -25,7 +25,6 @@ Shape::Shape(Transform transform) :
 
 Shape::~Shape() {
     cout << "Destroyed shape.\n";
-    // Destroy the render data to free up vram
     Renderer::destroyRenderData(renderData);
 }
 
