@@ -8,7 +8,11 @@ class Game : public gllib::BaseGame {
 private:
     gllib::Box* box;
     gllib::Animation* coin;
-    bool wireframeMode = true;
+    bool wireframeMode = false;
+
+    float cameraSpeed = 2.5f;
+    float cameraSensitivity = 100.0f;
+    gllib::Vector3 camRotation = gllib::Camera::forwardWorld();
 
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
     float myTime = 0;
@@ -17,6 +21,8 @@ protected:
     void init() override;
     void update() override;
     void uninit() override;
+
+    void handlePlayerInput();
 
 public:
     Game();
@@ -57,12 +63,11 @@ void Game::init() {
     window->setTitle("Cool rotating box");
 }
 
+
+
 void Game::update() {
     // Update
-    if (Input::getKeyReleased(Key_W)) {
-        wireframeMode = !wireframeMode;
-        gllib::Renderer::setLazyWireframeMode(wireframeMode);
-    }
+    handlePlayerInput();
 
     gllib::Quaternion rot = box->getRotationQuat();
     rot.x += 30.0f * gllib::LibTime::getDeltaTime();
@@ -100,6 +105,49 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete box;
     delete coin;
+}
+
+void Game::handlePlayerInput() {
+    if (Input::getKeyPressed(Key_Escape)) {
+        stop();
+    }
+    if (Input::getKeyReleased(Key_Q)) {
+        wireframeMode = !wireframeMode;
+        gllib::Renderer::setLazyWireframeMode(wireframeMode);
+    }
+
+    if (Input::getKeyPressed(Key_W)) {
+        camera->move(camera->forward() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_A)) {
+        camera->move(-camera->right() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_S)) {
+        camera->move(-camera->forward() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_D)) {
+        camera->move(camera->right() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_Space)) {
+        camera->move(camera->up() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_LeftCtrl)) {
+        camera->move(-camera->up() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+
+    if (Input::getKeyPressed(Key_Left)) {
+        camRotation.y -= cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
+    }
+    if (Input::getKeyPressed(Key_Right)) {
+        camRotation.y += cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
+    }
+    if (Input::getKeyPressed(Key_Up)) {
+        camRotation.x += cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
+    }
+    if (Input::getKeyPressed(Key_Down)) {
+        camRotation.x -= cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
+    }
+    camera->rotate(camRotation);
 }
 
 int main() {

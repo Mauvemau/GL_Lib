@@ -51,6 +51,7 @@ namespace gllib {
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 
 		static void setModelMatrix(glm::mat4 newModelMatrix);
+		static void setViewMatrix(glm::mat4 newViewMatrix);
 		static void setOrthoProjectionMatrix(float width, float height);
 		static void setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane);
 

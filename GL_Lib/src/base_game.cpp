@@ -22,11 +22,13 @@ BaseGame::BaseGame() {
 	gllib::LibCore::initGlad();
 	
 	input = new Input(window->getReference());
+	camera = new Camera();
 }
 
 BaseGame::~BaseGame() {
 	delete input;
 	delete window;
+	delete camera;
 }
 
 // Private
@@ -58,9 +60,10 @@ bool BaseGame::initInternal() {
 
 void BaseGame::updateInternal() {
 	// Loop until the user closes the window
-	while (!window->getShouldClose()) {
+	while (!window->getShouldClose() && !shouldStop) {
 
 		update();
+		camera->update();
 
 		// Swap front and back buffers
 		window->swapBuffers();
@@ -78,4 +81,8 @@ void BaseGame::uninitInternal() {
 void BaseGame::start() {
 	initInternal();
 	uninitInternal();
+}
+
+void BaseGame::stop() {
+	shouldStop = true;
 }

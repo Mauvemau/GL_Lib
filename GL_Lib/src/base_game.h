@@ -6,6 +6,7 @@
 #include "renderer.h"
 #include "lib_time.h"
 #include "loader.h"
+#include "camera.h"
 
 #include "triangle.h"
 #include "rectangle.h"
@@ -19,6 +20,8 @@ namespace gllib {
 	class DLLExport BaseGame {
 	private:
 		LibCore libCore;
+
+		bool shouldStop = false;
 		
 		bool initInternal();
 		void updateInternal();
@@ -27,6 +30,7 @@ namespace gllib {
 	protected:
 		Window* window;
 		Input* input;
+		Camera* camera;
 
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
@@ -40,6 +44,7 @@ namespace gllib {
 		virtual ~BaseGame();
 
 		void start();
+		void stop();
 	};
 
 }

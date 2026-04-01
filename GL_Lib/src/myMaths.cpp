@@ -3,8 +3,19 @@
 #include <cmath>
 
 
-namespace gllib
-{
+namespace gllib{
+     Vector3 Maths::cross(Vector3 a, Vector3 b) {
+        return {
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        };
+    }
+
+    float Maths::dot(Vector3 a, Vector3 b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
     float Maths::deg2Rad()
     {
         constexpr float pi = 3.14159265359f;

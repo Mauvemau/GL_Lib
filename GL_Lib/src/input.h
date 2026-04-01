@@ -29,7 +29,28 @@ enum Keys
     Key_W,
     Key_X,
     Key_Y,
-    Key_Z
+    Key_Z,
+
+    // Common keys
+    Key_Space      = GLFW_KEY_SPACE,
+    Key_Enter      = GLFW_KEY_ENTER,
+    Key_Escape     = GLFW_KEY_ESCAPE,
+    Key_Tab        = GLFW_KEY_TAB,
+    Key_Backspace  = GLFW_KEY_BACKSPACE,
+
+    // Modifiers
+    Key_LeftShift  = GLFW_KEY_LEFT_SHIFT,
+    Key_RightShift = GLFW_KEY_RIGHT_SHIFT,
+    Key_LeftCtrl   = GLFW_KEY_LEFT_CONTROL,
+    Key_RightCtrl  = GLFW_KEY_RIGHT_CONTROL,
+    Key_LeftAlt    = GLFW_KEY_LEFT_ALT,
+    Key_RightAlt   = GLFW_KEY_RIGHT_ALT,
+
+    // Arrows
+    Key_Up    = GLFW_KEY_UP,
+    Key_Down  = GLFW_KEY_DOWN,
+    Key_Left  = GLFW_KEY_LEFT,
+    Key_Right = GLFW_KEY_RIGHT
 };
 
 class DLLExport Input {

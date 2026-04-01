@@ -132,6 +132,10 @@ void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
     modelMatrix = newModelMatrix;
 }
 
+void Renderer::setViewMatrix(glm::mat4 newViewMatrix) {
+    viewMatrix = newViewMatrix;
+}
+
 void Renderer::setOrthoProjectionMatrix(float width, float height) {
     projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
 }

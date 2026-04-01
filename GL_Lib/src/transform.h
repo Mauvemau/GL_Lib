@@ -14,9 +14,31 @@ namespace gllib
         float y; // height | yaw
         float z; // depth | roll
 
+        explicit operator glm::vec3() const {
+            return {x, y, z};
+        }
+
         Vector3 operator*(float scalar)
         {
             return {x * scalar, y * scalar, z * scalar};
+        }
+
+        Vector3 operator+(const Vector3& other) const
+        {
+            return { x + other.x, y + other.y, z + other.z };
+        }
+
+        Vector3 operator-(const Vector3& other) const
+        {
+            return { x - other.x, y - other.y, z - other.z };
+        }
+
+        Vector3& operator-=(const Vector3& other)
+        {
+            x -= other.x;
+            y -= other.y;
+            z -= other.z;
+            return *this;
         }
 
         Vector3& operator+=(Vector3 vector)
@@ -31,6 +53,22 @@ namespace gllib
         {
             return {x / scalar, y / scalar, z / scalar};
         }
+
+        Vector3 operator-( ) const
+        {
+            return { -x, -y, -z };
+        }
+
+        float length() {
+            return std::sqrt(x * x + y * y + z * z);
+        }
+
+        Vector3 normalized() {
+            float len = length();
+            if (len == 0.0f) return {0.0f, 0.0f, 0.0f};
+            return {x / len, y / len, z / len};
+        }
+
 
         Vector3(float iX, float iY, float iZ)
         {
