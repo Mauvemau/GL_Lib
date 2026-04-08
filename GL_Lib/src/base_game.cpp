@@ -8,7 +8,7 @@ using namespace std;
 // Constr/Destr
 
 BaseGame::BaseGame() {
-	window = new Window(640, 480, "Loading...");
+	window = new Window(1240, 720, "Loading...");
 
 	// Confirm that the window has been properly initialized
 	if (!window->getIsInitialized()) {

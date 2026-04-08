@@ -6,7 +6,7 @@ using namespace gllib;
 using namespace std;
 
 glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
 void Renderer::setUpVertexAttributes() {

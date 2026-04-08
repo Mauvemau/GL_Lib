@@ -8,11 +8,13 @@ using namespace std;
 
 namespace gllib {
 
-    FirstPersonCamera::FirstPersonCamera(Vector3 *target, Vector3 initDirection, float sensitivity) {
-        this->target = target;
-
+    FirstPersonCamera::FirstPersonCamera(Vector3 initPosition, Vector3 initDirection, float sensitivity) {
+        this->position = initPosition;
+        initDirection = initDirection.normalized();
         yaw = glm::degrees(atan2(initDirection.z, initDirection.x));
         pitch = glm::degrees(asin(initDirection.y));
+        rotate(pitch, yaw);
+        update();
 
         this->sensitivity = sensitivity;
         cout << "Created FP Camera.\n";
@@ -29,6 +31,11 @@ namespace gllib {
 
     void FirstPersonCamera::setSensitivity(float sensitivity) {
         this->sensitivity = sensitivity;
+    }
+
+    void FirstPersonCamera::followTargetPosition(Vector3 targetPosition) {
+        position = targetPosition;
+        update();
     }
 
     void FirstPersonCamera::updateMouseInput() {

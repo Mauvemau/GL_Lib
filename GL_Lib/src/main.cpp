@@ -12,7 +12,11 @@ private:
 
     gllib::Box* box;
     gllib::Animation* coin;
+    gllib::Box* player;
+    gllib::Box* floor;
     bool wireframeMode = false;
+
+    float playerSpeed = 2.5f;
 
     float cameraSensitivity = .5f;
     bool cameraLocked = true;
@@ -37,7 +41,8 @@ Game::Game() {
     cout << "Game created!\n";
     gllib::Renderer::setLazyWireframeMode(wireframeMode);
 
-    camera = new gllib::FirstPersonCamera(nullptr, gllib::Vector3(0.0f, 0.0f, 0.0f), cameraSensitivity);
+    camera = new gllib::FirstPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
+                                         gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity);
 
     gllib::Transform trs;
     trs.position = { 0.0f, 0.0f, 0.0f };
@@ -55,6 +60,18 @@ Game::Game() {
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
     coin->setCurrentFrame(0);
     coin->setDurationInSecs(.6);
+
+    gllib::Transform trs3;
+    trs3.position = { 0.0f, 0.0f, -3.0f };
+    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs3.scale = { 1.0f, 1.0f, 1.0f };
+    player = new gllib::Box(trs3, { .75f, 0.75f, 0.75f, 1.0f });
+
+    gllib::Transform trs4;
+    trs4.position = { 0.0f, -1.5f, 0.0f };
+    trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs4.scale = { 6.0f, .1f, 6.0f };
+    floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f });
 }
 
 Game::~Game() {
@@ -102,6 +119,7 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     box->draw();
+    floor->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     coin->draw();
 }
@@ -110,6 +128,9 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete box;
     delete coin;
+    delete floor;
+    delete player;
+    delete camera;
 }
 
 void Game::handlePlayerInput() {
@@ -125,6 +146,32 @@ void Game::handlePlayerInput() {
         Input::setCursorLocked(!cameraLocked);
     }
 
+    if (Input::getKeyPressed(Key_W)) {
+        gllib::Vector3 forwardDir = camera->forward();
+        forwardDir.y = .0f;
+        forwardDir = forwardDir.normalized();
+        player->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_A)) {
+        player->move(-camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_S)) {
+        gllib::Vector3 forwardDir = camera->forward();
+        forwardDir.y = .0f;
+        forwardDir = forwardDir.normalized();
+        player->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_D)) {
+        player->move(camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_Space)) {
+        player->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+    if (Input::getKeyPressed(Key_LeftCtrl)) {
+        player->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    }
+
+    camera->followTargetPosition(player->getPosition());
     if (cameraLocked) return;
     camera->updateMouseInput();
 }

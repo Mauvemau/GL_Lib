@@ -23,7 +23,7 @@ namespace gllib {
         void rotate(float x, float y);
         void lookAt(Vector3 target);
 
-        virtual void update();
+        void update();
     };
 
 }
