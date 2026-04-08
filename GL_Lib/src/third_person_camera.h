@@ -3,10 +3,12 @@
 #include "camera.h"
 
 namespace gllib {
-
-    class DLLExport FirstPersonCamera : public Camera{
+    class ThirdPersonCamera : public Camera {
     private:
+        Vector3 target;
+
         float sensitivity;
+        float distance;
 
         float pitch;
         float yaw;
@@ -15,14 +17,13 @@ namespace gllib {
         float minRotationX = -89.0f;
 
     public:
-        FirstPersonCamera(Vector3 initPosition, Vector3 initDirection, float sensitivity);
-        ~FirstPersonCamera() override;
+        ThirdPersonCamera(Vector3 initPosition, Vector3 initDirection, float sensitivity, float distance);
+        ~ThirdPersonCamera() override;
 
         void setMinMaxClampX(float max, float min);
         void setSensitivity(float sensitivity);
 
-        void followTargetPosition(Vector3 targetPosition);
         void updateMouseInput();
+        void updateCamera(Vector3 target);
     };
-
 }

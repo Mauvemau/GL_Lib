@@ -76,12 +76,12 @@ void Sprite::updateRenderData() {
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
         0, 1, 3, // First triangle
-        1, 2, 3  // Second traingle
+        1, 2, 3  // Second triangle
     };
 
     alignVertex(rectangleVertexData, 4, 9);
 
-    // Aquire the size of each buffer
+    // Acquire the size of each buffer
     int vertexDataSize = sizeof(rectangleVertexData) / sizeof(rectangleVertexData[0]);
     int indexSize = sizeof(rectangleIndex) / sizeof(rectangleIndex[0]);
 

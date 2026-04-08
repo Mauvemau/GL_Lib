@@ -7,6 +7,8 @@ namespace gllib {
     protected:
         Vector3 position;
         Vector3 direction;
+
+        void update();
     public:
         Camera();
         Camera(Vector3 position, Vector3 direction);
@@ -22,8 +24,6 @@ namespace gllib {
         void move(Vector3 direction);
         void rotate(float x, float y);
         void lookAt(Vector3 target);
-
-        void update();
     };
 
 }

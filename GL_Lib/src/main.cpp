@@ -3,12 +3,13 @@
 #include <iostream>
 
 #include "first_person_camera.h"
+#include "third_person_camera.h"
 
 using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
-    gllib::FirstPersonCamera* camera;
+    gllib::ThirdPersonCamera* camera;
 
     gllib::Box* box;
     gllib::Animation* coin;
@@ -41,8 +42,8 @@ Game::Game() {
     cout << "Game created!\n";
     gllib::Renderer::setLazyWireframeMode(wireframeMode);
 
-    camera = new gllib::FirstPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
-                                         gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity);
+    camera = new gllib::ThirdPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
+                                         gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity, 5.0f);
 
     gllib::Transform trs;
     trs.position = { 0.0f, 0.0f, 0.0f };
@@ -62,9 +63,9 @@ Game::Game() {
     coin->setDurationInSecs(.6);
 
     gllib::Transform trs3;
-    trs3.position = { 0.0f, 0.0f, -3.0f };
+    trs3.position = { 0.0f, -1.0f, -3.0f };
     trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs3.scale = { 1.0f, 1.0f, 1.0f };
+    trs3.scale = { 0.5f, 0.5f, 0.5f };
     player = new gllib::Box(trs3, { .75f, 0.75f, 0.75f, 1.0f });
 
     gllib::Transform trs4;
@@ -119,6 +120,7 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     box->draw();
+    player->draw();
     floor->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     coin->draw();
@@ -171,7 +173,7 @@ void Game::handlePlayerInput() {
         player->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
     }
 
-    camera->followTargetPosition(player->getPosition());
+    camera->updateCamera(player->getPosition());
     if (cameraLocked) return;
     camera->updateMouseInput();
 }
