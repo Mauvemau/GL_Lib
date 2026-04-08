@@ -1,5 +1,4 @@
 #pragma once
-#include "renderer.h"
 #include "myMaths.h"
 
 namespace gllib {
@@ -10,6 +9,7 @@ namespace gllib {
         Vector3 direction;
     public:
         Camera();
+        Camera(Vector3 position, Vector3 direction);
         virtual ~Camera();
 
         Vector3 forward();
@@ -20,9 +20,10 @@ namespace gllib {
         static Vector3 upWorld();
 
         void move(Vector3 direction);
-        void rotate(Vector3 eulerRotation);
+        void rotate(float x, float y);
+        void lookAt(Vector3 target);
 
-        void update();
+        virtual void update();
     };
 
 }

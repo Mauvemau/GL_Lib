@@ -16,6 +16,12 @@ namespace gllib{
         return a.x * b.x + a.y * b.y + a.z * b.z;
     }
 
+    float Maths::clamp(float value, float min, float max) {
+         if (value < min) return min;
+         if (value > max) return max;
+         return value;
+     }
+
     float Maths::deg2Rad()
     {
         constexpr float pi = 3.14159265359f;

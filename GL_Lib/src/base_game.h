@@ -30,7 +30,6 @@ namespace gllib {
 	protected:
 		Window* window;
 		Input* input;
-		Camera* camera;
 
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;

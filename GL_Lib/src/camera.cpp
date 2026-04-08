@@ -1,13 +1,25 @@
 #include "camera.h"
+#include "renderer.h"
+
+#include <iostream>
+
+using namespace std;
 
 namespace gllib {
 
     Camera::Camera() {
+        position = Vector3(0.0f, 0.0f, -4.0f);
+        lookAt(Vector3(0.0f, 0.0f, 0.0f));
+    }
 
+    Camera::Camera(Vector3 position, Vector3 direction) {
+        this->position = position;
+        lookAt(direction);
+        cout << "Created Camera.\n";
     }
 
     Camera::~Camera() {
-
+        cout << "Destroyed Camera.\n";
     }
 
     Vector3 Camera::forwardWorld() {
@@ -38,10 +50,14 @@ namespace gllib {
         this->position += position;
     }
 
-    void Camera::rotate(Vector3 direction) {
-        this->direction.x = cos(glm::radians(direction.y)) * cos(glm::radians(direction.x));
-        this->direction.y = sin(glm::radians(direction.x));
-        this->direction.z = sin(glm::radians(direction.y)) * cos(glm::radians(direction.x));
+    void Camera::rotate(float x, float y) {
+        this->direction.x = cos(glm::radians(y)) * cos(glm::radians(x));
+        this->direction.y = sin(glm::radians(x));
+        this->direction.z = sin(glm::radians(y)) * cos(glm::radians(x));
+    }
+
+    void Camera::lookAt(Vector3 target) {
+        direction = (target - position).normalized();
     }
 
     void Camera::update() {

@@ -3,10 +3,30 @@
 #include <unordered_map>
 
 GLFWwindow* Input::window = nullptr;
+float Input::deltaX = 0;
+float Input::deltaY = 0;
 
-Input::Input(GLFWwindow* window)
-{
+float Input::lastX = 0;
+float Input::lastY = 0;
+bool Input::firstMouse = true;
+
+Input::Input(GLFWwindow* window){
     Input::window = window;
+    glfwSetCursorPosCallback(window, mouseCallback);
+}
+
+void Input::mouseCallback(GLFWwindow* window, double xPos, double yPos) {
+    if (firstMouse) {
+        lastX = static_cast<float>(xPos);
+        lastY = static_cast<float>(yPos);
+        firstMouse = false;
+    }
+
+    deltaX = static_cast<float>(xPos )- lastX;
+    deltaY = lastY - static_cast<float>(yPos);
+
+    lastX = static_cast<float>(xPos);
+    lastY = static_cast<float>(yPos);
 }
 
 bool Input::getKeyPressed(int key)
@@ -36,6 +56,26 @@ float Input::getMouseY()
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     return ypos;
+}
+
+float Input::getMouseDeltaX() {
+    float dx = deltaX;
+    deltaX = 0.0f;
+    return dx;
+}
+
+float Input::getMouseDeltaY() {
+    float dy = deltaY;
+    deltaY = 0.0f;
+    return dy;
+}
+
+void Input::setCursorLocked(bool lock) {
+    glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
+
+bool Input::isCursorLocked() {
+    return glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
 }
 
 bool Input::isAnyKeyPressed()

@@ -54,9 +54,22 @@ enum Keys
 };
 
 class DLLExport Input {
+private:
+    static GLFWwindow* window;
+    bool keys[GLFW_KEY_LAST + 1] = { false };
+    bool mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1] = { false };
+
+    static float deltaX;
+    static float deltaY;
+
+    static float lastX;
+    static float lastY;
+    static bool firstMouse;
 public:
     // Constructor
     Input(GLFWwindow* window);
+
+    static void mouseCallback(GLFWwindow* window, double xPos, double yPos);
 
     // Key input functions
     static bool getKeyPressed(int key);
@@ -68,10 +81,9 @@ public:
     
     static float getMouseX();
     static float getMouseY();
+    static float getMouseDeltaX();
+    static float getMouseDeltaY();
+    static void setCursorLocked(bool lock);
+    static bool isCursorLocked();
     static bool isAnyKeyPressed();
-private:
-    static GLFWwindow* window;
-    bool keys[GLFW_KEY_LAST + 1] = { false };
-    bool mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1] = { false };
-    
 };

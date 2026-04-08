@@ -2,17 +2,20 @@
 
 #include <iostream>
 
+#include "first_person_camera.h"
+
 using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
+    gllib::FirstPersonCamera* camera;
+
     gllib::Box* box;
     gllib::Animation* coin;
     bool wireframeMode = false;
 
-    float cameraSpeed = 2.5f;
-    float cameraSensitivity = 100.0f;
-    gllib::Vector3 camRotation = gllib::Camera::forwardWorld();
+    float cameraSensitivity = .5f;
+    bool cameraLocked = true;
 
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
     float myTime = 0;
@@ -33,6 +36,8 @@ Game::Game() {
     window->setVsyncEnabled(true);
     cout << "Game created!\n";
     gllib::Renderer::setLazyWireframeMode(wireframeMode);
+
+    camera = new gllib::FirstPersonCamera(nullptr, gllib::Vector3(0.0f, 0.0f, 0.0f), cameraSensitivity);
 
     gllib::Transform trs;
     trs.position = { 0.0f, 0.0f, 0.0f };
@@ -115,39 +120,13 @@ void Game::handlePlayerInput() {
         wireframeMode = !wireframeMode;
         gllib::Renderer::setLazyWireframeMode(wireframeMode);
     }
-
-    if (Input::getKeyPressed(Key_W)) {
-        camera->move(camera->forward() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
-    }
-    if (Input::getKeyPressed(Key_A)) {
-        camera->move(-camera->right() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
-    }
-    if (Input::getKeyPressed(Key_S)) {
-        camera->move(-camera->forward() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
-    }
-    if (Input::getKeyPressed(Key_D)) {
-        camera->move(camera->right() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
-    }
-    if (Input::getKeyPressed(Key_Space)) {
-        camera->move(camera->up() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
-    }
-    if (Input::getKeyPressed(Key_LeftCtrl)) {
-        camera->move(-camera->up() * cameraSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+    if (Input::getKeyReleased(Key_Tab)) {
+        cameraLocked = !cameraLocked;
+        Input::setCursorLocked(!cameraLocked);
     }
 
-    if (Input::getKeyPressed(Key_Left)) {
-        camRotation.y -= cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
-    }
-    if (Input::getKeyPressed(Key_Right)) {
-        camRotation.y += cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
-    }
-    if (Input::getKeyPressed(Key_Up)) {
-        camRotation.x += cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
-    }
-    if (Input::getKeyPressed(Key_Down)) {
-        camRotation.x -= cameraSensitivity * static_cast<float>(gllib::LibTime::getDeltaTime());
-    }
-    camera->rotate(camRotation);
+    if (cameraLocked) return;
+    camera->updateMouseInput();
 }
 
 int main() {
