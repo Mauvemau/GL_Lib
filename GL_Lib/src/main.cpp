@@ -22,6 +22,8 @@ private:
     float cameraSensitivity = .5f;
     bool cameraLocked = true;
 
+    bool lit = false;
+
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
     float myTime = 0;
 
@@ -118,7 +120,9 @@ void Game::update() {
     // Draw
     gllib::Renderer::clear();
 
-    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
+            gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+
     box->draw();
     player->draw();
     floor->draw();
@@ -142,6 +146,9 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_Q)) {
         wireframeMode = !wireframeMode;
         gllib::Renderer::setLazyWireframeMode(wireframeMode);
+    }
+    if (Input::getKeyReleased(Key_L)) {
+        lit = !lit;
     }
     if (Input::getKeyReleased(Key_Tab)) {
         cameraLocked = !cameraLocked;

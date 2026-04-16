@@ -104,6 +104,7 @@ void Shader::destroyShader(unsigned int program) {
 }
 
 const char* Shader::loadShader(string filePath) {
+    cout << "Loading Shader [" << filePath << "]..." << endl;
     return Loader::loadTextFile(filePath);
 }
 

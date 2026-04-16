@@ -24,6 +24,17 @@ void Renderer::setUpVertexAttributes() {
     glEnableVertexAttribArray(2);
 }
 
+void Renderer::setUpLightingUniforms() {
+    GLint prog = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+
+    int ambientColorLoc = glGetUniformLocation(prog, "u_AmbientColor");
+    int ambientStrengthLoc = glGetUniformLocation(prog, "u_AmbientStrength");
+
+    glUniform3f(ambientColorLoc, 0.5f, 0.5f, 0.5f);
+    glUniform1f(ambientStrengthLoc, 0.25f);
+}
+
 void Renderer::setUpMVP() {
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
@@ -101,6 +112,7 @@ void Renderer::destroyRenderData(RenderData rData) {
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     setUpMVP();
+    setUpLightingUniforms();
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 
@@ -111,8 +123,7 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     glBindVertexArray(0);
 }
 
-void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID)
-{
+void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID) {
     bindTexture(textureID);
     drawElements(rData, indexSize);
 }

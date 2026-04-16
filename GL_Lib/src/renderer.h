@@ -33,6 +33,7 @@ namespace gllib {
 
 	public:
 		static void setUpVertexAttributes();
+		static void setUpLightingUniforms();
 		static void setUpMVP();
 
 		static void setLazyWireframeMode(bool set);

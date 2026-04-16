@@ -1,3 +1,4 @@
+#pragma once
 #include "deps.h"
 
 #include "core.h"
@@ -32,6 +33,7 @@ namespace gllib {
 		Input* input;
 
 		unsigned int shaderProgramSolidColor;
+		unsigned int shaderProgramSolidColorLit;
 		unsigned int shaderProgramTexture;
 
 		virtual void init() {};
