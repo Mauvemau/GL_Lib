@@ -171,7 +171,7 @@ void Game::handlePlayerInput() {
 
     if (Input::getKeyPressed(Key_W)) {
         if (controllingLight) {
-            lightBox->move(gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            lightBox->move(-gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
             gllib::Vector3 forwardDir = camera->forward();
@@ -182,7 +182,7 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyPressed(Key_A)) {
         if (controllingLight) {
-            lightBox->move(-gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            lightBox->move(gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
             player->move(-camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
@@ -190,7 +190,7 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyPressed(Key_S)) {
         if (controllingLight) {
-            lightBox->move(-gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            lightBox->move(gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
             gllib::Vector3 forwardDir = camera->forward();
@@ -201,7 +201,7 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyPressed(Key_D)) {
         if (controllingLight) {
-            lightBox->move(gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            lightBox->move(-gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
             player->move(camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));

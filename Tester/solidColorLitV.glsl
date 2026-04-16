@@ -15,8 +15,11 @@ out vec4 vColor;
 
 void main(){
 	gl_Position = u_Projection * u_View * u_Model * aPosition;
+
 	vFragPos = vec3(u_Model * aPosition);
 
-	vNormal = mat3(u_Model) * aNormal;
+	mat3 normalMatrix = transpose(inverse(mat3(u_Model)));
+	vNormal = normalMatrix * aNormal;
+
 	vColor = aColor;
 }
