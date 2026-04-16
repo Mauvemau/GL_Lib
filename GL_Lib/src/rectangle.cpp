@@ -26,18 +26,18 @@ Rectangle::~Rectangle() {
 void Rectangle::updateRenderData(Color color) {
     // Values for the vertices
     float rectangleVertexData[] = {
-         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 1.0f, /* uv */
-         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 0.0f, /* uv */
-         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 0.0f, /* uv */
-         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
-    };
+        1.0f, 1.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  1.0f,1.0f,
+        1.0f, 0.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  1.0f,0.0f,
+        0.0f, 0.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  0.0f,0.0f,
+        0.0f, 1.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  0.0f,1.0f,
+   };
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
         0, 1, 3, // First triangle
         1, 2, 3  // Second triangle
     };
 
-    alignVertex(rectangleVertexData, 4, 9);
+    alignVertex(rectangleVertexData, 4, 12);
 
     // Aquire the size of each buffer
     int vertexDataSize = sizeof(rectangleVertexData) / sizeof(rectangleVertexData[0]);

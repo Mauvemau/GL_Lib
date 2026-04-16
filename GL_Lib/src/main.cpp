@@ -15,6 +15,7 @@ private:
     gllib::Animation* coin;
     gllib::Box* player;
     gllib::Box* floor;
+    gllib::Box* lightBox;
     bool wireframeMode = false;
 
     float playerSpeed = 2.5f;
@@ -23,6 +24,7 @@ private:
     bool cameraLocked = true;
 
     bool lit = false;
+    bool controllingLight = false;
 
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
     float myTime = 0;
@@ -75,6 +77,12 @@ Game::Game() {
     trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs4.scale = { 6.0f, .1f, 6.0f };
     floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    gllib::Transform trs5;
+    trs5.position = { 3.0f, 0.0f, 3.0f };
+    trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs5.scale = { 0.25f, 0.25f, 0.25f };
+    lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
 }
 
 Game::~Game() {
@@ -120,6 +128,8 @@ void Game::update() {
     // Draw
     gllib::Renderer::clear();
 
+    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    lightBox->draw();
     lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
             gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 
@@ -134,6 +144,7 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete box;
     delete coin;
+    delete lightBox;
     delete floor;
     delete player;
     delete camera;
@@ -150,37 +161,71 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_L)) {
         lit = !lit;
     }
+    if (Input::getKeyReleased(Key_K)) {
+        controllingLight = !controllingLight;
+    }
     if (Input::getKeyReleased(Key_Tab)) {
         cameraLocked = !cameraLocked;
         Input::setCursorLocked(!cameraLocked);
     }
 
     if (Input::getKeyPressed(Key_W)) {
-        gllib::Vector3 forwardDir = camera->forward();
-        forwardDir.y = .0f;
-        forwardDir = forwardDir.normalized();
-        player->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            gllib::Vector3 forwardDir = camera->forward();
+            forwardDir.y = .0f;
+            forwardDir = forwardDir.normalized();
+            player->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
     if (Input::getKeyPressed(Key_A)) {
-        player->move(-camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(-gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            player->move(-camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
     if (Input::getKeyPressed(Key_S)) {
-        gllib::Vector3 forwardDir = camera->forward();
-        forwardDir.y = .0f;
-        forwardDir = forwardDir.normalized();
-        player->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(-gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            gllib::Vector3 forwardDir = camera->forward();
+            forwardDir.y = .0f;
+            forwardDir = forwardDir.normalized();
+            player->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
     if (Input::getKeyPressed(Key_D)) {
-        player->move(camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            player->move(camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
     if (Input::getKeyPressed(Key_Space)) {
-        player->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            player->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
     if (Input::getKeyPressed(Key_LeftCtrl)) {
-        player->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingLight) {
+            lightBox->move(-gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
+        else {
+            player->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        }
     }
 
     camera->updateCamera(player->getPosition());
+    gllib::Renderer::setLightPos(glm::vec3(lightBox->getPosition()));
     if (cameraLocked) return;
     camera->updateMouseInput();
 }

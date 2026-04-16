@@ -68,18 +68,18 @@ void Sprite::updateRenderData() {
 
     // Values for the vertices
     float rectangleVertexData[] = {
-         1.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMax, vMin, /* uv */
-         1.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMax, vMax, /* uv */
-         0.0f, 0.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMin, vMax, /* uv */
-         0.0f, 1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ uMin, vMin, /* uv */
-    };
+        1.0f, 1.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  uMax,vMin,
+        1.0f, 0.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  uMax,vMax,
+        0.0f, 0.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  uMin,vMax,
+        0.0f, 1.0f, 0.0f,  0.0f,0.0f,1.0f,  color.r,color.g,color.b,color.a,  uMin,vMin,
+   };
     // The order in which the vertices are drawn
     const int rectangleIndex[] = {
         0, 1, 3, // First triangle
         1, 2, 3  // Second triangle
     };
 
-    alignVertex(rectangleVertexData, 4, 9);
+    alignVertex(rectangleVertexData, 4, 12);
 
     // Acquire the size of each buffer
     int vertexDataSize = sizeof(rectangleVertexData) / sizeof(rectangleVertexData[0]);

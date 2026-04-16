@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "transform.h"
+
 using namespace gllib;
 using namespace std;
 
@@ -9,19 +11,25 @@ glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.
 glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
+glm::vec3 Renderer::lightPos = glm::vec3(3.0f, 0.0f, 3.0f);
+
 void Renderer::setUpVertexAttributes() {
     // position attribute
-    // Pointer id 0, length is 3 floats (xyz), each line is 9 floats long in total (xyz,rgba,uv), value begins at position 0 on this line. 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), static_cast<void *>(nullptr));
+    // Pointer id 0, length is 3 floats (xyz), each line is 12 floats long in total (xyz,nxnynz,rgba,uv), value begins at position 0 on this line.
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), static_cast<void *>(nullptr));
     glEnableVertexAttribArray(0);
-    // color attribute
-    // Pointer id 1, length is 4 floats (rgba), value begins at position 3 on this line (after xyz). 
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
+    // normal attribute
+    // Pointed id 1, length is 3 floats (nx, ny, nz), value begins at position 3 on this line (after xyz).
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    // uv attribute
-    // Pointer id 2, length is 2 floats (uv), value begins at position 7 on this line (after xyzrgba).
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<void *>(7 * sizeof(float)));
+    // color attribute
+    // Pointer id 2, length is 4 floats (rgba), value begins at position 6 on this line (after xyznxnynz).
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 12 * sizeof(float), reinterpret_cast<void *>(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
+    // uv attribute
+    // Pointer id 3, length is 2 floats (uv), value begins at position 10 on this line (after xyznxnynzrgba).
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 12 * sizeof(float), reinterpret_cast<void *>(10 * sizeof(float)));
+    glEnableVertexAttribArray(3);
 }
 
 void Renderer::setUpLightingUniforms() {
@@ -30,9 +38,13 @@ void Renderer::setUpLightingUniforms() {
 
     int ambientColorLoc = glGetUniformLocation(prog, "u_AmbientColor");
     int ambientStrengthLoc = glGetUniformLocation(prog, "u_AmbientStrength");
-
-    glUniform3f(ambientColorLoc, 0.5f, 0.5f, 0.5f);
+    glUniform3f(ambientColorLoc, 1.0f, 1.0f, 1.0f);
     glUniform1f(ambientStrengthLoc, 0.25f);
+
+    int lightPosLoc = glGetUniformLocation(prog, "u_LightPos");
+    int lightColorLoc = glGetUniformLocation(prog, "u_LightColor");
+    glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+    glUniform3f(lightColorLoc, 0.5f, 0.5f, 0.5f);
 }
 
 void Renderer::setUpMVP() {
@@ -43,6 +55,15 @@ void Renderer::setUpMVP() {
     glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
     int mvpLocation = glGetUniformLocation(prog, "u_MVP");
     glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvp));
+
+    int modelLoc = glGetUniformLocation(prog, "u_Model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+    int viewLoc = glGetUniformLocation(prog, "u_View");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+
+    int projLoc = glGetUniformLocation(prog, "u_Projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projMatrix));
 }
 
 void Renderer::setLazyWireframeMode(bool set){
@@ -153,6 +174,10 @@ void Renderer::setOrthoProjectionMatrix(float width, float height) {
 
 void Renderer::setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane) {
     projMatrix = glm::perspective(glm::radians(fov), width / height, 0.1f, farPlane);
+}
+
+void Renderer::setLightPos(glm::vec3 newLightPos) {
+    lightPos = newLightPos;
 }
 
 void Renderer::clear() {

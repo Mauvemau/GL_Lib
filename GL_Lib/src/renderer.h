@@ -31,6 +31,8 @@ namespace gllib {
 		static glm::mat4 viewMatrix;
 		static glm::mat4 modelMatrix;
 
+		static glm::vec3 lightPos;
+
 	public:
 		static void setUpVertexAttributes();
 		static void setUpLightingUniforms();
@@ -55,6 +57,8 @@ namespace gllib {
 		static void setViewMatrix(glm::mat4 newViewMatrix);
 		static void setOrthoProjectionMatrix(float width, float height);
 		static void setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane);
+
+		static void setLightPos(glm::vec3 newLightPos);
 
 		static void clear();
 	};

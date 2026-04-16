@@ -27,33 +27,47 @@ Box::~Box() {
 
 void Box::updateRenderData(Color color) {
     float boxVertexData[] = {
-        // Front face
-        1.0f, 1.0f, 1.0f, color.r, color.g, color.b, color.a, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, color.r, color.g, color.b, color.a, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, color.r, color.g, color.b, color.a, 0.0f, 0.0f,
-        0.0f, 1.0f, 1.0f, color.r, color.g, color.b, color.a, 0.0f, 1.0f,
-        // Back face
-        1.0f, 1.0f, 0.0f, color.r, color.g, color.b, color.a, 1.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, color.r, color.g, color.b, color.a, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, color.r, color.g, color.b, color.a, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, color.r, color.g, color.b, color.a, 0.0f, 1.0f
+        // Front (+Z)
+        1,1,1,  0,0,1,  color.r,color.g,color.b,color.a,  1,1,
+        1,0,1,  0,0,1,  color.r,color.g,color.b,color.a,  1,0,
+        0,0,1,  0,0,1,  color.r,color.g,color.b,color.a,  0,0,
+        0,1,1,  0,0,1,  color.r,color.g,color.b,color.a,  0,1,
+        // Back (-Z)
+        1,1,0,  0,0,-1, color.r,color.g,color.b,color.a,  1,1,
+        1,0,0,  0,0,-1, color.r,color.g,color.b,color.a,  1,0,
+        0,0,0,  0,0,-1, color.r,color.g,color.b,color.a,  0,0,
+        0,1,0,  0,0,-1, color.r,color.g,color.b,color.a,  0,1,
+        // Right (+X)
+        1,1,1,  1,0,0,  color.r,color.g,color.b,color.a,  1,1,
+        1,1,0,  1,0,0,  color.r,color.g,color.b,color.a,  1,0,
+        1,0,0,  1,0,0,  color.r,color.g,color.b,color.a,  0,0,
+        1,0,1,  1,0,0,  color.r,color.g,color.b,color.a,  0,1,
+        // Left (-X)
+        0,1,1,  -1,0,0, color.r,color.g,color.b,color.a,  1,1,
+        0,1,0,  -1,0,0, color.r,color.g,color.b,color.a,  1,0,
+        0,0,0,  -1,0,0, color.r,color.g,color.b,color.a,  0,0,
+        0,0,1,  -1,0,0, color.r,color.g,color.b,color.a,  0,1,
+        // Top (+Y)
+        1,1,1,  0,-1,0,  color.r,color.g,color.b,color.a,  1,1,
+        0,1,1,  0,-1,0,  color.r,color.g,color.b,color.a,  0,1,
+        0,1,0,  0,-1,0,  color.r,color.g,color.b,color.a,  0,0,
+        1,1,0,  0,-1,0,  color.r,color.g,color.b,color.a,  1,0,
+        // Bottom (-Y)
+        1,0,1,  0,1,0, color.r,color.g,color.b,color.a,  1,1,
+        0,0,1,  0,1,0, color.r,color.g,color.b,color.a,  0,1,
+        0,0,0,  0,1,0, color.r,color.g,color.b,color.a,  0,0,
+        1,0,0,  0,1,0, color.r,color.g,color.b,color.a,  1,0,
     };
     const int boxIndex[] = {
-        // Front
-        0, 1, 3, 1, 2, 3,
-        // Right
-        0, 4, 1, 1, 4, 5,
-        // Back
-        4, 7, 5, 5, 7, 6,
-        // Left
-        7, 3, 6, 6, 3, 2,
-        // Top
-        0, 3, 4, 4, 3, 7,
-        // Bottom
-        1, 5, 2, 2, 5, 6
+        0,1,2, 0,2,3,        // Front
+        4,5,6, 4,6,7,        // Back
+        8,9,10, 8,10,11,     // Right
+        12,13,14, 12,14,15,  // Left
+        16,18,17, 16,19,18,  // Top
+        20,21,22, 20,22,23   // Bottom
     };
 
-    alignVertex(boxVertexData, 8, 9);
+    alignVertex(boxVertexData, 24, 12);
 
     int vertexDataSize = sizeof(boxVertexData) / sizeof(boxVertexData[0]);
     int indexSize = sizeof(boxIndex) / sizeof(boxIndex[0]);
