@@ -26,7 +26,7 @@ namespace gllib {
         glm::mat4 view = glm::lookAt(static_cast<glm::vec3>(position),
             static_cast<glm::vec3>(position + forward()),
             static_cast<glm::vec3>(up()));
-        Renderer::setViewMatrix(view);
+        Renderer::setViewMatrix(view, static_cast<glm::vec3>(position));
     }
 
     Vector3 Camera::forwardWorld() {

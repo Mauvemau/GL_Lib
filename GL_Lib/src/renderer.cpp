@@ -11,6 +11,7 @@ glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.
 glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
+glm::vec3 Renderer::cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 Renderer::lightPos = glm::vec3(3.0f, 0.0f, 3.0f);
 
 void Renderer::setUpVertexAttributes() {
@@ -45,6 +46,11 @@ void Renderer::setUpLightingUniforms() {
     int lightColorLoc = glGetUniformLocation(prog, "u_LightColor");
     glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(lightColorLoc, 0.5f, 0.5f, 0.5f);
+
+    int viewPosLoc = glGetUniformLocation(prog, "u_ViewPos");
+    int specularStrengthLoc = glGetUniformLocation(prog, "u_SpecularStrength");
+    glUniform3f(viewPosLoc, cameraPos.x, cameraPos.y, cameraPos.z);
+    glUniform1f(specularStrengthLoc, 0.5f);
 }
 
 void Renderer::setUpMVP() {
@@ -160,12 +166,21 @@ void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(0);
 }
 
+void Renderer::setCameraPos(glm::vec3 newCameraPos) {
+    cameraPos = newCameraPos;
+}
+
 void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
     modelMatrix = newModelMatrix;
 }
 
 void Renderer::setViewMatrix(glm::mat4 newViewMatrix) {
     viewMatrix = newViewMatrix;
+}
+
+void Renderer::setViewMatrix(glm::mat4 newViewMatrix, glm::vec3 newCameraPos) {
+    setViewMatrix(newViewMatrix);
+    setCameraPos(newCameraPos);
 }
 
 void Renderer::setOrthoProjectionMatrix(float width, float height) {

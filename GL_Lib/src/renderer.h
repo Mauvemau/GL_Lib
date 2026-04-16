@@ -31,6 +31,8 @@ namespace gllib {
 		static glm::mat4 viewMatrix;
 		static glm::mat4 modelMatrix;
 
+		static glm::vec3 cameraPos;
+
 		static glm::vec3 lightPos;
 
 	public:
@@ -53,8 +55,10 @@ namespace gllib {
 		static void bindTexture(unsigned int textureID);
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 
+		static void setCameraPos(glm::vec3 newCameraPos);
 		static void setModelMatrix(glm::mat4 newModelMatrix);
 		static void setViewMatrix(glm::mat4 newViewMatrix);
+		static void setViewMatrix(glm::mat4 newViewMatrix, glm::vec3 newCameraPos);
 		static void setOrthoProjectionMatrix(float width, float height);
 		static void setPerspectiveProjectionMatrix(float width, float height, float fov, float farPlane);
 
