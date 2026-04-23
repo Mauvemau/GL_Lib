@@ -1,11 +1,13 @@
 #pragma once
 
+#include "material.h"
 #include "shape.h"
 
 namespace gllib {
     class DLLExport Box : public Shape {
     private:
         Color color{};
+        Material* material;
 
         void updateRenderData(Color color);
     public:

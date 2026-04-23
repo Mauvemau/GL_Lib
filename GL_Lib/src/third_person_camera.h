@@ -3,7 +3,7 @@
 #include "camera.h"
 
 namespace gllib {
-    class ThirdPersonCamera : public Camera {
+    class DLLExport ThirdPersonCamera : public Camera {
     private:
         Vector3 target;
 

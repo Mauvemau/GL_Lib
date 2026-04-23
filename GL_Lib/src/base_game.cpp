@@ -40,12 +40,12 @@ bool BaseGame::initInternal() {
 	const char* fragmentSource1 = gllib::Shader::loadShader("solidColorF.glsl");
 	const char* vertexSource2 = gllib::Shader::loadShader("solidColorLitV.glsl");
 	const char* fragmentSource2 = gllib::Shader::loadShader("solidColorLitF.glsl");
-	const char* vertexSource3 = gllib::Shader::loadShader("textureV.glsl");
-	const char* fragmentSource3 = gllib::Shader::loadShader("textureF.glsl");
+	const char* vertexSource4 = gllib::Shader::loadShader("textureV.glsl");
+	const char* fragmentSource4 = gllib::Shader::loadShader("textureF.glsl");
 	// Create shader program
 	shaderProgramSolidColor = gllib::Shader::createShader(vertexSource1, fragmentSource1);
 	shaderProgramSolidColorLit = gllib::Shader::createShader(vertexSource2, fragmentSource2);
-	shaderProgramTexture = gllib::Shader::createShader(vertexSource3, fragmentSource3);
+	shaderProgramTexture = gllib::Shader::createShader(vertexSource4, fragmentSource4);
 	// Set current shader program
 	Shader::useShaderProgram(shaderProgramSolidColor);
 	// Enabling the Z-Buffer

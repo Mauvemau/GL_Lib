@@ -1,5 +1,6 @@
 #pragma once
 #include "deps.h"
+#include "material.h"
 
 #ifdef _WIN32 // Directory is different in linux
 #include <glm.hpp>
@@ -37,6 +38,7 @@ namespace gllib {
 
 	public:
 		static void setUpVertexAttributes();
+		static void setUpMaterial();
 		static void setUpLightingUniforms();
 		static void setUpMVP();
 
