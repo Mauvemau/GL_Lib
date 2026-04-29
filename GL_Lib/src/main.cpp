@@ -70,7 +70,12 @@ Game::Game() {
     trs3.position = { 0.0f, -1.0f, -3.0f };
     trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs3.scale = { 0.5f, 0.5f, 0.5f };
-    player = new gllib::Box(trs3, { .75f, 0.75f, 0.75f, 1.0f });
+
+    gllib::Material playerMat = gllib::Material({0.329412f, 0.223529f, 0.027451f},
+                                                {0.780392f, 0.568627f, 0.113725f},
+                                                {0.992157f, 0.941176f, 0.807843f},
+                                                27.8974f);
+    player = new gllib::Box(trs3, { 1.0f, 1.0f, 1.0f, 1.0f }, playerMat);
 
     gllib::Transform trs4;
     trs4.position = { 0.0f, -1.5f, 0.0f };

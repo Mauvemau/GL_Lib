@@ -38,7 +38,7 @@ namespace gllib {
 
 	public:
 		static void setUpVertexAttributes();
-		static void setUpMaterial();
+		static void setDefaultMaterial();
 		static void setUpLightingUniforms();
 		static void setUpMVP();
 
@@ -57,6 +57,7 @@ namespace gllib {
 		static void bindTexture(unsigned int textureID);
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 
+		static void setMaterial(const Material &material);
 		static void setCameraPos(glm::vec3 newCameraPos);
 		static void setModelMatrix(glm::mat4 newModelMatrix);
 		static void setViewMatrix(glm::mat4 newViewMatrix);

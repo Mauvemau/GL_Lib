@@ -4,6 +4,7 @@
 namespace gllib {
 
     struct DLLExport Material {
+    public:
         Vector3 ambient;
         Vector3 diffuse;
         Vector3 specular;

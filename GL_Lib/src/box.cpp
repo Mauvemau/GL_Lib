@@ -1,6 +1,7 @@
 #include "box.h"
 
 #include <iostream>
+#include "renderer.h"
 
 using namespace gllib;
 using namespace std;
@@ -10,10 +11,20 @@ Shape(translation, rotation, scale) {
     this->color = color;
     updateRenderData(this->color);
 
-    Vector3 ambient = Vector3(1.0f, 1.0f, 1.0f);
+    Vector3 ambient = Vector3(0.2f, 0.2f, 0.2f);
     Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
-    Vector3 specular = Vector3(1.0f, 1.0f, 1.0f);
-    material = new Material(ambient, specular, diffuse, .5f);
+    Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
+    material = Material(ambient, diffuse, specular, 80.0f);
+
+    cout << "Created box.\n";
+}
+
+Box::Box(Vector3 translation, Vector3 rotation, Vector3 scale, Color color, Material mat) :
+Shape(translation, rotation, scale) {
+    this->color = color;
+    updateRenderData(this->color);
+
+    material = mat;
 
     cout << "Created box.\n";
 }
@@ -23,10 +34,20 @@ Shape(transform) {
     this->color = color;
     updateRenderData(this->color);
 
-    Vector3 ambient = Vector3(1.0f, 1.0f, 1.0f);
+    Vector3 ambient = Vector3(0.2f, 0.2f, 0.2f);
     Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
-    Vector3 specular = Vector3(1.0f, 1.0f, 1.0f);
-    material = new Material(ambient, specular, diffuse, .5f);
+    Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
+    material = Material(ambient, diffuse, specular, 80.0f);
+
+    cout << "Created box.\n";
+}
+
+Box::Box(Transform transform, Color color, Material mat) :
+Shape(transform) {
+    this->color = color;
+    updateRenderData(this->color);
+
+    material = mat;
 
     cout << "Created box.\n";
 }
@@ -99,5 +120,6 @@ void Box::setColor(Color color) {
 }
 
 void Box::draw() {
+    Renderer::setMaterial(*material);
     internalDraw();
 }

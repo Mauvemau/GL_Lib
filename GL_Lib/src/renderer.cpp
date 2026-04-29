@@ -33,7 +33,7 @@ void Renderer::setUpVertexAttributes() {
     glEnableVertexAttribArray(3);
 }
 
-void Renderer::setUpMaterial() {
+void Renderer::setDefaultMaterial() {
     GLint prog = 0;
     glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
 
@@ -41,10 +41,10 @@ void Renderer::setUpMaterial() {
     int materialDiffuseLoc = glGetUniformLocation(prog, "u_material.diffuse");
     int materialSpecularLoc = glGetUniformLocation(prog, "u_material.specular");
     int materialShininessLoc = glGetUniformLocation(prog, "u_material.shininess");
-    glUniform3f(materialAmbientLoc, 0.24725f, 0.1995f, 0.0745f);
-    glUniform3f(materialDiffuseLoc, 0.75164f, 0.60648f, 0.22648f);
-    glUniform3f(materialSpecularLoc, 0.628281f, 0.555802f, 0.366065f);
-    glUniform1f(materialShininessLoc, 51.2f);
+    glUniform3f(materialAmbientLoc, 0.1f, 0.1f, 0.1f);
+    glUniform3f(materialDiffuseLoc, 1.0f, 1.0f, 1.0f);
+    glUniform3f(materialSpecularLoc, 0.5f, 0.5f, 0.5f);
+    glUniform1f(materialShininessLoc, 80.0f);
 }
 
 void Renderer::setUpLightingUniforms() {
@@ -59,7 +59,7 @@ void Renderer::setUpLightingUniforms() {
     int lightPosLoc = glGetUniformLocation(prog, "u_LightPos");
     int lightColorLoc = glGetUniformLocation(prog, "u_LightColor");
     glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-    glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+    glUniform3f(lightColorLoc, 0.8f, 0.8f, 0.8f);
 
     int viewPosLoc = glGetUniformLocation(prog, "u_ViewPos");
     int specularStrengthLoc = glGetUniformLocation(prog, "u_SpecularStrength");
@@ -154,7 +154,6 @@ void Renderer::destroyRenderData(RenderData rData) {
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     setUpMVP();
     setUpLightingUniforms();
-    setUpMaterial();
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 
@@ -179,6 +178,20 @@ void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height);
     bindTexture(0);
+}
+
+void Renderer::setMaterial(const Material &material) {
+    GLint prog = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+
+    int materialAmbientLoc = glGetUniformLocation(prog, "u_material.ambient");
+    int materialDiffuseLoc = glGetUniformLocation(prog, "u_material.diffuse");
+    int materialSpecularLoc = glGetUniformLocation(prog, "u_material.specular");
+    int materialShininessLoc = glGetUniformLocation(prog, "u_material.shininess");
+    glUniform3f(materialAmbientLoc, material.ambient.x, material.ambient.y, material.ambient.z);
+    glUniform3f(materialDiffuseLoc, material.diffuse.x, material.diffuse.y, material.diffuse.z);
+    glUniform3f(materialSpecularLoc, material.specular.x, material.specular.y, material.specular.z);
+    glUniform1f(materialShininessLoc, material.shininess);
 }
 
 void Renderer::setCameraPos(glm::vec3 newCameraPos) {
