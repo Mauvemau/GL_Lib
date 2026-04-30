@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "first_person_camera.h"
-#include "third_person_camera.h"
+#include "camera/first_person_camera.h"
+#include "camera/third_person_camera.h"
 
 using namespace std;
 
@@ -81,7 +81,11 @@ Game::Game() {
     trs4.position = { 0.0f, -1.5f, 0.0f };
     trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs4.scale = { 6.0f, .1f, 6.0f };
-    floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f });
+    gllib::Material floorMat = gllib::Material({0.05f, 0.05f, 0.05f},
+                                                {0.5f, 0.5f, 0.5f},
+                                                {0.7f, 0.7f, 0.7f},
+                                                10.0f);
+    floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
 
     gllib::Transform trs5;
     trs5.position = { 3.0f, 0.0f, 3.0f };
@@ -137,6 +141,7 @@ void Game::update() {
     lightBox->draw();
     lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
             gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    gllib::Renderer::setUpLightingUniforms();
 
     box->draw();
     player->draw();

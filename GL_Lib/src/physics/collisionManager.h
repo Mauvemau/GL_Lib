@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <vector>
 
-#include "rectangle.h"
+#include "../primitives/rectangle.h"
 
 namespace gllib
 {

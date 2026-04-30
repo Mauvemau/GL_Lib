@@ -1,5 +1,5 @@
 #pragma once
-#include "myMaths.h"
+#include "../myMaths.h"
 
 namespace gllib {
 

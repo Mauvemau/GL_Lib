@@ -7,13 +7,13 @@
 #include "renderer.h"
 #include "lib_time.h"
 #include "loader.h"
-#include "camera.h"
+#include "camera/camera.h"
 
-#include "triangle.h"
-#include "rectangle.h"
-#include "sprite.h"
-#include "box.h"
-#include "animation.h"
+#include "primitives/triangle.h"
+#include "primitives/rectangle.h"
+#include "primitives/sprite.h"
+#include "primitives/box.h"
+#include "primitives/animation.h"
 #include "shader.h"
 
 namespace gllib {
@@ -35,6 +35,7 @@ namespace gllib {
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramSolidColorLit;
 		unsigned int shaderProgramTexture;
+		unsigned int shaderProgramTest;
 
 		virtual void init() {};
 		virtual void update() {};

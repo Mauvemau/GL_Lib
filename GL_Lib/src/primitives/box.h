@@ -1,6 +1,6 @@
 #pragma once
 
-#include "material.h"
+#include "../lighting/material.h"
 #include "shape.h"
 #include <optional>
 

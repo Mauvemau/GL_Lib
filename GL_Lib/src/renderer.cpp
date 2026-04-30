@@ -51,20 +51,13 @@ void Renderer::setUpLightingUniforms() {
     GLint prog = 0;
     glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
 
-    int ambientColorLoc = glGetUniformLocation(prog, "u_AmbientColor");
-    int ambientStrengthLoc = glGetUniformLocation(prog, "u_AmbientStrength");
-    glUniform3f(ambientColorLoc, 1.0f, 1.0f, 1.0f);
-    glUniform1f(ambientStrengthLoc, 0.25f);
-
     int lightPosLoc = glGetUniformLocation(prog, "u_LightPos");
     int lightColorLoc = glGetUniformLocation(prog, "u_LightColor");
     glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
     glUniform3f(lightColorLoc, 0.8f, 0.8f, 0.8f);
 
     int viewPosLoc = glGetUniformLocation(prog, "u_ViewPos");
-    int specularStrengthLoc = glGetUniformLocation(prog, "u_SpecularStrength");
     glUniform3f(viewPosLoc, cameraPos.x, cameraPos.y, cameraPos.z);
-    glUniform1f(specularStrengthLoc, 0.5f);
 }
 
 void Renderer::setUpMVP() {
@@ -153,7 +146,6 @@ void Renderer::destroyRenderData(RenderData rData) {
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     setUpMVP();
-    setUpLightingUniforms();
     glBindVertexArray(rData.VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
 
@@ -178,6 +170,13 @@ void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height);
     bindTexture(0);
+}
+
+void Renderer::setLightingData(const LightingData &lightingData) {
+    GLint prog = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+
+    // Set lighting data from lighting data
 }
 
 void Renderer::setMaterial(const Material &material) {

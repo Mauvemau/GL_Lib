@@ -1,6 +1,6 @@
 #include "third_person_camera.h"
-#include "input.h"
-#include "myMaths.h"
+#include "../input.h"
+#include "../myMaths.h"
 
 #include <iostream>
 

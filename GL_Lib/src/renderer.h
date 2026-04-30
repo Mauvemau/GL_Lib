@@ -1,6 +1,7 @@
 #pragma once
 #include "deps.h"
-#include "material.h"
+#include "lighting/material.h"
+#include "lighting/lighting_data.h"
 
 #ifdef _WIN32 // Directory is different in linux
 #include <glm.hpp>
@@ -57,6 +58,7 @@ namespace gllib {
 		static void bindTexture(unsigned int textureID);
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 
+		static void setLightingData(const LightingData& lightingData);
 		static void setMaterial(const Material &material);
 		static void setCameraPos(glm::vec3 newCameraPos);
 		static void setModelMatrix(glm::mat4 newModelMatrix);

@@ -1,7 +1,7 @@
 #include "box.h"
 
 #include <iostream>
-#include "renderer.h"
+#include "../renderer.h"
 
 using namespace gllib;
 using namespace std;
