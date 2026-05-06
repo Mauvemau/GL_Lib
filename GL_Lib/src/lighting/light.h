@@ -13,6 +13,10 @@ namespace gllib {
         Light();
         Light(Color color);
         virtual ~Light();
+
+        void setColor(Color color);
+
+        virtual Color getColor() const;
     };
 
 }

@@ -7,9 +7,22 @@
 
 namespace gllib {
 
+    static constexpr int MAX_POINT_LIGHTS = 6;
+
     struct LightingData {
-        DirectionalLight* directionalLight = nullptr;
-        std::vector<PointLight> pointLights;
+        bool hasDirectional = false;
+        DirectionalLight* directionalLight;
+
+        std::vector<PointLight*> pointLights;
+
+        void SetDirectionalLight(DirectionalLight& light) {
+            directionalLight = &light;
+            hasDirectional = true;
+        }
+
+        void AddPointLight(PointLight& light) {
+            pointLights.push_back(&light);
+        }
     };
 
 }

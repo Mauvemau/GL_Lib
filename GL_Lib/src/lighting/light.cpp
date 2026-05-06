@@ -6,6 +6,8 @@ using namespace std;
 
 Light::Light() {
     this->color = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    cout << "Created light\n";
 }
 
 Light::Light(Color color) {
@@ -16,4 +18,12 @@ Light::Light(Color color) {
 
 Light::~Light() {
     cout << "Destroyed light *evil god*\n";
+}
+
+void Light::setColor(Color color) {
+    this->color = color;
+}
+
+Color Light::getColor() const {
+    return color;
 }

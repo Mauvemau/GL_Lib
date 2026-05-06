@@ -47,19 +47,6 @@ void Renderer::setDefaultMaterial() {
     glUniform1f(materialShininessLoc, 80.0f);
 }
 
-void Renderer::setUpLightingUniforms() {
-    GLint prog = 0;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
-
-    int lightPosLoc = glGetUniformLocation(prog, "u_LightPos");
-    int lightColorLoc = glGetUniformLocation(prog, "u_LightColor");
-    glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-    glUniform3f(lightColorLoc, 0.8f, 0.8f, 0.8f);
-
-    int viewPosLoc = glGetUniformLocation(prog, "u_ViewPos");
-    glUniform3f(viewPosLoc, cameraPos.x, cameraPos.y, cameraPos.z);
-}
-
 void Renderer::setUpMVP() {
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
@@ -172,11 +159,52 @@ void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(0);
 }
 
-void Renderer::setLightingData(const LightingData &lightingData) {
+void Renderer::setLightingData(const LightingData& data) {
     GLint prog = 0;
     glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
 
-    // Set lighting data from lighting data
+    auto setVec3 = [&](const std::string& name, const glm::vec3& v) {
+        int loc = glGetUniformLocation(prog, name.c_str());
+        if (loc != -1) glUniform3f(loc, v.x, v.y, v.z);
+    };
+
+    auto setFloat = [&](const std::string& name, float v) {
+        int loc = glGetUniformLocation(prog, name.c_str());
+        if (loc != -1) glUniform1f(loc, v);
+    };
+
+    setVec3("u_viewPos", cameraPos);
+
+    if (data.hasDirectional) {
+        setVec3("u_dirLight.direction", static_cast<glm::vec3>(data.directionalLight->getDirection()));
+        setVec3("u_dirLight.color", static_cast<glm::vec3>(data.directionalLight->getColor()));
+    } else {
+        // disable it
+        setVec3("u_dirLight.color", {0.0f, 0.0f, 0.0f});
+    }
+
+    int count = std::min(static_cast<int>(data.pointLights.size()), MAX_POINT_LIGHTS);
+
+    for (int i = 0; i < count; i++) {
+        const PointLight& l = *data.pointLights[i];
+        std::string base = "u_pointLights[" + std::to_string(i) + "]";
+
+        setVec3(base + ".position", static_cast<glm::vec3>(l.getPosition()));
+        setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+        setFloat(base + ".constant", l.getConstant());
+        setFloat(base + ".linear", l.getLinear());
+        setFloat(base + ".quadratic", l.getQuadratic());
+    }
+
+    for (int i = count; i < MAX_POINT_LIGHTS; i++) {
+        std::string base = "u_pointLights[" + std::to_string(i) + "]";
+
+        setVec3(base + ".position", {0,0,0});
+        setVec3(base + ".color", {0,0,0});
+        setFloat(base + ".constant", 1.0f);
+        setFloat(base + ".linear", 0.0f);
+        setFloat(base + ".quadratic", 0.0f);
+    }
 }
 
 void Renderer::setMaterial(const Material &material) {

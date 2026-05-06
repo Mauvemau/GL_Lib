@@ -109,6 +109,10 @@ namespace gllib
         float b;
         float a;
 
+        explicit operator glm::vec3() const {
+            return {r, g, b};
+        }
+
         void normalize()
         {
             if (r < 0 || g < 0 || b < 0 || a < 0)

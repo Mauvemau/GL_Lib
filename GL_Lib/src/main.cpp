@@ -15,7 +15,10 @@ private:
     gllib::Animation* coin;
     gllib::Box* player;
     gllib::Box* floor;
+    gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
+    gllib::PointLight* light;
+    gllib::LightingData* lightData;
     bool wireframeMode = false;
 
     float playerSpeed = 2.5f;
@@ -80,18 +83,24 @@ Game::Game() {
     gllib::Transform trs4;
     trs4.position = { 0.0f, -1.5f, 0.0f };
     trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs4.scale = { 6.0f, .1f, 6.0f };
+    trs4.scale = { 10.0f, .1f, 10.0f };
     gllib::Material floorMat = gllib::Material({0.05f, 0.05f, 0.05f},
                                                 {0.5f, 0.5f, 0.5f},
                                                 {0.7f, 0.7f, 0.7f},
                                                 10.0f);
     floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
 
+
+    gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
+    dirLight = new gllib::DirectionalLight(dirLightDirection, {0.3f, 0.3f, 0.35f, 1.0f});
     gllib::Transform trs5;
     trs5.position = { 3.0f, 0.0f, 3.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs5.scale = { 0.25f, 0.25f, 0.25f };
     lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
+    light = new gllib::PointLight(trs5.position);
+
+    lightData = new gllib::LightingData();
 }
 
 Game::~Game() {
@@ -103,6 +112,9 @@ void Game::init() {
 
     srand(time(nullptr));
     window->setTitle("Cool rotating box");
+
+    lightData->SetDirectionalLight(*dirLight);
+    lightData->AddPointLight(*light);
 }
 
 
@@ -139,9 +151,9 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     lightBox->draw();
-    lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
+    lit ?   gllib::Shader::useShaderProgram(shaderProgramTest) :
             gllib::Shader::useShaderProgram(shaderProgramSolidColor);
-    gllib::Renderer::setUpLightingUniforms();
+    gllib::Renderer::setLightingData(*lightData);
 
     box->draw();
     player->draw();
@@ -154,7 +166,10 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete box;
     delete coin;
+    delete lightData;
     delete lightBox;
+    delete dirLight;
+    delete light;
     delete floor;
     delete player;
     delete camera;
@@ -235,7 +250,7 @@ void Game::handlePlayerInput() {
     }
 
     camera->updateCamera(player->getPosition());
-    gllib::Renderer::setLightPos(glm::vec3(lightBox->getPosition()));
+    light->setPosition(lightBox->getPosition());
     if (cameraLocked) return;
     camera->updateMouseInput();
 }

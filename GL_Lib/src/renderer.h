@@ -40,7 +40,6 @@ namespace gllib {
 	public:
 		static void setUpVertexAttributes();
 		static void setDefaultMaterial();
-		static void setUpLightingUniforms();
 		static void setUpMVP();
 
 		static void setLazyWireframeMode(bool set);

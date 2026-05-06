@@ -10,12 +10,10 @@ namespace gllib
         transform.scale = scale;
     }
 
-    Entity::Entity(const Transform& transform): transform(transform)
-    {
+    Entity::Entity(const Transform& transform): transform(transform) {
     }
 
-    Entity::~Entity()
-    = default;
+    Entity::~Entity() = default;
 
     void Entity::move(const Vector3 direction) {
         transform.position += direction;
@@ -47,28 +45,23 @@ namespace gllib
         return transform.right;
     }
 
-    Transform Entity::getTransform() const
-    {
+    Transform Entity::getTransform() const {
         return transform;
     }
 
-    Vector3 Entity::getPosition() const
-    {
+    Vector3 Entity::getPosition() const {
         return transform.position;
     }
 
-    Vector3 Entity::getScale() const
-    {
+    Vector3 Entity::getScale() const {
         return transform.scale;
     }
 
-    Vector3 Entity::getRotationEuler() const
-    {
+    Vector3 Entity::getRotationEuler() const {
         return Maths::Quat2Vec3( transform.rotationQuat, Vector3(1, 1, 1));
     }
 
-    Quaternion Entity::getRotationQuat() const
-    {
+    Quaternion Entity::getRotationQuat() const {
         return transform.rotationQuat;
     }
 
@@ -92,8 +85,7 @@ namespace gllib
         transform.rotationQuat = Maths::Euler(rotation);
     }
 
-    bool Entity::isColliding(const Transform& _transform) const
-    {
+    bool Entity::isColliding(const Transform& _transform) const {
         float xOffset = 0.5f * transform.scale.x;
         float yOffset = 0.5f * transform.scale.y;
 
@@ -109,16 +101,14 @@ namespace gllib
         if (thisAdjustedX + transform.scale.x >= otherAdjustedX &&
             thisAdjustedX <= otherAdjustedX + _transform.scale.x &&
             thisAdjustedY + transform.scale.y >= otherAdjustedY &&
-            thisAdjustedY <= otherAdjustedY + _transform.scale.y)
-        {
+            thisAdjustedY <= otherAdjustedY + _transform.scale.y) {
             return true;
         }
 
         return false;
     }
 
-    bool Entity::isColliding(float x, float y, float width, float height) const
-    {
+    bool Entity::isColliding(float x, float y, float width, float height) const {
         if (transform.position.x + transform.scale.x >= x &&		
             transform.position.x <= x + width &&    
             transform.position.y + transform.scale.y >= y &&			
