@@ -35,7 +35,6 @@ namespace gllib {
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramSolidColorLit;
 		unsigned int shaderProgramTexture;
-		unsigned int shaderProgramTest;
 
 		virtual void init() {};
 		virtual void update() {};

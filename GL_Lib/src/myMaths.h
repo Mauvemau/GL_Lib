@@ -13,5 +13,6 @@ namespace gllib
         static Quaternion Euler(Vector3 euler);
         static float deg2Rad();
         static Vector3 Quat2Vec3(Quaternion Quat, Vector3 Vec);
+        static Vector3 QuatToEuler(const Quaternion& q);
     };
 }

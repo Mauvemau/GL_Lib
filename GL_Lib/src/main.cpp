@@ -15,9 +15,16 @@ private:
     gllib::Animation* coin;
     gllib::Box* player;
     gllib::Box* floor;
+    gllib::Box* wall;
+    gllib::Box* emerald;
+    gllib::Box* greenPlastic;
+    gllib::Box* greenRubber;
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
+    gllib::Box* lightBox2;
     gllib::PointLight* light;
+    gllib::PointLight* light2;
+    gllib::SpotLight* spotLight;
     gllib::LightingData* lightData;
     bool wireframeMode = false;
 
@@ -89,17 +96,60 @@ Game::Game() {
                                                 {0.7f, 0.7f, 0.7f},
                                                 10.0f);
     floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
+    gllib::Transform trs6;
+    trs6.position = { 0.0f, 1.0f, 5.0f };
+    trs6.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs6.scale = { 10.0f, 5.0f, 0.1f };
+    wall = new gllib::Box(trs6, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
+
+    gllib::Transform trs7;
+    trs7.position = { -4.0f, -1.1f, -4.0f };
+    trs7.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs7.scale = { 0.75f, 0.75f, 0.75f };
+    gllib::Material emeraldMat = gllib::Material({0.0215f, 0.1745f, 0.0215 },
+                                                {0.07568f, 0.61424f, 0.07568f },
+                                                {0.633f, 0.727811f, 0.633f },
+                                                76.8f);
+    emerald = new gllib::Box(trs7, { 1.0f, 1.0f, 1.0f, 0.55f }, emeraldMat);
+
+    gllib::Transform trs8;
+    trs8.position = { -3.0f, -1.1f, -4.0f };
+    trs8.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs8.scale = { 0.75f, 0.75f, 0.75f };
+    gllib::Material greenPlasticMat = gllib::Material({0.0f, 0.0f, 0.0f },
+                                                {0.1f, 0.35f, 0.1f },
+                                                {0.45f, 0.55f, 0.45f },
+                                                32.0f);
+    greenPlastic = new gllib::Box(trs8, { 1.0f, 1.0f, 1.0f, 1.0f }, greenPlasticMat);
+
+    gllib::Transform trs9;
+    trs9.position = { -2.0f, -1.1f, -4.0f };
+    trs9.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs9.scale = { 0.75f, 0.75f, 0.75f };
+    gllib::Material greenRubberMat = gllib::Material({0.0f, 0.05f, 0.0f },
+                                                {0.4f, 0.5f, 0.4f },
+                                                {0.04f, 0.7f, 0.04f},
+                                                10.0f);
+    greenRubber = new gllib::Box(trs9, { 1.0f, 1.0f, 1.0f, 1.0f }, greenRubberMat);
 
 
     gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
     dirLight = new gllib::DirectionalLight(dirLightDirection, {0.3f, 0.3f, 0.35f, 1.0f});
     gllib::Transform trs5;
-    trs5.position = { 3.0f, 0.0f, 3.0f };
+    trs5.position = { 4.0f, 0.0f, 3.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs5.scale = { 0.25f, 0.25f, 0.25f };
     lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
     light = new gllib::PointLight(trs5.position);
 
+    gllib::Transform trs10;
+    trs10.position = { -4.0f, 0.0f, 3.0f };
+    trs10.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs10.scale = { 0.25f, 0.25f, 0.25f };
+    lightBox2 = new gllib::Box(trs10, { 0.2f, 0.4f, 1.0f, 1.0f });
+    light2 = new gllib::PointLight(trs10.position, 1.0f, 0.14f, 0.07f, {0.2f, 0.4f, 1.0f, 1.0f});
+
+    spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
 }
 
@@ -115,6 +165,8 @@ void Game::init() {
 
     lightData->SetDirectionalLight(*dirLight);
     lightData->AddPointLight(*light);
+    lightData->AddPointLight(*light2);
+    lightData->AddSpotLight(*spotLight);
 }
 
 
@@ -151,13 +203,18 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     lightBox->draw();
-    lit ?   gllib::Shader::useShaderProgram(shaderProgramTest) :
+    lightBox2->draw();
+    lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
             gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     gllib::Renderer::setLightingData(*lightData);
 
     box->draw();
     player->draw();
     floor->draw();
+    wall->draw();
+    emerald->draw();
+    greenPlastic->draw();
+    greenRubber->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     coin->draw();
 }
@@ -165,12 +222,19 @@ void Game::update() {
 void Game::uninit() {
     cout << "External uninit!!!\n";
     delete box;
+    delete emerald;
+    delete greenPlastic;
+    delete greenRubber;
     delete coin;
     delete lightData;
     delete lightBox;
+    delete lightBox2;
     delete dirLight;
     delete light;
+    delete light2;
+    delete spotLight;
     delete floor;
+    delete wall;
     delete player;
     delete camera;
 }
@@ -250,6 +314,25 @@ void Game::handlePlayerInput() {
     }
 
     camera->updateCamera(player->getPosition());
+    spotLight->setPosition(player->getPosition());
+    if (!controllingLight) {
+        gllib::Vector3 camForward = camera->forward();
+        camForward.y = 0.0f;
+
+        if (camForward.length() > 0.0001f) {
+            camForward = camForward.normalized();
+            spotLight->setDirection(camForward);
+
+            float yaw = atan2(camForward.x, camForward.z);
+            float yawDeg = yaw * 180.0f / M_PI;
+
+            gllib::Quaternion rot = player->getRotationQuat();
+            rot.y = yawDeg;
+
+            player->setRotationQuat(rot);
+        }
+    }
+
     light->setPosition(lightBox->getPosition());
     if (cameraLocked) return;
     camera->updateMouseInput();

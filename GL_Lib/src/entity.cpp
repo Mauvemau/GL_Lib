@@ -2,8 +2,7 @@
 
 #include "myMaths.h"
 
-namespace gllib
-{
+namespace gllib {
     Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale) {
         transform.position = translation;
         transform.rotationQuat = Maths::Euler(rotationEuler);
@@ -58,7 +57,7 @@ namespace gllib
     }
 
     Vector3 Entity::getRotationEuler() const {
-        return Maths::Quat2Vec3( transform.rotationQuat, Vector3(1, 1, 1));
+        return Maths::QuatToEuler(transform.rotationQuat);
     }
 
     Quaternion Entity::getRotationQuat() const {

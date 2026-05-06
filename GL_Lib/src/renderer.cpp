@@ -175,13 +175,16 @@ void Renderer::setLightingData(const LightingData& data) {
 
     setVec3("u_viewPos", cameraPos);
 
+    // Directional Light
+
     if (data.hasDirectional) {
         setVec3("u_dirLight.direction", static_cast<glm::vec3>(data.directionalLight->getDirection()));
         setVec3("u_dirLight.color", static_cast<glm::vec3>(data.directionalLight->getColor()));
     } else {
-        // disable it
         setVec3("u_dirLight.color", {0.0f, 0.0f, 0.0f});
     }
+
+    // PointLight
 
     int count = std::min(static_cast<int>(data.pointLights.size()), MAX_POINT_LIGHTS);
 
@@ -201,6 +204,41 @@ void Renderer::setLightingData(const LightingData& data) {
 
         setVec3(base + ".position", {0,0,0});
         setVec3(base + ".color", {0,0,0});
+        setFloat(base + ".constant", 1.0f);
+        setFloat(base + ".linear", 0.0f);
+        setFloat(base + ".quadratic", 0.0f);
+    }
+
+    // SpotLight
+
+    int spotCount = std::min(static_cast<int>(data.spotLights.size()), MAX_SPOT_LIGHTS);
+
+    for (int i = 0; i < spotCount; i++) {
+        const SpotLight& l = *data.spotLights[i];
+        std::string base = "u_spotLights[" + std::to_string(i) + "]";
+
+        setVec3(base + ".position", static_cast<glm::vec3>(l.getPosition()));
+        setVec3(base + ".direction", static_cast<glm::vec3>(l.getDirection()));
+        setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+
+        setFloat(base + ".cutOff", l.getCutOffCos());
+        setFloat(base + ".outerCutOff", l.getOuterCutOffCos());
+
+        setFloat(base + ".constant", l.getConstant());
+        setFloat(base + ".linear", l.getLinear());
+        setFloat(base + ".quadratic", l.getQuadratic());
+    }
+
+    for (int i = spotCount; i < MAX_SPOT_LIGHTS; i++) {
+        std::string base = "u_spotLights[" + std::to_string(i) + "]";
+
+        setVec3(base + ".position", {0,0,0});
+        setVec3(base + ".direction", {0,0,0});
+        setVec3(base + ".color", {0,0,0});
+
+        setFloat(base + ".cutOff", 0.0f);
+        setFloat(base + ".outerCutOff", 0.0f);
+
         setFloat(base + ".constant", 1.0f);
         setFloat(base + ".linear", 0.0f);
         setFloat(base + ".quadratic", 0.0f);
