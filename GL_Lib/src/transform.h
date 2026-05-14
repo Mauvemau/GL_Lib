@@ -6,10 +6,8 @@
 #include "glm/glm.hpp"
 #endif // _WIN32
 
-namespace gllib
-{
+namespace gllib {
     struct DLLExport Vector3 {
-        
         float x; // width | pitch
         float y; // height | yaw
         float z; // depth | roll
@@ -18,44 +16,37 @@ namespace gllib
             return {x, y, z};
         }
 
-        Vector3 operator*(float scalar)
-        {
+        Vector3 operator*(float scalar) {
             return {x * scalar, y * scalar, z * scalar};
         }
 
-        Vector3 operator+(const Vector3& other) const
-        {
+        Vector3 operator+(const Vector3& other) const {
             return { x + other.x, y + other.y, z + other.z };
         }
 
-        Vector3 operator-(const Vector3& other) const
-        {
+        Vector3 operator-(const Vector3& other) const {
             return { x - other.x, y - other.y, z - other.z };
         }
 
-        Vector3& operator-=(const Vector3& other)
-        {
+        Vector3& operator-=(const Vector3& other) {
             x -= other.x;
             y -= other.y;
             z -= other.z;
             return *this;
         }
 
-        Vector3& operator+=(Vector3 vector)
-        {
+        Vector3& operator+=(Vector3 vector) {
             x += vector.x;
             y += vector.y;
             z += vector.z;
             return *this;
         }
 
-        Vector3 operator/(float scalar)
-        {
+        Vector3 operator/(float scalar) {
             return {x / scalar, y / scalar, z / scalar};
         }
 
-        Vector3 operator-( ) const
-        {
+        Vector3 operator-( ) const {
             return { -x, -y, -z };
         }
 
@@ -70,30 +61,88 @@ namespace gllib
         }
 
 
-        Vector3(float iX, float iY, float iZ)
-        {
+        Vector3(float iX, float iY, float iZ) {
             x = iX;
             y = iY;
             z = iZ;
         }
 
-        Vector3()
-        {
+        Vector3() {
             x = 0;
             y = 0;
             z = 0;
         }
     };
 
-    struct DLLExport Quaternion
-    {
+    struct DLLExport Vector2 {
+        float x; // width | pitch
+        float y; // height | yaw
+
+        explicit operator glm::vec2() const {
+            return {x, y};
+        }
+
+        Vector2 operator*(float scalar) {
+            return {x * scalar, y * scalar};
+        }
+
+        Vector2 operator+(const Vector2& other) const {
+            return {x + other.x, y + other.y};
+        }
+
+        Vector2 operator-(const Vector2& other) const {
+            return {x - other.x, y - other.y};
+        }
+
+        Vector2& operator-=(const Vector2& other) {
+            x -= other.x;
+            y -= other.y;
+            return *this;
+        }
+
+        Vector2& operator+=(Vector2 vector) {
+            x += vector.x;
+            y += vector.y;
+            return *this;
+        }
+
+        Vector2 operator/(float scalar) {
+            return {x / scalar, y / scalar};
+        }
+
+        Vector2 operator-( ) const {
+            return {-x, -y};
+        }
+
+        float length() {
+            return std::sqrt(x * x + y * y);
+        }
+
+        Vector2 normalized() {
+            float len = length();
+            if (len == 0.0f) return {0.0f, 0.0f};
+            return {x / len, y / len};
+        }
+
+
+        Vector2(float iX, float iY) {
+            x = iX;
+            y = iY;
+        }
+
+        Vector2() {
+            x = 0;
+            y = 0;
+        }
+    };
+
+    struct DLLExport Quaternion {
         float w;
         float x;
         float y;
         float z;
         
-        Quaternion& operator+=(const Quaternion& quaternion)
-        {
+        Quaternion& operator+=(const Quaternion& quaternion) {
             w += quaternion.w;
             x += quaternion.x;
             y += quaternion.y;
@@ -102,8 +151,7 @@ namespace gllib
         }
     };
 
-    struct DLLExport Color
-    {
+    struct DLLExport Color {
         float r;
         float g;
         float b;
@@ -113,18 +161,15 @@ namespace gllib
             return {r, g, b};
         }
 
-        void normalize()
-        {
-            if (r < 0 || g < 0 || b < 0 || a < 0)
-            {
+        void normalize() {
+            if (r < 0 || g < 0 || b < 0 || a < 0) {
                 r = 0.0f;
                 g = 0.0f;
                 b = 0.0f;
                 a = 0.0f;
             }
 
-            if (r > 1.0f || g > 1.0f || b > 1.0f || a > 1.0f)
-            {
+            if (r > 1.0f || g > 1.0f || b > 1.0f || a > 1.0f) {
                 r = 1.0f;
                 g = 1.0f;
                 b = 1.0f;
@@ -133,8 +178,7 @@ namespace gllib
         }
     };
 
-    struct DLLExport Transform
-    {
+    struct DLLExport Transform {
         Vector3 position;
         Vector3 scale;
         Quaternion rotationQuat;
@@ -175,6 +219,5 @@ namespace gllib
         glm::mat4 rotationZ;
         glm::mat4 scale;
     };
-    
 }
         

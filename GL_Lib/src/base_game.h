@@ -14,6 +14,9 @@
 #include "primitives/sprite.h"
 #include "primitives/box.h"
 #include "primitives/animation.h"
+#include "models/mesh_group.h"
+#include "models/model.h"
+#include "models/model_importer.h"
 #include "shader.h"
 
 namespace gllib {
@@ -35,6 +38,7 @@ namespace gllib {
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramSolidColorLit;
 		unsigned int shaderProgramTexture;
+		unsigned int shaderProgramNormals;
 
 		virtual void init() {};
 		virtual void update() {};

@@ -26,6 +26,8 @@ private:
     gllib::PointLight* light2;
     gllib::SpotLight* spotLight;
     gllib::LightingData* lightData;
+    gllib::Model* nissanModel;
+    gllib::Model* swordModel;
     bool wireframeMode = false;
 
     float playerSpeed = 2.5f;
@@ -33,7 +35,7 @@ private:
     float cameraSensitivity = .5f;
     bool cameraLocked = true;
 
-    bool lit = false;
+    bool lit = true;
     bool controllingLight = false;
 
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
@@ -60,7 +62,7 @@ Game::Game() {
                                          gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity, 5.0f);
 
     gllib::Transform trs;
-    trs.position = { 0.0f, 0.0f, 0.0f };
+    trs.position = { 0.0f, -1.05f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs.scale = { 1.0f, 1.0f, 1.0f };
     box = new gllib::Box(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
@@ -134,7 +136,7 @@ Game::Game() {
 
 
     gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
-    dirLight = new gllib::DirectionalLight(dirLightDirection, {0.3f, 0.3f, 0.35f, 1.0f});
+    dirLight = new gllib::DirectionalLight(dirLightDirection, {0.30f, 0.30f, 0.35f, 1.0f});
     gllib::Transform trs5;
     trs5.position = { 4.0f, 0.0f, 3.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -151,6 +153,16 @@ Game::Game() {
 
     spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
+
+
+    gllib::Material whitePaintMaterial = gllib::Material({0.3f, 0.3f, 0.3f },
+                                                {0.4f, 0.4f, 0.4f },
+                                                {0.9f, 0.9f, 0.9f},
+                                                200.0f);
+    gllib::MeshGroup nissanMesh = gllib::ModelImporter::loadMeshGroup("NissanS30.obj");
+    gllib::Mesh swordMesh = gllib::ModelImporter::loadMesh("starpiercer.fbx");
+    nissanModel = new gllib::Model(nissanMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f}, whitePaintMaterial);
+    swordModel = new gllib::Model(swordMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f});
 }
 
 Game::~Game() {
@@ -169,16 +181,14 @@ void Game::init() {
     lightData->AddSpotLight(*spotLight);
 }
 
-
-
 void Game::update() {
     // Update
     handlePlayerInput();
 
-    gllib::Quaternion rot = box->getRotationQuat();
-    rot.x += 30.0f * gllib::LibTime::getDeltaTime();
+    gllib::Quaternion rot = nissanModel->getRotationQuat();
+    //rot.x += 30.0f * gllib::LibTime::getDeltaTime();
     rot.y += 20.0f * gllib::LibTime::getDeltaTime();
-    box->setRotationQuat(rot);
+    nissanModel->setRotationQuat(rot);
 
     myTime += gllib::LibTime::getDeltaTime();
     coin->update();
@@ -205,18 +215,19 @@ void Game::update() {
     lightBox->draw();
     lightBox2->draw();
     lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
-            gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+            gllib::Shader::useShaderProgram(shaderProgramNormals);
     gllib::Renderer::setLightingData(*lightData);
 
-    box->draw();
+    //box->draw();
+    nissanModel->draw();
     player->draw();
     floor->draw();
     wall->draw();
-    emerald->draw();
     greenPlastic->draw();
     greenRubber->draw();
+    emerald->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
-    coin->draw();
+    //coin->draw();
 }
 
 void Game::uninit() {
@@ -237,6 +248,8 @@ void Game::uninit() {
     delete wall;
     delete player;
     delete camera;
+    delete nissanModel;
+    delete swordModel;
 }
 
 void Game::handlePlayerInput() {

@@ -11,7 +11,7 @@ Shape(translation, rotation, scale) {
     this->color = color;
     updateRenderData(this->color);
 
-    Vector3 ambient = Vector3(0.2f, 0.2f, 0.2f);
+    Vector3 ambient = Vector3(0.35f, 0.35f, 0.35f);
     Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
     Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
     material = Material(ambient, diffuse, specular, 80.0f);
@@ -34,7 +34,7 @@ Shape(transform) {
     this->color = color;
     updateRenderData(this->color);
 
-    Vector3 ambient = Vector3(0.2f, 0.2f, 0.2f);
+    Vector3 ambient = Vector3(0.35f, 0.35f, 0.35f);
     Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
     Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
     material = Material(ambient, diffuse, specular, 80.0f);
@@ -61,43 +61,55 @@ Box::~Box() {
 void Box::updateRenderData(Color color) {
     float boxVertexData[] = {
         // Front (+Z)
-        1,1,1,  0,0,1,  color.r,color.g,color.b,color.a,  1,1,
-        1,0,1,  0,0,1,  color.r,color.g,color.b,color.a,  1,0,
-        0,0,1,  0,0,1,  color.r,color.g,color.b,color.a,  0,0,
-        0,1,1,  0,0,1,  color.r,color.g,color.b,color.a,  0,1,
+        1,1,1, 0,0,1, color.r,color.g,color.b,color.a, 1,1,
+        1,0,1, 0,0,1, color.r,color.g,color.b,color.a, 1,0,
+        0,0,1, 0,0,1, color.r,color.g,color.b,color.a, 0,0,
+        0,1,1, 0,0,1, color.r,color.g,color.b,color.a, 0,1,
         // Back (-Z)
-        1,1,0,  0,0,-1, color.r,color.g,color.b,color.a,  1,1,
-        1,0,0,  0,0,-1, color.r,color.g,color.b,color.a,  1,0,
-        0,0,0,  0,0,-1, color.r,color.g,color.b,color.a,  0,0,
-        0,1,0,  0,0,-1, color.r,color.g,color.b,color.a,  0,1,
+        1,1,0, 0,0,-1, color.r,color.g,color.b,color.a, 1,1,
+        1,0,0, 0,0,-1, color.r,color.g,color.b,color.a, 1,0,
+        0,0,0, 0,0,-1, color.r,color.g,color.b,color.a, 0,0,
+        0,1,0, 0,0,-1, color.r,color.g,color.b,color.a, 0,1,
         // Right (+X)
-        1,1,1,  1,0,0,  color.r,color.g,color.b,color.a,  1,1,
-        1,1,0,  1,0,0,  color.r,color.g,color.b,color.a,  1,0,
-        1,0,0,  1,0,0,  color.r,color.g,color.b,color.a,  0,0,
-        1,0,1,  1,0,0,  color.r,color.g,color.b,color.a,  0,1,
+        1,1,1, 1,0,0, color.r,color.g,color.b,color.a, 1,1,
+        1,1,0, 1,0,0, color.r,color.g,color.b,color.a, 1,0,
+        1,0,0, 1,0,0, color.r,color.g,color.b,color.a, 0,0,
+        1,0,1, 1,0,0, color.r,color.g,color.b,color.a, 0,1,
         // Left (-X)
-        0,1,1,  -1,0,0, color.r,color.g,color.b,color.a,  1,1,
-        0,1,0,  -1,0,0, color.r,color.g,color.b,color.a,  1,0,
-        0,0,0,  -1,0,0, color.r,color.g,color.b,color.a,  0,0,
-        0,0,1,  -1,0,0, color.r,color.g,color.b,color.a,  0,1,
-        // Top (+Y)
-        1,1,1,  0,-1,0,  color.r,color.g,color.b,color.a,  1,1,
-        0,1,1,  0,-1,0,  color.r,color.g,color.b,color.a,  0,1,
-        0,1,0,  0,-1,0,  color.r,color.g,color.b,color.a,  0,0,
-        1,1,0,  0,-1,0,  color.r,color.g,color.b,color.a,  1,0,
-        // Bottom (-Y)
-        1,0,1,  0,1,0, color.r,color.g,color.b,color.a,  1,1,
-        0,0,1,  0,1,0, color.r,color.g,color.b,color.a,  0,1,
-        0,0,0,  0,1,0, color.r,color.g,color.b,color.a,  0,0,
-        1,0,0,  0,1,0, color.r,color.g,color.b,color.a,  1,0,
+        0,1,1, -1,0,0, color.r,color.g,color.b,color.a, 1,1,
+        0,1,0, -1,0,0, color.r,color.g,color.b,color.a, 1,0,
+        0,0,0, -1,0,0, color.r,color.g,color.b,color.a, 0,0,
+        0,0,1, -1,0,0, color.r,color.g,color.b,color.a, 0,1,
+        // Top (-Y)
+        1,1,1, 0,-1,0, color.r,color.g,color.b,color.a, 1,1,
+        0,1,1, 0,-1,0, color.r,color.g,color.b,color.a, 0,1,
+        0,1,0, 0,-1,0, color.r,color.g,color.b,color.a, 0,0,
+        1,1,0, 0,-1,0, color.r,color.g,color.b,color.a, 1,0,
+        // Bottom (+Y)
+        1,0,1, 0,1,0, color.r,color.g,color.b,color.a, 1,1,
+        0,0,1, 0,1,0, color.r,color.g,color.b,color.a, 0,1,
+        0,0,0, 0,1,0, color.r,color.g,color.b,color.a, 0,0,
+        1,0,0, 0,1,0, color.r,color.g,color.b,color.a, 1,0,
     };
     const int boxIndex[] = {
-        0,1,2, 0,2,3,        // Front
-        4,5,6, 4,6,7,        // Back
-        8,9,10, 8,10,11,     // Right
-        12,13,14, 12,14,15,  // Left
-        16,18,17, 16,19,18,  // Top
-        20,21,22, 20,22,23   // Bottom
+        // Front (+Z)
+        0,1,2,
+        0,2,3,
+        // Back (-Z)
+        4,6,5,
+        4,7,6,
+        // Right (+X)
+        8,9,10,
+        8,10,11,
+        // Left (-X)
+        12,14,13,
+        12,15,14,
+        // Top (+Y)
+        16,17,18,
+        16,18,19,
+        // Bottom (-Y)
+        20,22,21,
+        20,23,22
     };
 
     alignVertex(boxVertexData, 24, 12);

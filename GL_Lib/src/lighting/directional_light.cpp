@@ -7,6 +7,8 @@ using namespace std;
 
 DirectionalLight::DirectionalLight() {
     direction = Vector3(-0.2f, -1.0f, -0.3f);
+
+    cout << "Created Directional Light!\n";
 }
 
 DirectionalLight::DirectionalLight(Vector3 direction) {
@@ -25,7 +27,6 @@ Light(color) {
 DirectionalLight::~DirectionalLight() {
     cout << "Destroyed Directional Light!\n";
 }
-
 
 Vector3 DirectionalLight::getDirection() const {
     return direction;
