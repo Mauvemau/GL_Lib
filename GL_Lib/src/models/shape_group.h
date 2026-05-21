@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 
 #include "../renderer.h"
 #include "../entity.h"
@@ -13,6 +14,8 @@ namespace gllib {
         std::vector<unsigned int> indexSizes;
 
         protected:
+        std::map<unsigned int, unsigned int> textureData;
+
         void addRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize);
         void pivotVertex(float* vertexData, int vertexCount, int vertexStride, Vector3 pivot);
         Vector3 calculateBoundsCenter(const std::vector<std::vector<float>>& vertexGroups, int vertexStride);

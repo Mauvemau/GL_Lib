@@ -3,6 +3,10 @@
 in vec3 vFragPos;
 in vec3 vNormal;
 in vec4 vColor;
+in vec2 vUV;
+
+uniform sampler2D u_Texture;
+uniform bool u_UseTexture;
 
 struct DirLight {
 	vec3 direction;
@@ -86,7 +90,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	light.linear * distance +
 	light.quadratic * distance * distance);
 
-	vec3 ambient = light.color * u_material.ambient;
+	vec3 ambient = vec3(0.0);
 	vec3 diffuse = light.color * diff * u_material.diffuse;
 	vec3 specular = light.color * spec * u_material.specular;
 
@@ -115,7 +119,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	float epsilon = light.cutOff - light.outerCutOff;
 	float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
-	vec3 ambient  = light.color * u_material.ambient;
+	vec3 ambient = vec3(0.0);
 	vec3 diffuse  = light.color * diff * u_material.diffuse;
 	vec3 specular = light.color * spec * u_material.specular;
 
@@ -129,6 +133,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 void main() {
 	vec3 norm = normalize(vNormal);
 	vec3 viewDir = normalize(u_viewPos - vFragPos);
+	vec4 baseColor = vColor;
 
 	vec3 result = CalcDirLight(u_dirLight, norm, viewDir);
 
@@ -141,8 +146,11 @@ void main() {
 		result += CalcSpotLight(u_spotLights[i], norm, vFragPos, viewDir);
 	}
 
+	if (u_UseTexture) {
+		baseColor *= texture(u_Texture, vUV);
+	}
 
-	result *= vColor.rgb;
+	result *= baseColor.rgb;
 
-	outColor = vec4(result, vColor.a);
+	outColor = vec4(result, baseColor.a);
 }

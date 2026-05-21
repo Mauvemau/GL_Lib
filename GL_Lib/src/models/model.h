@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <map>
 
 #include "../lighting/material.h"
 #include "shape_group.h"
@@ -33,6 +34,7 @@ namespace gllib {
         Color getColor();
 
         void setColor(Color color);
+        void setTexture(unsigned int index, unsigned int texture);
 
         virtual void draw() override;
     };

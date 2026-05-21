@@ -38,8 +38,8 @@ bool BaseGame::initInternal() {
 	// Load vertex and fragment shaders from files
 	const char* vertexSource1 = gllib::Shader::loadShader("solidColorV.glsl");
 	const char* fragmentSource1 = gllib::Shader::loadShader("solidColorF.glsl");
-	const char* vertexSource2 = gllib::Shader::loadShader("solidColorLitV.glsl");
-	const char* fragmentSource2 = gllib::Shader::loadShader("solidColorLitF.glsl");
+	const char* vertexSource2 = gllib::Shader::loadShader("LitV.glsl");
+	const char* fragmentSource2 = gllib::Shader::loadShader("LitF.glsl");
 	const char* vertexSource4 = gllib::Shader::loadShader("textureV.glsl");
 	const char* fragmentSource4 = gllib::Shader::loadShader("textureF.glsl");
 	const char* vertexSource5 = gllib::Shader::loadShader("normalVisualizerV.glsl");

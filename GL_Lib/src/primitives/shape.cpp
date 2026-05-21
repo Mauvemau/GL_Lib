@@ -73,5 +73,5 @@ void Shape::internalDraw() {
     trs = glm::scale(trs, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 
     Renderer::setModelMatrix(trs);
-    Renderer::drawElements(renderData, indexSize);
+    Renderer::drawSolidColor(renderData, indexSize);
 }

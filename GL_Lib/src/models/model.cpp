@@ -128,6 +128,10 @@ void Model::setColor(Color color) {
     updateRenderData(this->color, true);
 }
 
+void Model::setTexture(unsigned int index, unsigned int texture) {
+    textureData[index] = texture;
+}
+
 MeshGroup& Model::getMeshGroup() {
     return *meshGroup;
 }

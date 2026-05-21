@@ -48,7 +48,7 @@ Mesh ModelImporter::processMesh(aiMesh* mesh) {
 
 Mesh ModelImporter::loadMesh(const std::string& path) {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate | aiProcess_GenNormals |aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         throw runtime_error(importer.GetErrorString());
@@ -61,21 +61,30 @@ Mesh ModelImporter::loadMesh(const std::string& path) {
     return processMesh(mesh);
 }
 
-MeshGroup ModelImporter::loadMeshGroup(const std::string& path) {
-    Assimp::Importer importer;
+void ModelImporter::processNode(aiNode* node, const aiScene* scene, vector<Mesh>& meshes) {
+    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        throw runtime_error(importer.GetErrorString());
-    }
-    vector<Mesh> meshes;
-
-    for (int i = 0; i < scene->mNumMeshes; i++) {
-        aiMesh* mesh = scene->mMeshes[i];
+        //cout << i << ") Node: " << node->mName.C_Str() << " -> Mesh: " << mesh->mName.C_Str() << endl;
 
         meshes.push_back(processMesh(mesh));
     }
+
+    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+        processNode(node->mChildren[i], scene, meshes);
+    }
+}
+
+MeshGroup ModelImporter::loadMeshGroup(const string& path) {
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
+    if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
+        throw runtime_error(importer.GetErrorString());
+    }
+
+    vector<Mesh> meshes;
+
+    processNode(scene->mRootNode, scene, meshes);
 
     return MeshGroup(meshes);
 }

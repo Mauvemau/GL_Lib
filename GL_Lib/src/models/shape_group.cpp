@@ -79,6 +79,10 @@ void ShapeGroup::internalDraw() {
     Renderer::setModelMatrix(trs);
 
     for (int i = 0; i < renderDatas.size(); i++) {
-        Renderer::drawElements(renderDatas[i], indexSizes[i]);
+        if (textureData[i]) {
+            Renderer::drawTexture(renderDatas[i], indexSizes[i], textureData[i]);
+        }else {
+            Renderer::drawSolidColor(renderDatas[i], indexSizes[i]);
+        }
     }
 }

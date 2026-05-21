@@ -143,13 +143,31 @@ void Renderer::drawElements(RenderData rData, GLsizei indexSize) {
     glBindVertexArray(0);
 }
 
-void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID) {
-    bindTexture(textureID);
-    drawElements(rData, indexSize);
+void Renderer::bindSolidColor() {
+    GLint prog = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+
+    glUniform1i(glGetUniformLocation(prog, "u_UseTexture"), 0);
 }
 
 void Renderer::bindTexture(unsigned int textureID) {
+    GLint prog = 0;
+    glActiveTexture(GL_TEXTURE0);
+    glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
     glBindTexture(GL_TEXTURE_2D, textureID);
+
+    glUniform1i(glGetUniformLocation(prog, "u_Texture"), 0);
+    glUniform1i(glGetUniformLocation(prog, "u_UseTexture"), 1);
+}
+
+void Renderer::drawSolidColor(RenderData rData, GLsizei indexSize) {
+    bindSolidColor();
+    drawElements(rData, indexSize);
+}
+
+void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID) {
+    bindTexture(textureID);
+    drawElements(rData, indexSize);
 }
 
 void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {

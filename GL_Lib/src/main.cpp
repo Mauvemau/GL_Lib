@@ -154,15 +154,23 @@ Game::Game() {
     spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
 
-
     gllib::Material whitePaintMaterial = gllib::Material({0.3f, 0.3f, 0.3f },
                                                 {0.4f, 0.4f, 0.4f },
                                                 {0.9f, 0.9f, 0.9f},
-                                                200.0f);
+                                                50.0f);
     gllib::MeshGroup nissanMesh = gllib::ModelImporter::loadMeshGroup("NissanS30.obj");
-    gllib::Mesh swordMesh = gllib::ModelImporter::loadMesh("starpiercer.fbx");
+    gllib::MeshGroup swordMesh = gllib::ModelImporter::loadMeshGroup("starpiercer.fbx");
     nissanModel = new gllib::Model(nissanMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f}, whitePaintMaterial);
-    swordModel = new gllib::Model(swordMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f});
+
+    gllib::Transform trsSword;
+    trsSword.position = { 0.0f, 1.05f, 3.0f };
+    trsSword.rotationQuat = { 0.0f, 90.0f, 0.0f, 0.0f };
+    trsSword.scale = { 1.0f, 1.0f, 1.0f };
+    swordModel = new gllib::Model(swordMesh, trsSword, {1.0f, 1.0f, 1.0f, 1.0f});
+    unsigned int swordTexture = gllib::Loader::loadTexture("textures/GALAXY_low_DefaultMaterial_BaseColor.png", false);
+    unsigned int particleTexture = gllib::Loader::loadTexture("textures/beo.png", true);
+    swordModel->setTexture(0, swordTexture);
+    swordModel->setTexture(1, particleTexture);
 }
 
 Game::~Game() {
@@ -219,7 +227,8 @@ void Game::update() {
     gllib::Renderer::setLightingData(*lightData);
 
     //box->draw();
-    nissanModel->draw();
+    //nissanModel->draw();
+    swordModel->draw();
     player->draw();
     floor->draw();
     wall->draw();
