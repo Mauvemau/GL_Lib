@@ -13,8 +13,10 @@ namespace gllib {
         std::vector<RenderData> renderDatas;
         std::vector<unsigned int> indexSizes;
 
+        Material getDefaultMaterial();
+
         protected:
-        std::map<unsigned int, unsigned int> textureData;
+        std::vector<Material> materials;
 
         void addRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize);
         void pivotVertex(float* vertexData, int vertexCount, int vertexStride, Vector3 pivot);

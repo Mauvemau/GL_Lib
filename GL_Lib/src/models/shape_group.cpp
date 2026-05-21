@@ -28,6 +28,7 @@ void ShapeGroup::addRenderData(const float vertexData[], int vertexDataSize, con
 
     renderDatas.push_back(renderData);
     indexSizes.push_back(indexSize);
+    materials.push_back(Material());
 }
 
 void ShapeGroup::pivotVertex(float* vertexData, int vertexCount, int vertexStride, Vector3 pivot) {
@@ -79,9 +80,13 @@ void ShapeGroup::internalDraw() {
     Renderer::setModelMatrix(trs);
 
     for (int i = 0; i < renderDatas.size(); i++) {
-        if (textureData[i]) {
-            Renderer::drawTexture(renderDatas[i], indexSizes[i], textureData[i]);
-        }else {
+        const Material& material = materials[i];
+        Renderer::setMaterial(material);
+
+        if (material.texture > 0) {
+            Renderer::drawTexture(renderDatas[i], indexSizes[i], material.texture);
+        }
+        else {
             Renderer::drawSolidColor(renderDatas[i], indexSizes[i]);
         }
     }

@@ -153,24 +153,151 @@ Game::Game() {
 
     spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
-
-    gllib::Material whitePaintMaterial = gllib::Material({0.3f, 0.3f, 0.3f },
-                                                {0.4f, 0.4f, 0.4f },
-                                                {0.9f, 0.9f, 0.9f},
-                                                50.0f);
+#pragma region Nissan
+    gllib::Material debugGreen = gllib::Material(
+    {0.0f, 1.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    {0.0f, 0.0f, 0.0f},
+    1.0f);
+    gllib::Material metallicRed = gllib::Material(
+    {0.18f, 0.03f, 0.03f},
+    {0.75f, 0.05f, 0.05f},
+    {1.0f, 0.9f, 0.9f},
+    128.0f );
+    gllib::Material matteBlackPlastic = gllib::Material(
+    {0.02f, 0.02f, 0.02f},
+    {0.08f, 0.08f, 0.08f},
+    {0.15f, 0.15f, 0.15f},
+    12.0f);
+    gllib::Material chrome = gllib::Material(
+    {0.20f, 0.20f, 0.20f},
+    {0.55f, 0.55f, 0.55f},
+    {1.0f, 1.0f, 1.0f},
+    512.0f);
+    gllib::Material blackGlass = gllib::Material(
+    {0.01f, 0.01f, 0.01f},
+    {0.03f, 0.03f, 0.03f},
+    {1.0f, 1.0f, 1.0f},
+    300.0f);
+    gllib::Material glossyRubber = gllib::Material(
+    {0.02f, 0.02f, 0.02f},
+    {0.06f, 0.06f, 0.06f},
+    {0.4f, 0.4f, 0.4f},
+    48.0f);
+    gllib::Material imprezaGold = gllib::Material(
+    {0.20f, 0.14f, 0.02f},
+    {0.85f, 0.65f, 0.08f},
+    {1.0f, 0.9f, 0.5f},
+    96.0f);
     gllib::MeshGroup nissanMesh = gllib::ModelImporter::loadMeshGroup("NissanS30.obj");
-    gllib::MeshGroup swordMesh = gllib::ModelImporter::loadMeshGroup("starpiercer.fbx");
-    nissanModel = new gllib::Model(nissanMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f}, whitePaintMaterial);
+    nissanModel = new gllib::Model(nissanMesh, trs, {1.0f, 1.0f, 1.0f, 1.0f});
+    nissanModel->setMaterial(0, metallicRed); // Body
+    nissanModel->setMaterial(1, chrome); // Chrome body parts
+    nissanModel->setMaterial(2, matteBlackPlastic); // Back
+    unsigned int lightsTexture = gllib::Loader::loadTexture("textures/lights.png", false);
+    gllib::Material lightsMaterial = gllib::Material(lightsTexture);
+    nissanModel->setMaterial(3, lightsTexture);
+    nissanModel->setMaterial(4, matteBlackPlastic); // Inside Grill
+    nissanModel->setMaterial(5, blackGlass); // Windows
+    nissanModel->setMaterial(6, matteBlackPlastic); // Wing
+    nissanModel->setMaterial(7, matteBlackPlastic); // Fenders
+    nissanModel->setMaterial(8, lightsMaterial); // Lights
+    nissanModel->setMaterial(9, chrome); // Headlight ring
+    nissanModel->setMaterial(10, matteBlackPlastic); // Backlight rings
+    // 11 Nothing
+    nissanModel->setMaterial(12, lightsMaterial); // Headlights
+    nissanModel->setMaterial(13, chrome); // Grill
+    nissanModel->setMaterial(14, debugGreen); // The damn tree
+    nissanModel->setMaterial(15, chrome); // Small metallic details
+    unsigned int plateTexture = gllib::Loader::loadTexture("textures/plate_d-dds.png", false);
+    gllib::Material plateMaterial = gllib::Material(plateTexture);
+    nissanModel->setMaterial(16, plateMaterial); // Plate
+    nissanModel->setMaterial(17, chrome); //pedals
+    nissanModel->setMaterial(18, chrome); // Wheel
+    nissanModel->setMaterial(19, metallicRed); // Cage
+    nissanModel->setMaterial(20, matteBlackPlastic); // Interior
+    unsigned int radioTexture = gllib::Loader::loadTexture("textures/Classic_&_Sports_Car_–_Datsun_240Z_–_09.png", false);
+    gllib::Material radioMaterial = gllib::Material(radioTexture);
+    nissanModel->setMaterial(21, radioMaterial);
+    unsigned int radioTexture2 = gllib::Loader::loadTexture("textures/6d3540a077232b960ef9dd1991bde2c0.jpeg", false);
+    gllib::Material radioMaterial2 = gllib::Material(radioTexture2);
+    nissanModel->setMaterial(22, radioMaterial2);
+    nissanModel->setMaterial(23, matteBlackPlastic);
+    nissanModel->setMaterial(24, chrome);
+    nissanModel->setMaterial(25, matteBlackPlastic);
+    nissanModel->setMaterial(28, matteBlackPlastic); // Bottom
+    nissanModel->setMaterial(29, matteBlackPlastic); // Carpet
+    unsigned int beltTexture = gllib::Loader::loadTexture("textures/70002-H2__45943.1452186941.jpeg", false);
+    gllib::Material beltMaterial = gllib::Material(beltTexture);
+    nissanModel->setMaterial(30, beltMaterial);
+    nissanModel->setMaterial(31, metallicRed);
+    unsigned int capTexture = gllib::Loader::loadTexture("textures/large311002.jpeg", false);
+    gllib::Material capMaterial = gllib::Material(capTexture);
+    nissanModel->setMaterial(32, capMaterial);
+    nissanModel->setMaterial(33, chrome);
+    nissanModel->setMaterial(34, capMaterial);
+    nissanModel->setMaterial(35, chrome);
+    nissanModel->setMaterial(36, chrome);
+    nissanModel->setMaterial(37, capMaterial);
+    nissanModel->setMaterial(38, chrome); // Exhaust tip
+    nissanModel->setMaterial(39, chrome);
+    nissanModel->setMaterial(40, metallicRed);
+    nissanModel->setMaterial(41, chrome);
+    nissanModel->setMaterial(42, chrome);
+    nissanModel->setMaterial(43, chrome); // Rear Bumper
+    nissanModel->setMaterial(44, matteBlackPlastic);
+    nissanModel->setMaterial(45, chrome); // Front Bumper
+    nissanModel->setMaterial(46, matteBlackPlastic);
+    nissanModel->setMaterial(47, matteBlackPlastic);
+    nissanModel->setMaterial(48, chrome); // Mirrors
+    nissanModel->setMaterial(49, chrome);
+    nissanModel->setMaterial(50, blackGlass);
+    nissanModel->setMaterial(52, chrome);
+    nissanModel->setMaterial(53, metallicRed);
+    nissanModel->setMaterial(54, chrome);
+    nissanModel->setMaterial(55, chrome);
+    nissanModel->setMaterial(56, metallicRed);
+    nissanModel->setMaterial(57, chrome);
+    nissanModel->setMaterial(58, chrome);
+    nissanModel->setMaterial(59, metallicRed);
+    nissanModel->setMaterial(60, chrome);
+    nissanModel->setMaterial(61, chrome);
+    nissanModel->setMaterial(62, chrome);
+    nissanModel->setMaterial(63, metallicRed); // Lip
+    nissanModel->setMaterial(64, chrome); // Bolts
+    nissanModel->setMaterial(65, chrome);
+    nissanModel->setMaterial(66, glossyRubber); // Tire
+    nissanModel->setMaterial(67, chrome); // Rim bolts
+    nissanModel->setMaterial(68, chrome);
+    nissanModel->setMaterial(69, chrome); // Outer Rim
+    nissanModel->setMaterial(70, imprezaGold); // Rim
+    nissanModel->setMaterial(71, glossyRubber);
+    nissanModel->setMaterial(72, chrome);
+    nissanModel->setMaterial(73, chrome);
+    nissanModel->setMaterial(74, chrome);
+    nissanModel->setMaterial(75, imprezaGold);
+    nissanModel->setMaterial(76, glossyRubber);
+    nissanModel->setMaterial(77, chrome);
+    nissanModel->setMaterial(78, chrome);
+    nissanModel->setMaterial(79, chrome);
+    nissanModel->setMaterial(80, imprezaGold);
+    nissanModel->setMaterial(81, glossyRubber);
+    nissanModel->setMaterial(82, chrome);
+    nissanModel->setMaterial(83, chrome);
+    nissanModel->setMaterial(84, chrome);
+    nissanModel->setMaterial(85, imprezaGold);
+    nissanModel->setMaterial(89, chrome);
+#pragma endregion
 
     gllib::Transform trsSword;
     trsSword.position = { 0.0f, 1.05f, 3.0f };
     trsSword.rotationQuat = { 0.0f, 90.0f, 0.0f, 0.0f };
     trsSword.scale = { 1.0f, 1.0f, 1.0f };
+    gllib::MeshGroup swordMesh = gllib::ModelImporter::loadMeshGroup("starpiercer.fbx");
     swordModel = new gllib::Model(swordMesh, trsSword, {1.0f, 1.0f, 1.0f, 1.0f});
     unsigned int swordTexture = gllib::Loader::loadTexture("textures/GALAXY_low_DefaultMaterial_BaseColor.png", false);
-    unsigned int particleTexture = gllib::Loader::loadTexture("textures/beo.png", true);
-    swordModel->setTexture(0, swordTexture);
-    swordModel->setTexture(1, particleTexture);
+    gllib::Material swordMaterial = gllib::Material(swordTexture);
+    swordModel->setMaterial(0, swordMaterial);
 }
 
 Game::~Game() {
@@ -227,7 +354,7 @@ void Game::update() {
     gllib::Renderer::setLightingData(*lightData);
 
     //box->draw();
-    //nissanModel->draw();
+    nissanModel->draw();
     swordModel->draw();
     player->draw();
     floor->draw();

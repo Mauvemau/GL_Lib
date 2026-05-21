@@ -17,15 +17,11 @@ namespace gllib {
 
         Color color{};
 
-        std::optional<Material> material;
-
         void updateRenderData(Color color, bool centerPivot);
 
     public:
         Model(Mesh &mesh,Transform transform,Color color);
-        Model(Mesh &mesh,Transform transform,Color color, Material mat);
         Model(MeshGroup &meshGroup,Transform transform, Color color);
-        Model(MeshGroup &meshGroup, Transform transform, Color color, Material mat);
         virtual ~Model() override;
 
         MeshGroup& getMeshGroup();
@@ -33,8 +29,7 @@ namespace gllib {
 
         Color getColor();
 
-        void setColor(Color color);
-        void setTexture(unsigned int index, unsigned int texture);
+        void setMaterial(unsigned int index, const Material& mat);
 
         virtual void draw() override;
     };

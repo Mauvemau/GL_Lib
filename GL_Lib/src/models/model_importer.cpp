@@ -65,7 +65,7 @@ void ModelImporter::processNode(aiNode* node, const aiScene* scene, vector<Mesh>
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-        //cout << i << ") Node: " << node->mName.C_Str() << " -> Mesh: " << mesh->mName.C_Str() << endl;
+        cout << i << ") Node: " << node->mName.C_Str() << " -> Mesh: " << mesh->mName.C_Str() << endl;
 
         meshes.push_back(processMesh(mesh));
     }

@@ -4,18 +4,27 @@
 namespace gllib {
 
     struct DLLExport Material {
-    public:
-        Vector3 ambient;
-        Vector3 diffuse;
-        Vector3 specular;
-        float shininess;
+        Vector3 ambient  {0.35f, 0.35f, 0.35f};
+        Vector3 diffuse  {1.0f, 1.0f, 1.0f};
+        Vector3 specular {0.5f, 0.5f, 0.5f};
 
-        Material(const Vector3 ambient, const Vector3 diffuse, const Vector3 specular, const float shininess) {
-            this->ambient = ambient;
-            this->diffuse = diffuse;
-            this->specular = specular;
-            this->shininess = shininess;
+        float shininess = 80.0f;
+
+        unsigned int texture = 0;
+
+        Material() = default;
+
+        Material(unsigned int texture) : texture(texture) {
+
+        }
+
+        Material(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular, float shininess, unsigned int texture = 0)
+            : ambient(ambient),
+              diffuse(diffuse),
+              specular(specular),
+              shininess(shininess),
+              texture(texture) {
+
         }
     };
-
 }

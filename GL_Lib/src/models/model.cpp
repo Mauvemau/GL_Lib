@@ -14,26 +14,6 @@ ShapeGroup(transform) {
     meshGroup = &(*ownedMeshGroup);
 
     updateRenderData(this->color, true);
-
-    Vector3 ambient = Vector3(0.35f, 0.35f, 0.35f);
-    Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
-    Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
-    material = Material(ambient, diffuse, specular, 80.0f);
-
-    cout << "Created model.\n";
-}
-
-Model::Model(Mesh& mesh, Transform transform, Color color, Material mat):
-ShapeGroup(transform) {
-    this->color = color;
-
-    ownedMeshGroup = MeshGroup({ mesh });
-    meshGroup = &(*ownedMeshGroup);
-
-    updateRenderData(this->color, true);
-
-    material = mat;
-
     cout << "Created model.\n";
 }
 
@@ -43,24 +23,6 @@ ShapeGroup(transform), meshGroup(&meshGroup) {
     this->color = color;
 
     updateRenderData(this->color, true);
-
-    Vector3 ambient = Vector3(0.35f, 0.35f, 0.35f);
-    Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f);
-    Vector3 specular = Vector3(0.5f, 0.5f, 0.5f);
-    material = Material(ambient, diffuse, specular, 80.0f);
-
-    cout << "Created model.\n";
-}
-
-Model::Model(MeshGroup& meshGroup, Transform transform, Color color, Material mat) :
-ShapeGroup(transform), meshGroup(&meshGroup) {
-
-    this->color = color;
-
-    updateRenderData(this->color, true);
-
-    material = mat;
-
     cout << "Created model.\n";
 }
 
@@ -123,13 +85,12 @@ Color Model::getColor() {
     return color;
 }
 
-void Model::setColor(Color color) {
-    this->color = color;
-    updateRenderData(this->color, true);
-}
+void Model::setMaterial(unsigned int index, const Material& material) {
+    if (index >= materials.size()) {
+        return;
+    }
 
-void Model::setTexture(unsigned int index, unsigned int texture) {
-    textureData[index] = texture;
+    materials[index] = material;
 }
 
 MeshGroup& Model::getMeshGroup() {
@@ -141,7 +102,5 @@ Mesh& Model::getMesh() {
 }
 
 void Model::draw() {
-    Renderer::setMaterial(*material);
-
     internalDraw();
 }
