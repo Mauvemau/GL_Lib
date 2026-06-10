@@ -8,6 +8,7 @@
 
 #include "mesh.h"
 #include "mesh_group.h"
+#include "../lighting/material_group.h"
 
 namespace gllib {
     class DLLExport Model : public ShapeGroup {
@@ -22,6 +23,8 @@ namespace gllib {
     public:
         Model(Mesh &mesh,Transform transform,Color color);
         Model(MeshGroup &meshGroup,Transform transform, Color color);
+        Model(MeshGroup &meshGroup, MaterialGroup &materialGroup, Transform transform, Color color);
+
         virtual ~Model() override;
 
         MeshGroup& getMeshGroup();

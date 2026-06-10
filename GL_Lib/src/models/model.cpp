@@ -26,6 +26,26 @@ ShapeGroup(transform), meshGroup(&meshGroup) {
     cout << "Created model.\n";
 }
 
+Model::Model(MeshGroup& meshGroup, MaterialGroup& materialGroup, Transform transform, Color color) :
+ShapeGroup(transform), meshGroup(&meshGroup) {
+    this->color = color;
+
+    updateRenderData(this->color, true);
+
+    vector<Material>& loadedMaterials = materialGroup.getMaterials();
+    vector<Mesh>& meshes = meshGroup.getMeshes();
+
+    for (size_t i = 0; i < meshes.size(); i++) {
+        unsigned int matIdx = meshes[i].getMaterialIndex();
+
+        if (matIdx < loadedMaterials.size()) {
+            materials[i] = loadedMaterials[matIdx];
+        }
+    }
+
+    cout << "Created model with automated, exact MaterialGroup mapping.\n";
+}
+
 Model::~Model() {
     cout << "Destroyed model.\n";
 }

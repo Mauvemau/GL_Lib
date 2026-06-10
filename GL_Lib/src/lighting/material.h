@@ -10,21 +10,21 @@ namespace gllib {
 
         float shininess = 80.0f;
 
+        float alpha = 1.0f;
+
         unsigned int texture = 0;
 
         Material() = default;
 
-        Material(unsigned int texture) : texture(texture) {
+        Material(unsigned int texture) : texture(texture) {}
 
-        }
-
-        Material(const Vector3& ambient, const Vector3& diffuse, const Vector3& specular, float shininess, unsigned int texture = 0)
-            : ambient(ambient),
-              diffuse(diffuse),
-              specular(specular),
-              shininess(shininess),
-              texture(texture) {
-
+        Material(const Vector3& ambient,const Vector3& diffuse,const Vector3& specular,float shininess,float alpha = 1.0f,unsigned int texture = 0) :
+            ambient(ambient),
+            diffuse(diffuse),
+            specular(specular),
+            shininess(shininess),
+            alpha(alpha),
+            texture(texture) {
         }
     };
 }

@@ -17,7 +17,7 @@ Light::Light(Color color) {
 }
 
 Light::~Light() {
-    cout << "Destroyed light *evil god*\n";
+    cout << "Destroyed light\n";
 }
 
 void Light::setColor(Color color) {

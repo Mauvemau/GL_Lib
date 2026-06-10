@@ -17,12 +17,14 @@ namespace gllib {
         private:
         std::vector<Vertex> vertices;
         std::vector<int> indices;
+        unsigned int materialIndex;
 
         public:
-        Mesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices);
+        Mesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices, unsigned int materialIndex = 0);
         ~Mesh();
 
         std::vector<Vertex>& getVertices();
         std::vector<int>& getIndices();
+        unsigned int getMaterialIndex() const;
     };
 }

@@ -9,7 +9,8 @@ using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
-    gllib::ThirdPersonCamera* camera;
+    gllib::FirstPersonCamera* cameraFp;
+    gllib::ThirdPersonCamera* cameraTp;
 
     gllib::Box* box;
     gllib::Animation* coin;
@@ -22,17 +23,23 @@ private:
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
     gllib::Box* lightBox2;
+    gllib::Box* lightBox3;
+    gllib::Box* lightBox4;
     gllib::PointLight* light;
     gllib::PointLight* light2;
+    gllib::PointLight* light3;
+    gllib::PointLight* light4;
     gllib::SpotLight* spotLight;
     gllib::LightingData* lightData;
     gllib::Model* nissanModel;
-    gllib::Model* swordModel;
+    gllib::Model* lemon;
+    gllib::Model* lion;
     bool wireframeMode = false;
 
     float playerSpeed = 2.5f;
 
     float cameraSensitivity = .5f;
+    bool thirdPerson = true;
     bool cameraLocked = true;
 
     bool lit = true;
@@ -57,8 +64,10 @@ Game::Game() {
     window->setVsyncEnabled(true);
     cout << "Game created!\n";
     gllib::Renderer::setLazyWireframeMode(wireframeMode);
+    cameraFp = new gllib::FirstPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
+                                         gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity);
 
-    camera = new gllib::ThirdPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
+    cameraTp = new gllib::ThirdPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
                                          gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity, 5.0f);
 
     gllib::Transform trs;
@@ -134,25 +143,39 @@ Game::Game() {
                                                 10.0f);
     greenRubber = new gllib::Box(trs9, { 1.0f, 1.0f, 1.0f, 1.0f }, greenRubberMat);
 
-
     gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
     dirLight = new gllib::DirectionalLight(dirLightDirection, {0.30f, 0.30f, 0.35f, 1.0f});
     gllib::Transform trs5;
-    trs5.position = { 4.0f, 0.0f, 3.0f };
+    trs5.position = { 0.0f, 0.0f, -3.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs5.scale = { 0.25f, 0.25f, 0.25f };
     lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
     light = new gllib::PointLight(trs5.position);
 
     gllib::Transform trs10;
-    trs10.position = { -4.0f, 0.0f, 3.0f };
+    trs10.position = { -2.0f, 0.0f, 3.0f };
     trs10.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs10.scale = { 0.25f, 0.25f, 0.25f };
     lightBox2 = new gllib::Box(trs10, { 0.2f, 0.4f, 1.0f, 1.0f });
-    light2 = new gllib::PointLight(trs10.position, 1.0f, 0.14f, 0.07f, {0.2f, 0.4f, 1.0f, 1.0f});
+    light2 = new gllib::PointLight(trs10.position, 1.0f, 0.11f, 0.05f, {0.2f, 0.4f, 1.0f, 1.0f});
+
+    gllib::Transform trs11;
+    trs11.position = { 0.0f, 0.0f, 3.0f };
+    trs11.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs11.scale = { 0.25f, 0.25f, 0.25f };
+    lightBox3 = new gllib::Box(trs11, { 1.0f, 0.2f, 0.2f, 1.0f });
+    light3 = new gllib::PointLight(trs11.position, 1.0f, 0.11f, 0.05f, { 1.0f, 0.2f, 0.2f, 1.0f });;;
+
+    gllib::Transform trs12;
+    trs12.position = { 2.0f, 0.0f, 3.0f };
+    trs12.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs12.scale = { 0.25f, 0.25f, 0.25f };
+    lightBox4 = new gllib::Box(trs12, { 0.2f, 1.0f, 0.2f, 1.0f });
+    light4 = new gllib::PointLight(trs12.position, 1.0f, 0.11f, 0.05f, { 0.2f, 1.0f, 0.2f, 1.0f });
 
     spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
+
 #pragma region Nissan
     gllib::Material debugGreen = gllib::Material(
     {0.0f, 1.0f, 0.0f},
@@ -289,15 +312,22 @@ Game::Game() {
     nissanModel->setMaterial(89, chrome);
 #pragma endregion
 
-    gllib::Transform trsSword;
-    trsSword.position = { 0.0f, 1.05f, 3.0f };
-    trsSword.rotationQuat = { 0.0f, 90.0f, 0.0f, 0.0f };
-    trsSword.scale = { 1.0f, 1.0f, 1.0f };
-    gllib::MeshGroup swordMesh = gllib::ModelImporter::loadMeshGroup("starpiercer.fbx");
-    swordModel = new gllib::Model(swordMesh, trsSword, {1.0f, 1.0f, 1.0f, 1.0f});
-    unsigned int swordTexture = gllib::Loader::loadTexture("textures/GALAXY_low_DefaultMaterial_BaseColor.png", false);
-    gllib::Material swordMaterial = gllib::Material(swordTexture);
-    swordModel->setMaterial(0, swordMaterial);
+    gllib::Transform trs14;
+    trs14.position = { 5.0f, 0.0f, -1.0f };
+    trs14.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs14.scale = { 15.0f, 15.0f, 15.0f };
+    gllib::MeshGroup lemonMesh = gllib::ModelImporter::loadMeshGroup("lemon_4k.fbx");
+    gllib::MaterialGroup lemonMaterial = gllib::ModelImporter::loadMaterialGroup("lemon_4k.fbx");
+    lemon = new gllib::Model(lemonMesh, lemonMaterial, trs14, {1.0f, 1.0f, 1.0f, 1.0f});
+
+    gllib::Transform trs15;
+    trs15.position = { -4.25f, -.35f, -1.0f };
+    trs15.rotationQuat = { 0.0f, 0.0f, 90.0f, 0.0f };
+    trs15.scale = { 5.0f, 5.0f, 5.0f };
+    gllib::MeshGroup lionMesh = gllib::ModelImporter::loadMeshGroup("lion_head_4k.obj");
+    gllib::MaterialGroup lionMaterial = gllib::ModelImporter::loadMaterialGroup("lion_head_4k.obj");
+    lion = new gllib::Model(lionMesh, lionMaterial, trs15, {1.0f, 1.0f, 1.0f, 1.0f});
+    cout << "Material: " << lionMaterial.getMaterials()[1].texture << "\n";
 }
 
 Game::~Game() {
@@ -313,6 +343,8 @@ void Game::init() {
     lightData->SetDirectionalLight(*dirLight);
     lightData->AddPointLight(*light);
     lightData->AddPointLight(*light2);
+    lightData->AddPointLight(*light3);
+    lightData->AddPointLight(*light4);
     lightData->AddSpotLight(*spotLight);
 }
 
@@ -349,19 +381,24 @@ void Game::update() {
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     lightBox->draw();
     lightBox2->draw();
+    lightBox3->draw();
+    lightBox4->draw();
     lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
             gllib::Shader::useShaderProgram(shaderProgramNormals);
     gllib::Renderer::setLightingData(*lightData);
 
-    //box->draw();
     nissanModel->draw();
-    swordModel->draw();
-    player->draw();
+    lemon->draw();
+    lion->draw();
+    if (thirdPerson) {
+        player->draw();
+    }
     floor->draw();
     wall->draw();
     greenPlastic->draw();
     greenRubber->draw();
     emerald->draw();
+    //nissanModel->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     //coin->draw();
 }
@@ -376,16 +413,22 @@ void Game::uninit() {
     delete lightData;
     delete lightBox;
     delete lightBox2;
+    delete lightBox3;
+    delete lightBox4;
     delete dirLight;
     delete light;
     delete light2;
+    delete light3;
+    delete light4;
     delete spotLight;
     delete floor;
     delete wall;
     delete player;
-    delete camera;
+    delete cameraFp;
+    delete cameraTp;
     delete nissanModel;
-    delete swordModel;
+    delete lemon;
+    delete lion;
 }
 
 void Game::handlePlayerInput() {
@@ -395,6 +438,9 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_Q)) {
         wireframeMode = !wireframeMode;
         gllib::Renderer::setLazyWireframeMode(wireframeMode);
+    }
+    if (Input::getKeyReleased(Key_V)) {
+        thirdPerson = !thirdPerson;
     }
     if (Input::getKeyReleased(Key_L)) {
         lit = !lit;
@@ -412,7 +458,7 @@ void Game::handlePlayerInput() {
             lightBox->move(-gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            gllib::Vector3 forwardDir = camera->forward();
+            gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
             player->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
@@ -423,7 +469,8 @@ void Game::handlePlayerInput() {
             lightBox->move(gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            player->move(-camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
+            player->move(-rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_S)) {
@@ -431,7 +478,7 @@ void Game::handlePlayerInput() {
             lightBox->move(gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            gllib::Vector3 forwardDir = camera->forward();
+            gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
             player->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
@@ -442,7 +489,8 @@ void Game::handlePlayerInput() {
             lightBox->move(-gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            player->move(camera->right() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
+            player->move(rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_Space)) {
@@ -462,29 +510,42 @@ void Game::handlePlayerInput() {
         }
     }
 
-    camera->updateCamera(player->getPosition());
+    if (thirdPerson) {
+        cameraTp->updateCamera(player->getPosition());
+    }else {
+        cameraFp->updateCamera(player->getPosition());
+    }
+
     spotLight->setPosition(player->getPosition());
     if (!controllingLight) {
-        gllib::Vector3 camForward = camera->forward();
-        camForward.y = 0.0f;
+        gllib::Vector3 camForward = thirdPerson ? cameraTp->forward() : cameraFp->forward();
+        if (thirdPerson) {
+            camForward.y = 0.0f;
+        }
 
         if (camForward.length() > 0.0001f) {
             camForward = camForward.normalized();
             spotLight->setDirection(camForward);
 
-            float yaw = atan2(camForward.x, camForward.z);
-            float yawDeg = yaw * 180.0f / M_PI;
+            if (thirdPerson) {
+                float yaw = atan2(camForward.x, camForward.z);
+                float yawDeg = yaw * 180.0f / M_PI;
 
-            gllib::Quaternion rot = player->getRotationQuat();
-            rot.y = yawDeg;
+                gllib::Quaternion rot = player->getRotationQuat();
+                rot.y = yawDeg;
 
-            player->setRotationQuat(rot);
+                player->setRotationQuat(rot);
+            }
         }
     }
-
     light->setPosition(lightBox->getPosition());
+
     if (cameraLocked) return;
-    camera->updateMouseInput();
+    if (thirdPerson) {
+        cameraTp->updateMouseInput();
+    }else {
+        cameraFp->updateMouseInput();
+    }
 }
 
 int main() {

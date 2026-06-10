@@ -33,11 +33,6 @@ namespace gllib {
         this->sensitivity = sensitivity;
     }
 
-    void FirstPersonCamera::followTargetPosition(Vector3 targetPosition) {
-        position = targetPosition;
-        update();
-    }
-
     void FirstPersonCamera::updateMouseInput() {
         float mouseX = Input::getMouseDeltaX();
         float mouseY = Input::getMouseDeltaY();
@@ -49,6 +44,11 @@ namespace gllib {
 
         rotate(pitch, yaw);
 
+        update();
+    }
+
+    void FirstPersonCamera::updateCamera(Vector3 target) {
+        position = target;
         update();
     }
 

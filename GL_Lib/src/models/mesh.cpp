@@ -5,16 +5,10 @@
 using namespace gllib;
 using namespace std;
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<int>& indices) {
-    this->vertices = vertices;
-    this->indices = indices;
+Mesh::Mesh(const vector<Vertex>& vertices, const vector<int>& indices, unsigned int materialIndex)
+    : vertices(vertices), indices(indices), materialIndex(materialIndex) {}
 
-    //cout << "Created mesh.\n";
-}
-
-Mesh::~Mesh() {
-    //cout << "Destroyed mesh.\n";
-}
+Mesh::~Mesh() {}
 
 std::vector<Vertex>& Mesh::getVertices() {
     return vertices;
@@ -22,4 +16,8 @@ std::vector<Vertex>& Mesh::getVertices() {
 
 std::vector<int>& Mesh::getIndices() {
     return indices;
+}
+
+unsigned int Mesh::getMaterialIndex() const {
+    return materialIndex;
 }

@@ -21,8 +21,8 @@ namespace gllib {
         void setMinMaxClampX(float max, float min);
         void setSensitivity(float sensitivity);
 
-        void followTargetPosition(Vector3 targetPosition);
         void updateMouseInput();
+        void updateCamera(Vector3 target);
     };
 
 }
