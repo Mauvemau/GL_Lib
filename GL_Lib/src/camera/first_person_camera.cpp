@@ -37,18 +37,16 @@ namespace gllib {
         float mouseX = Input::getMouseDeltaX();
         float mouseY = Input::getMouseDeltaY();
 
-        yaw += mouseX * sensitivity;
+        yaw   += mouseX * sensitivity;
         pitch += mouseY * sensitivity;
 
         pitch = Maths::clamp(pitch, minRotationX, maxRotationX);
-
-        rotate(pitch, yaw);
-
-        update();
     }
 
     void FirstPersonCamera::updateCamera(Vector3 target) {
         position = target;
+        rotate(pitch, yaw);
+
         update();
     }
 
