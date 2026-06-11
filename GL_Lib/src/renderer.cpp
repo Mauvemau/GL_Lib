@@ -195,7 +195,7 @@ void Renderer::setLightingData(const LightingData& data) {
 
     // Directional Light
 
-    if (data.hasDirectional) {
+    if (data.hasDirectional && data.directionalLight->isActive()) {
         setVec3("u_dirLight.direction", static_cast<glm::vec3>(data.directionalLight->getDirection()));
         setVec3("u_dirLight.color", static_cast<glm::vec3>(data.directionalLight->getColor()));
     } else {
@@ -211,7 +211,11 @@ void Renderer::setLightingData(const LightingData& data) {
         std::string base = "u_pointLights[" + std::to_string(i) + "]";
 
         setVec3(base + ".position", static_cast<glm::vec3>(l.getPosition()));
-        setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+        if (l.isActive()) {
+            setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+        } else {
+            setVec3(base + ".color", {0.0f, 0.0f, 0.0f});
+        }
         setFloat(base + ".constant", l.getConstant());
         setFloat(base + ".linear", l.getLinear());
         setFloat(base + ".quadratic", l.getQuadratic());
@@ -237,7 +241,11 @@ void Renderer::setLightingData(const LightingData& data) {
 
         setVec3(base + ".position", static_cast<glm::vec3>(l.getPosition()));
         setVec3(base + ".direction", static_cast<glm::vec3>(l.getDirection()));
-        setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+        if (l.isActive()) {
+            setVec3(base + ".color", static_cast<glm::vec3>(l.getColor()));
+        } else {
+            setVec3(base + ".color", {0.0f, 0.0f, 0.0f});
+        }
 
         setFloat(base + ".cutOff", l.getCutOffCos());
         setFloat(base + ".outerCutOff", l.getOuterCutOffCos());

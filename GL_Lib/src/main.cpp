@@ -15,6 +15,7 @@ private:
     gllib::Box* box;
     gllib::Animation* coin;
     gllib::Box* player;
+    gllib::Model* playerModel;
     gllib::Box* floor;
     gllib::Box* wall;
     gllib::Box* emerald;
@@ -44,6 +45,7 @@ private:
 
     bool lit = true;
     bool controllingLight = false;
+    float rgbTimeAccumulator = 0.0f;
 
     gllib::Vector3 velocity = {1.5f, 1.25f, 0.0f};
     float myTime = 0;
@@ -89,14 +91,18 @@ Game::Game() {
 
     gllib::Transform trs3;
     trs3.position = { 0.0f, -1.0f, -3.0f };
-    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs3.scale = { 0.5f, 0.5f, 0.5f };
+    trs3.rotationQuat = { 0.0f, -90.0f, 0.0f, 0.0f };
+    trs3.scale = { 2.0f, 2.0f, 2.0f };
 
     gllib::Material playerMat = gllib::Material({0.329412f, 0.223529f, 0.027451f},
                                                 {0.780392f, 0.568627f, 0.113725f},
                                                 {0.992157f, 0.941176f, 0.807843f},
                                                 27.8974f);
     player = new gllib::Box(trs3, { 1.0f, 1.0f, 1.0f, 1.0f }, playerMat);
+
+    gllib::MeshGroup playerMesh = gllib::ModelImporter::loadMeshGroup("rubber_duck_toy_4k.fbx");
+    gllib::MaterialGroup playerMaterial = gllib::ModelImporter::loadMaterialGroup("rubber_duck_toy_4k.fbx");
+    playerModel = new gllib::Model(playerMesh, playerMaterial, trs3, {1.0f, 1.0f, 1.0f, 1.0f});
 
     gllib::Transform trs4;
     trs4.position = { 0.0f, -1.5f, 0.0f };
@@ -391,7 +397,8 @@ void Game::update() {
     lemon->draw();
     lion->draw();
     if (thirdPerson) {
-        player->draw();
+        //player->draw();
+        playerModel->draw();
     }
     floor->draw();
     wall->draw();
@@ -424,6 +431,7 @@ void Game::uninit() {
     delete floor;
     delete wall;
     delete player;
+    delete playerModel;
     delete cameraFp;
     delete cameraTp;
     delete nissanModel;
@@ -448,6 +456,34 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_K)) {
         controllingLight = !controllingLight;
     }
+    if (Input::getKeyPressed(Key_C)) {
+        rgbTimeAccumulator += static_cast<float>(gllib::LibTime::getDeltaTime()) * 2.0f;
+
+        float r = sin(rgbTimeAccumulator) * 0.5f + 0.5f;
+        float g = sin(rgbTimeAccumulator + 2.0f) * 0.5f + 0.5f;
+        float b = sin(rgbTimeAccumulator + 4.0f) * 0.5f + 0.5f;
+
+        light->setColor(gllib::Color({r, g, b, 1.0f}));
+        lightBox->setColor({r, g, b, 1.0f});
+    }
+    if (Input::getKeyReleased(Key_F)) {
+        spotLight->setActive(!spotLight->isActive());
+    }
+    if (Input::getKeyReleased(Key_P)) {
+        dirLight->setActive(!dirLight->isActive());
+    }
+    if (Input::getKeyReleased(Key_O)) {
+        light2->setActive(!light2->isActive());
+    }
+    if (Input::getKeyReleased(Key_I)) {
+        light3->setActive(!light3->isActive());
+    }
+    if (Input::getKeyReleased(Key_U)) {
+        light4->setActive(!light4->isActive());
+    }
+    if (Input::getKeyReleased(Key_X)) {
+        light->setActive(!light->isActive());
+    }
     if (Input::getKeyReleased(Key_Tab)) {
         cameraLocked = !cameraLocked;
         Input::setCursorLocked(!cameraLocked);
@@ -461,7 +497,7 @@ void Game::handlePlayerInput() {
             gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
-            player->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_A)) {
@@ -470,7 +506,7 @@ void Game::handlePlayerInput() {
         }
         else {
             gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
-            player->move(-rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_S)) {
@@ -481,7 +517,7 @@ void Game::handlePlayerInput() {
             gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
-            player->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_D)) {
@@ -490,7 +526,7 @@ void Game::handlePlayerInput() {
         }
         else {
             gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
-            player->move(rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_Space)) {
@@ -498,7 +534,7 @@ void Game::handlePlayerInput() {
             lightBox->move(gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            player->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
     if (Input::getKeyPressed(Key_LeftCtrl)) {
@@ -506,17 +542,17 @@ void Game::handlePlayerInput() {
             lightBox->move(-gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
         else {
-            player->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
     }
 
     if (thirdPerson) {
-        cameraTp->updateCamera(player->getPosition());
+        cameraTp->updateCamera(playerModel->getPosition());
     }else {
-        cameraFp->updateCamera(player->getPosition());
+        cameraFp->updateCamera(playerModel->getPosition());
     }
 
-    spotLight->setPosition(player->getPosition());
+    spotLight->setPosition(playerModel->getPosition());
     if (!controllingLight) {
         gllib::Vector3 camForward = thirdPerson ? cameraTp->forward() : cameraFp->forward();
         if (thirdPerson) {
@@ -531,10 +567,10 @@ void Game::handlePlayerInput() {
                 float yaw = atan2(camForward.x, camForward.z);
                 float yawDeg = yaw * 180.0f / M_PI;
 
-                gllib::Quaternion rot = player->getRotationQuat();
-                rot.y = yawDeg;
+                gllib::Quaternion rot = playerModel->getRotationQuat();
+                rot.z = yawDeg;
 
-                player->setRotationQuat(rot);
+                playerModel->setRotationQuat(rot);
             }
         }
     }
