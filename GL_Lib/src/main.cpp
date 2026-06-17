@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include "camera/first_person_camera.h"
-#include "camera/third_person_camera.h"
-
 using namespace std;
 
 class Game : public gllib::BaseGame {
@@ -389,23 +386,21 @@ void Game::update() {
     lightBox2->draw();
     lightBox3->draw();
     lightBox4->draw();
-    lit ?   gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
-            gllib::Shader::useShaderProgram(shaderProgramNormals);
+    lit ? gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
+          gllib::Shader::useShaderProgram(shaderProgramNormals);
     gllib::Renderer::setLightingData(*lightData);
 
     nissanModel->draw();
     lemon->draw();
-    lion->draw();
     if (thirdPerson) {
-        //player->draw();
         playerModel->draw();
     }
     floor->draw();
     wall->draw();
     greenPlastic->draw();
     greenRubber->draw();
-    emerald->draw();
-    //nissanModel->draw();
+    emerald->draw(); // transparent
+    lion->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
     //coin->draw();
 }
@@ -483,6 +478,10 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyReleased(Key_X)) {
         light->setActive(!light->isActive());
+    }
+    if (Input::getKeyReleased(Key_Z)) {
+        light->setColor(gllib::Color({1.0f, 1.0f, 1.0f, 1.0f}));
+        lightBox->setColor(gllib::Color({1.0f, 1.0f, 1.0f, 1.0f}));
     }
     if (Input::getKeyReleased(Key_Tab)) {
         cameraLocked = !cameraLocked;

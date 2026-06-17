@@ -7,7 +7,8 @@
 #include "renderer.h"
 #include "lib_time.h"
 #include "loader.h"
-#include "camera/camera.h"
+#include "camera/first_person_camera.h"
+#include "camera/third_person_camera.h"
 
 #include "primitives/triangle.h"
 #include "primitives/rectangle.h"
