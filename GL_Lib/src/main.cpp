@@ -45,7 +45,7 @@ private:
     float playerSpeed = 2.5f;
 
     float cameraSensitivity = .5f;
-    bool thirdPerson = true;
+    bool thirdPerson = false;
     bool cameraLocked = true;
 
     bool lit = true;
@@ -135,7 +135,7 @@ Game::Game() {
     lightData = new gllib::LightingData();
 
     gllib::Transform trs;
-    trs.position = { 0.0f, -1.05f, 0.0f };
+    trs.position = { 0.0f, -0.75f, 0.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs.scale = { 1.0f, 1.0f, 1.0f };
     gllib::ModelData cannonModelData = gllib::ModelData("cannon.fbx");

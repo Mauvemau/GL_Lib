@@ -2,6 +2,7 @@
 #include "deps.h"
 #include "lighting/material.h"
 #include "lighting/lighting_data.h"
+#include "models/model_node.h"
 
 #ifdef _WIN32 // Directory is different in linux
 #include <glm.hpp>
@@ -58,8 +59,11 @@ namespace gllib {
 
 		static void drawSolidColor(RenderData rData, GLsizei indexSize);
 		static void drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID);
+		static void drawBoundingBox(const BoundingBox& box, const glm::mat4& worldMatrix, const glm::vec4& color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
+		static const glm::mat4& getViewMatrix() { return viewMatrix; }
+		static const glm::mat4& getProjMatrix() { return projMatrix; }
 
 		static void setLightingData(const LightingData& lightingData);
 		static void setMaterial(const Material &material);

@@ -170,6 +170,62 @@ void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int tex
     drawElements(rData, indexSize);
 }
 
+void Renderer::drawBoundingBox(const BoundingBox& box, const glm::mat4& worldMatrix, const glm::vec4& color) {
+    glm::vec3 corners[8] = {
+        { box.min.x, box.min.y, box.min.z },
+        { box.min.x, box.min.y, box.max.z },
+        { box.min.x, box.max.y, box.min.z },
+        { box.min.x, box.max.y, box.max.z },
+        { box.max.x, box.min.y, box.min.z },
+        { box.max.x, box.min.y, box.max.z },
+        { box.max.x, box.max.y, box.min.z },
+        { box.max.x, box.max.y, box.max.z }
+    };
+    std::vector<float> vertexData;
+    vertexData.reserve(8 * 12);
+    for (int i = 0; i < 8; ++i) {
+        vertexData.push_back(corners[i].x);
+        vertexData.push_back(corners[i].y);
+        vertexData.push_back(corners[i].z);
+        vertexData.push_back(0.0f); vertexData.push_back(0.0f); vertexData.push_back(0.0f);
+        vertexData.push_back(color.r);
+        vertexData.push_back(color.g);
+        vertexData.push_back(color.b);
+        vertexData.push_back(color.a);
+        vertexData.push_back(0.0f); vertexData.push_back(0.0f);
+    }
+    int indices[24] = {
+        0, 1,  1, 3,  3, 2,  2, 0,
+        4, 5,  5, 7,  7, 6,  6, 4,
+        0, 4,  1, 5,  2, 6,  3, 7
+    };
+
+    RenderData rData = createRenderData(vertexData.data(), static_cast<GLsizei>(vertexData.size()), indices, 24);
+
+    setModelMatrix(worldMatrix);
+    setUpMVP();
+    bindSolidColor();
+
+    Material debugMaterial;
+    debugMaterial.ambient = Vector3(1.0f, 1.0f, 1.0f);
+    debugMaterial.diffuse = Vector3(0.0f, 0.0f, 0.0f);
+    debugMaterial.specular = Vector3(0.0f, 0.0f, 0.0f);
+    debugMaterial.shininess = 1.0f;
+    setMaterial(debugMaterial);
+
+    glBindVertexArray(rData.VAO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
+
+    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, nullptr);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    destroyRenderData(rData);
+
+    setDefaultMaterial();
+}
+
 void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(textureID);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);

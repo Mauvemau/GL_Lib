@@ -1,12 +1,13 @@
 #include "model.h"
 #include <iostream>
 #include "../renderer.h"
+#include "../lighting/material_group.h"
 
 using namespace gllib;
 using namespace std;
 
 Model::Model(ModelData& modelData, Transform transform, Color color) :
-    ShapeGroup(transform), meshGroup(modelData.getMeshGroup()) {
+    ShapeGroup(transform), meshGroup(modelData.getMeshGroup()), lastFrameDrawnCount(-1), totalMeshesCount(0) {
 
     this->color = color;
 
@@ -129,20 +130,43 @@ ModelNode* Model::findNodeRecursive(ModelNode* node, int id) {
     return nullptr;
 }
 
-void Model::renderNodeRecursive(ModelNode* node) {
+int Model::countTotalMeshesRecursive(ModelNode* node) const {
+    if (node == nullptr) return 0;
+
+    int count = node->hasMesh() ? 1 : 0;
+    for (ModelNode* child : node->getChildren()) {
+        count += countTotalMeshesRecursive(child);
+    }
+    return count;
+}
+
+void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& drawnCounter) {
     if (node == nullptr) return;
+
+    if (!frustum.isBoxInFrustum(node->getWorldBoundingBox())) {
+        return;
+    }
 
     if (node->hasMesh()) {
         drawSubMesh(node->getMeshIndex(), node->getWorldMatrix());
+        drawnCounter++;
     }
 
+    glm::vec4 boxColor = node->hasMesh() ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)
+                                         : glm::vec4(0.0f, 0.7f, 1.0f, 1.0f);
+    Renderer::drawBoundingBox(node->getWorldBoundingBox(), glm::mat4(1.0f), boxColor);
+
     for (ModelNode* child : node->getChildren()) {
-        renderNodeRecursive(child);
+        renderNodeRecursive(child, frustum, drawnCounter);
     }
 }
 
 void Model::draw() {
     if (rootNode == nullptr) return;
+
+    if (totalMeshesCount == 0) {
+        totalMeshesCount = countTotalMeshesRecursive(rootNode);
+    }
 
     glm::mat4 baseWorldMatrix = glm::mat4(1.0f);
     baseWorldMatrix = glm::translate(baseWorldMatrix, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
@@ -153,5 +177,16 @@ void Model::draw() {
 
     rootNode->updateTransformsAndBounds(baseWorldMatrix, true);
 
-    renderNodeRecursive(rootNode);
+    glm::mat4 viewProj = Renderer::getProjMatrix() * Renderer::getViewMatrix();
+    Frustum frustum;
+    frustum.update(viewProj);
+
+    int drawnCounter = 0;
+    renderNodeRecursive(rootNode, frustum, drawnCounter);
+
+    if (drawnCounter != lastFrameDrawnCount) {
+        cout << "[Culling] Current: " << drawnCounter
+             << " / Total: " << totalMeshesCount << "\n";
+        lastFrameDrawnCount = drawnCounter;
+    }
 }

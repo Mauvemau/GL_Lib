@@ -1,9 +1,5 @@
 #pragma once
 
-#include <optional>
-#include <map>
-#include <string>
-
 #include "../lighting/material.h"
 #include "shape_group.h"
 
@@ -11,7 +7,7 @@
 #include "mesh_group.h"
 #include "model_data.h"
 #include "model_node.h"
-#include "../lighting/material_group.h"
+#include "frustum.h"
 
 namespace gllib {
     class DLLExport Model : public ShapeGroup {
@@ -21,9 +17,13 @@ namespace gllib {
 
         Color color{};
 
-        void updateRenderData(Color color, bool centerPivot);
+        int lastFrameDrawnCount = -1;
+        int totalMeshesCount = 0;
 
-        void renderNodeRecursive(ModelNode* node);
+        void updateRenderData(Color color, bool centerPivot);
+        void renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& drawnCounter);
+        int countTotalMeshesRecursive(ModelNode* node) const;
+
         ModelNode* findNodeRecursive(ModelNode* node, int id);
 
         public:
