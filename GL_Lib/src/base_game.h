@@ -15,7 +15,7 @@
 #include "primitives/sprite.h"
 #include "primitives/box.h"
 #include "primitives/animation.h"
-#include "models/mesh_group.h"
+#include "models/model_data.h"
 #include "models/model.h"
 #include "models/model_importer.h"
 #include "shader.h"

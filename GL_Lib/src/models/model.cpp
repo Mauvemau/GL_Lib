@@ -1,39 +1,25 @@
 #include "model.h"
-
 #include <iostream>
 #include "../renderer.h"
 
 using namespace gllib;
 using namespace std;
 
-Model::Model(Mesh &mesh, Transform transform, Color color) :
-ShapeGroup(transform) {
-    this->color = color;
-
-    ownedMeshGroup = MeshGroup({ mesh });
-    meshGroup = &(*ownedMeshGroup);
-
-    updateRenderData(this->color, true);
-    cout << "Created model.\n";
-}
-
-Model::Model(MeshGroup& meshGroup, Transform transform, Color color) :
-ShapeGroup(transform), meshGroup(&meshGroup) {
+Model::Model(ModelData& modelData, Transform transform, Color color) :
+    ShapeGroup(transform), meshGroup(modelData.getMeshGroup()) {
 
     this->color = color;
 
-    updateRenderData(this->color, true);
-    cout << "Created model.\n";
-}
+    if (modelData.getRootNode() != nullptr) {
+        this->rootNode = modelData.getRootNode()->clone();
+    } else {
+        this->rootNode = nullptr;
+    }
 
-Model::Model(MeshGroup& meshGroup, MaterialGroup& materialGroup, Transform transform, Color color) :
-ShapeGroup(transform), meshGroup(&meshGroup) {
-    this->color = color;
+    updateRenderData(this->color, false);
 
-    updateRenderData(this->color, true);
-
-    vector<Material>& loadedMaterials = materialGroup.getMaterials();
-    vector<Mesh>& meshes = meshGroup.getMeshes();
+    vector<Material>& loadedMaterials = modelData.getMaterialGroup()->getMaterials();
+    vector<Mesh>& meshes = meshGroup->getMeshes();
 
     for (size_t i = 0; i < meshes.size(); i++) {
         unsigned int matIdx = meshes[i].getMaterialIndex();
@@ -43,14 +29,16 @@ ShapeGroup(transform), meshGroup(&meshGroup) {
         }
     }
 
-    cout << "Created model with automated, exact MaterialGroup mapping.\n";
+    cout << "Created model unified with ModelData and independent Node hierarchy.\n";
 }
 
 Model::~Model() {
+    if (rootNode != nullptr) {
+        delete rootNode;
+        rootNode = nullptr;
+    }
     cout << "Destroyed model.\n";
 }
-
-//
 
 void Model::updateRenderData(Color color, bool centerPivot) {
     vector<Mesh>& meshes = meshGroup->getMeshes();
@@ -84,10 +72,10 @@ void Model::updateRenderData(Color color, bool centerPivot) {
 
     Vector3 pivot(0,0,0);
     if (centerPivot) {
-        pivot = calculateBoundsCenter(vertexGroups,12);
+        pivot = calculateBoundsCenter(vertexGroups, 12);
     }
 
-    for (int i = 0; i < meshes.size(); i++) {
+    for (size_t i = 0; i < meshes.size(); i++) {
         Mesh& mesh = meshes[i];
 
         vector<float>& vertexData = vertexGroups[i];
@@ -109,7 +97,6 @@ void Model::setMaterial(unsigned int index, const Material& material) {
     if (index >= materials.size()) {
         return;
     }
-
     materials[index] = material;
 }
 
@@ -121,6 +108,50 @@ Mesh& Model::getMesh() {
     return meshGroup->getMeshes()[0];
 }
 
+ModelNode* Model::findNode(int id) {
+    return findNodeRecursive(rootNode, id);
+}
+
+ModelNode* Model::findNodeRecursive(ModelNode* node, int id) {
+    if (node == nullptr) return nullptr;
+
+    if (node->getId() == id) {
+        return node;
+    }
+
+    for (ModelNode* child : node->getChildren()) {
+        ModelNode* found = findNodeRecursive(child, id);
+        if (found != nullptr) {
+            return found;
+        }
+    }
+
+    return nullptr;
+}
+
+void Model::renderNodeRecursive(ModelNode* node) {
+    if (node == nullptr) return;
+
+    if (node->hasMesh()) {
+        drawSubMesh(node->getMeshIndex(), node->getWorldMatrix());
+    }
+
+    for (ModelNode* child : node->getChildren()) {
+        renderNodeRecursive(child);
+    }
+}
+
 void Model::draw() {
-    internalDraw();
+    if (rootNode == nullptr) return;
+
+    glm::mat4 baseWorldMatrix = glm::mat4(1.0f);
+    baseWorldMatrix = glm::translate(baseWorldMatrix, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+    baseWorldMatrix = glm::rotate(baseWorldMatrix, glm::radians(transform.rotationQuat.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    baseWorldMatrix = glm::rotate(baseWorldMatrix, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    baseWorldMatrix = glm::rotate(baseWorldMatrix, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    baseWorldMatrix = glm::scale(baseWorldMatrix, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
+
+    rootNode->updateTransformsAndBounds(baseWorldMatrix, true);
+
+    renderNodeRecursive(rootNode);
 }

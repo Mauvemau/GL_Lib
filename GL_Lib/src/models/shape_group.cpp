@@ -1,5 +1,4 @@
 #include "shape_group.h"
-
 #include <iostream>
 
 using namespace gllib;
@@ -66,6 +65,24 @@ Vector3 ShapeGroup::calculateBoundsCenter(const vector<vector<float>>& vertexGro
     }
 
     return Vector3((minX + maxX) * 0.5f, (minY + maxY) * 0.5f, (minZ + maxZ) * 0.5f);
+}
+
+void ShapeGroup::drawSubMesh(int meshIndex, const glm::mat4& transformMatrix) {
+    if (meshIndex < 0 || meshIndex >= static_cast<int>(renderDatas.size())) {
+        return;
+    }
+
+    Renderer::setModelMatrix(transformMatrix);
+
+    const Material& material = materials[meshIndex];
+    Renderer::setMaterial(material);
+
+    if (material.texture > 0) {
+        Renderer::drawTexture(renderDatas[meshIndex], indexSizes[meshIndex], material.texture);
+    }
+    else {
+        Renderer::drawSolidColor(renderDatas[meshIndex], indexSizes[meshIndex]);
+    }
 }
 
 void ShapeGroup::internalDraw() {

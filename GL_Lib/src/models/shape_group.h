@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <glm/glm.hpp>
 
 #include "../renderer.h"
 #include "../entity.h"
@@ -21,6 +22,11 @@ namespace gllib {
         void pivotVertex(float* vertexData, int vertexCount, int vertexStride, Vector3 pivot);
         Vector3 calculateBoundsCenter(const std::vector<std::vector<float>>& vertexGroups, int vertexStride);
         void internalDraw();
+
+        void drawSubMesh(int meshIndex, const glm::mat4& transformMatrix);
+
+        const std::vector<RenderData>& getRenderDatas() const { return renderDatas; }
+        const std::vector<unsigned int>& getIndexSizes() const { return indexSizes; }
 
         public:
         ShapeGroup(Vector3 translation, Vector3 rotation, Vector3 scale);

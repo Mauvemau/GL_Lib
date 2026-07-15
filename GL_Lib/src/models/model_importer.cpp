@@ -4,6 +4,8 @@
 #include <iostream>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 using namespace gllib;
 using namespace std;
@@ -92,25 +94,10 @@ Material ModelImporter::processMaterial(aiMaterial* material, const string& dire
         }
 
         bool isTransparent = (opacity < 1.0f);
-        mat.texture = Loader::loadTexture(fullPath, isTransparent);
+        mat.texture = Loader::loadTextureAdvanced(fullPath, GL_REPEAT, GL_LINEAR, isTransparent);
     }
 
     return mat;
-}
-
-Mesh ModelImporter::loadMesh(const std::string& path) {
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        throw runtime_error(importer.GetErrorString());
-    }
-    if (scene->mNumMeshes == 0) {
-        throw runtime_error("Model contains no meshes.");
-    }
-    aiMesh* mesh = scene->mMeshes[0];
-
-    return processMesh(mesh);
 }
 
 void ModelImporter::processNode(aiNode* node, const aiScene* scene, vector<Mesh>& meshes) {
@@ -127,6 +114,117 @@ void ModelImporter::processNode(aiNode* node, const aiScene* scene, vector<Mesh>
     for (unsigned int i = 0; i < node->mNumChildren; i++) {
         processNode(node->mChildren[i], scene, meshes);
     }
+}
+
+ModelNode* ModelImporter::processNodeSynchronized(aiNode* node, const aiScene* scene, vector<Mesh>& outMeshes, int& meshCounter, int& nodeCounter) {
+    aiVector3D aiScale;
+    aiQuaternion aiRotation;
+    aiVector3D aiTranslation;
+
+    node->mTransformation.Decompose(aiScale, aiRotation, aiTranslation);
+
+    glm::quat glmQuat(aiRotation.w, aiRotation.x, aiRotation.y, aiRotation.z);
+    glm::vec3 eulerRotation = glm::degrees(glm::eulerAngles(glmQuat));
+
+    int currentNodeId = nodeCounter++;
+    ModelNode* mNode = new ModelNode(currentNodeId);
+
+    mNode->setLocalPosition({aiTranslation.x, aiTranslation.y, aiTranslation.z});
+    mNode->setLocalRotation({eulerRotation.x, eulerRotation.y, eulerRotation.z});
+    mNode->setLocalScale({aiScale.x, aiScale.y, aiScale.z});
+
+    cout << "[" << currentNodeId << "] Node: " << node->mName.C_Str();
+
+    if (node->mNumMeshes == 1) {
+        aiMesh* aiMeshRef = scene->mMeshes[node->mMeshes[0]];
+        Mesh processedMesh = processMesh(aiMeshRef);
+        Mesh finalMesh(processedMesh.getVertices(), processedMesh.getIndices(), aiMeshRef->mMaterialIndex);
+
+        int currentMeshIndex = meshCounter++;
+        outMeshes.push_back(finalMesh);
+
+        BoundingBox localAABB = calculateLocalBounds(finalMesh);
+
+        int childNodeId = nodeCounter++;
+        ModelNode* meshChild = new ModelNode(childNodeId, currentMeshIndex, localAABB);
+        mNode->addChild(meshChild);
+
+        cout << " -> Mesh Name: " << aiMeshRef->mName.C_Str() << " (Geom Node ID: " << childNodeId << ")";
+    }
+    else if (node->mNumMeshes > 1) {
+        cout << " -> Meshes: [";
+        for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+            aiMesh* aiMeshRef = scene->mMeshes[node->mMeshes[i]];
+            Mesh processedMesh = processMesh(aiMeshRef);
+            Mesh finalMesh(processedMesh.getVertices(), processedMesh.getIndices(), aiMeshRef->mMaterialIndex);
+
+            int currentMeshIndex = meshCounter++;
+            outMeshes.push_back(finalMesh);
+
+            BoundingBox localAABB = calculateLocalBounds(finalMesh);
+
+            int childNodeId = nodeCounter++;
+            ModelNode* meshChild = new ModelNode(childNodeId, currentMeshIndex, localAABB);
+            mNode->addChild(meshChild);
+
+            cout << aiMeshRef->mName.C_Str() << " (ID: " << childNodeId << ")" << (i < node->mNumMeshes - 1 ? ", " : "");
+        }
+        cout << "]";
+    }
+    cout << endl;
+
+    for (unsigned int i = 0; i < node->mNumChildren; i++) {
+        ModelNode* childNode = processNodeSynchronized(node->mChildren[i], scene, outMeshes, meshCounter, nodeCounter);
+        mNode->addChild(childNode);
+    }
+
+    return mNode;
+}
+
+glm::mat4 ModelImporter::aiMatrixToGlm(const aiMatrix4x4& from) {
+    glm::mat4 to;
+    to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
+    to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
+    to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
+    to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+    return to;
+}
+
+BoundingBox ModelImporter::calculateLocalBounds(Mesh& mesh) {
+    BoundingBox bounds;
+    auto& vertices = mesh.getVertices();
+    if (vertices.empty()) {
+        return { {0,0,0}, {0,0,0} };
+    }
+    bounds.min = vertices[0].position;
+    bounds.max = vertices[0].position;
+    for (const auto& vertex : vertices) {
+        if (vertex.position.x < bounds.min.x) bounds.min.x = vertex.position.x;
+        if (vertex.position.y < bounds.min.y) bounds.min.y = vertex.position.y;
+        if (vertex.position.z < bounds.min.z) bounds.min.z = vertex.position.z;
+
+        if (vertex.position.x > bounds.max.x) bounds.max.x = vertex.position.x;
+        if (vertex.position.y > bounds.max.y) bounds.max.y = vertex.position.y;
+        if (vertex.position.z > bounds.max.z) bounds.max.z = vertex.position.z;
+    }
+    return bounds;
+}
+
+ImportedModelParts ModelImporter::loadModelParts(const string& path) {
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FlipUVs);
+
+    if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
+        throw runtime_error(importer.GetErrorString());
+    }
+
+    ImportedModelParts parts;
+    int meshCounter = 0;
+    int nodeCounter = 0;
+
+    parts.rootNode = processNodeSynchronized(scene->mRootNode, scene, parts.meshes, meshCounter, nodeCounter);
+
+    return parts;
 }
 
 MeshGroup ModelImporter::loadMeshGroup(const string& path) {
