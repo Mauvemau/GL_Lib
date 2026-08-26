@@ -152,9 +152,11 @@ void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& dr
         drawnCounter++;
     }
 
-    glm::vec4 boxColor = node->hasMesh() ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)
-                                         : glm::vec4(0.0f, 0.7f, 1.0f, 1.0f);
-    Renderer::drawBoundingBox(node->getWorldBoundingBox(), glm::mat4(1.0f), boxColor);
+    if (Renderer::isDebug()) {
+        glm::vec4 boxColor = node->hasMesh() ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)
+                                             : glm::vec4(0.0f, 0.7f, 1.0f, 1.0f);
+        Renderer::drawBoundingBox(node->getWorldBoundingBox(), glm::mat4(1.0f), boxColor);
+    }
 
     for (ModelNode* child : node->getChildren()) {
         renderNodeRecursive(child, frustum, drawnCounter);
@@ -184,7 +186,7 @@ void Model::draw() {
     int drawnCounter = 0;
     renderNodeRecursive(rootNode, frustum, drawnCounter);
 
-    if (drawnCounter != lastFrameDrawnCount) {
+    if (drawnCounter != lastFrameDrawnCount && Renderer::isDebug()) {
         cout << "[Culling] Current: " << drawnCounter
              << " / Total: " << totalMeshesCount << "\n";
         lastFrameDrawnCount = drawnCounter;

@@ -38,7 +38,12 @@ namespace gllib {
 
 		static glm::vec3 lightPos;
 
+		static bool debug;
+
 	public:
+		static bool isDebug();
+		static void setDebug(bool shouldDebug);
+
 		static void setUpVertexAttributes();
 		static void setDefaultMaterial();
 		static void setUpMVP();

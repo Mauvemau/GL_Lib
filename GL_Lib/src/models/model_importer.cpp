@@ -135,6 +135,56 @@ ModelNode* ModelImporter::processNodeSynchronized(aiNode* node, const aiScene* s
 
     cout << "[" << currentNodeId << "] Node: " << node->mName.C_Str();
 
+    if (node->mMetaData) {
+        bool firstProperty = true;
+
+        for (unsigned int i = 0; i < node->mMetaData->mNumProperties; ++i) {
+            std::string key = node->mMetaData->mKeys[i].C_Str();
+
+            if (key == "UserProperties" ||
+                key == "IsNull" ||
+                key == "InheritType" ||
+                key == "DefaultAttributeIndex" ||
+                key == "UDP3DSMAX") {
+                continue;
+                }
+
+            if (firstProperty) {
+                cout << " { CustomProps: ";
+                firstProperty = false;
+            } else {
+                cout << ", ";
+            }
+
+            aiMetadataEntry entry = node->mMetaData->mValues[i];
+            cout << key << "=";
+
+            if (entry.mType == AI_AISTRING) {
+                aiString val = *static_cast<aiString*>(entry.mData);
+                cout << "\"" << val.C_Str() << "\"";
+            }
+            else if (entry.mType == AI_FLOAT) {
+                cout << *static_cast<float*>(entry.mData);
+            }
+            else if (entry.mType == AI_INT32) {
+                cout << *static_cast<int32_t*>(entry.mData);
+            }
+            else if (entry.mType == AI_BOOL) {
+                cout << (*static_cast<bool*>(entry.mData) ? "true" : "false");
+            }
+            else if (entry.mType == AI_DOUBLE) {
+                cout << *static_cast<double*>(entry.mData);
+            }
+            else {
+                cout << "<unknown_type>";
+            }
+        }
+
+        if (!firstProperty) {
+            cout << " }";
+        }
+    }
+
     if (node->mNumMeshes == 1) {
         aiMesh* aiMeshRef = scene->mMeshes[node->mMeshes[0]];
         Mesh processedMesh = processMesh(aiMeshRef);

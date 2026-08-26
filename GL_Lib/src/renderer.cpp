@@ -14,6 +14,16 @@ glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 glm::vec3 Renderer::cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 Renderer::lightPos = glm::vec3(3.0f, 0.0f, 3.0f);
 
+bool Renderer::debug = false;
+
+bool Renderer::isDebug() {
+    return debug;
+}
+
+void Renderer::setDebug(bool shouldDebug) {
+    debug = shouldDebug;
+}
+
 void Renderer::setUpVertexAttributes() {
     // position attribute
     // Pointer id 0, length is 3 floats (xyz), each line is 12 floats long in total (xyz,nxnynz,rgba,uv), value begins at position 0 on this line.

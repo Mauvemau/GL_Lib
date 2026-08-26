@@ -158,6 +158,9 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_V)) {
         thirdPerson = !thirdPerson;
     }
+    if (Input::getKeyReleased(Key_B)) {
+        gllib::Renderer::setDebug(!gllib::Renderer::isDebug());
+    }
     if (Input::getKeyReleased(Key_K)) {
         controllingPawn = !controllingPawn;
     }
