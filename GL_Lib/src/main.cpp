@@ -25,6 +25,7 @@ private:
     gllib::Box* player;
     gllib::Model* playerModel;
     gllib::Model* scene;
+    gllib::ModelNode* pawn;
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
     gllib::PointLight* light;
@@ -39,7 +40,7 @@ private:
     bool cameraLocked = true;
 
     bool lit = true;
-    bool controllingLight = false;
+    bool controllingPawn = false;
     float rgbTimeAccumulator = 0.0f;
 
 protected:
@@ -69,6 +70,7 @@ Game::Game() {
     trs1.scale = { 0.4f, 0.4f, 0.4f };
     gllib::ModelData sceneData = gllib::ModelData("Walls.fbx");
     scene = new gllib::Model(sceneData, trs1, {1.0f, 1.0f, 1.0f, 1.0f});
+    pawn = scene->findNode(3);
 
     gllib::Transform trs3;
     trs3.position = { 0.0f, -1.0f, -3.0f };
@@ -157,7 +159,7 @@ void Game::handlePlayerInput() {
         thirdPerson = !thirdPerson;
     }
     if (Input::getKeyReleased(Key_K)) {
-        controllingLight = !controllingLight;
+        controllingPawn = !controllingPawn;
     }
     if (Input::getKeyPressed(Key_C)) {
         rgbTimeAccumulator += static_cast<float>(gllib::LibTime::getDeltaTime()) * 2.0f;
@@ -187,60 +189,75 @@ void Game::handlePlayerInput() {
         Input::setCursorLocked(!cameraLocked);
     }
 
+    // Pre-calculate delta time once to keep the code clean and efficient
+    const float dt = static_cast<float>(gllib::LibTime::getDeltaTime());
+    const float moveStep = playerSpeed * dt;
+
     if (Input::getKeyPressed(Key_W)) {
-        if (controllingLight) {
-            lightBox->move(-gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos - gllib::ThirdPersonCamera::forwardWorld() * moveStep);
         }
         else {
             gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
-            playerModel->move(forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(forwardDir * moveStep);
         }
     }
+
     if (Input::getKeyPressed(Key_A)) {
-        if (controllingLight) {
-            lightBox->move(gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos + gllib::ThirdPersonCamera::rightWorld() * moveStep);
         }
         else {
             gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
-            playerModel->move(-rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-rightDir * moveStep);
         }
     }
+
     if (Input::getKeyPressed(Key_S)) {
-        if (controllingLight) {
-            lightBox->move(gllib::ThirdPersonCamera::forwardWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos + gllib::ThirdPersonCamera::forwardWorld() * moveStep);
         }
         else {
             gllib::Vector3 forwardDir = thirdPerson ? cameraTp->forward() : cameraFp->forward();
             forwardDir.y = .0f;
             forwardDir = forwardDir.normalized();
-            playerModel->move(-forwardDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-forwardDir * moveStep);
         }
     }
+
     if (Input::getKeyPressed(Key_D)) {
-        if (controllingLight) {
-            lightBox->move(-gllib::ThirdPersonCamera::rightWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos - gllib::ThirdPersonCamera::rightWorld() * moveStep);
         }
         else {
             gllib::Vector3 rightDir = thirdPerson ? cameraTp->right() : cameraFp->right();
-            playerModel->move(rightDir * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(rightDir * moveStep);
         }
     }
+
     if (Input::getKeyPressed(Key_Space)) {
-        if (controllingLight) {
-            lightBox->move(gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos + gllib::ThirdPersonCamera::upWorld() * moveStep);
         }
         else {
-            playerModel->move(gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(gllib::Camera::upWorld() * moveStep);
         }
     }
+
     if (Input::getKeyPressed(Key_LeftCtrl)) {
-        if (controllingLight) {
-            lightBox->move(-gllib::ThirdPersonCamera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+        if (controllingPawn) {
+            gllib::Vector3 currentPos = pawn->getLocalPosition();
+            pawn->setLocalPosition(currentPos - gllib::ThirdPersonCamera::upWorld() * moveStep);
         }
         else {
-            playerModel->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
+            playerModel->move(-gllib::Camera::upWorld() * moveStep);
         }
     }
 
@@ -251,7 +268,7 @@ void Game::handlePlayerInput() {
     }
 
     spotLight->setPosition(playerModel->getPosition());
-    if (!controllingLight) {
+    if (!controllingPawn) {
         gllib::Vector3 camForward = thirdPerson ? cameraTp->forward() : cameraFp->forward();
         if (thirdPerson) {
             camForward.y = 0.0f;
