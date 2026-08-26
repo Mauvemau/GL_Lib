@@ -24,25 +24,15 @@ private:
 
     gllib::Box* player;
     gllib::Model* playerModel;
-    gllib::Box* floor;
-    gllib::Box* wall;
+    gllib::Model* scene;
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
-    gllib::Box* lightBox2;
-    gllib::Box* lightBox3;
-    gllib::Box* lightBox4;
     gllib::PointLight* light;
-    gllib::PointLight* light2;
-    gllib::PointLight* light3;
-    gllib::PointLight* light4;
     gllib::SpotLight* spotLight;
     gllib::LightingData* lightData;
-    gllib::Model* cannon;
-    gllib::ModelNode* cannonFrontWheels;
-    gllib::ModelNode* cannonBarrel;
     bool wireframeMode = false;
 
-    float playerSpeed = 2.5f;
+    float playerSpeed = 6.5f;
 
     float cameraSensitivity = .5f;
     bool thirdPerson = false;
@@ -73,6 +63,13 @@ Game::Game() {
     cameraTp = new gllib::ThirdPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
                                          gllib::Vector3(0.0f, 0.0f, 1.0f), cameraSensitivity, 5.0f);
 
+    gllib::Transform trs1;
+    trs1.position = { 0.0f, -2.0f, 0.0f };
+    trs1.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs1.scale = { 0.4f, 0.4f, 0.4f };
+    gllib::ModelData sceneData = gllib::ModelData("Walls.fbx");
+    scene = new gllib::Model(sceneData, trs1, {1.0f, 1.0f, 1.0f, 1.0f});
+
     gllib::Transform trs3;
     trs3.position = { 0.0f, -1.0f, -3.0f };
     trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -86,23 +83,8 @@ Game::Game() {
     gllib::ModelData playerModelData = gllib::ModelData("rubber_duck_toy_4k.fbx");
     playerModel = new gllib::Model(playerModelData, trs3, {1.0f, 1.0f, 1.0f, 1.0f});
 
-    gllib::Transform trs4;
-    trs4.position = { 0.0f, -1.5f, 0.0f };
-    trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs4.scale = { 10.0f, .1f, 10.0f };
-    gllib::Material floorMat = gllib::Material({0.05f, 0.05f, 0.05f},
-                                                {0.5f, 0.5f, 0.5f},
-                                                {0.7f, 0.7f, 0.7f},
-                                                10.0f);
-    floor = new gllib::Box(trs4, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
-    gllib::Transform trs6;
-    trs6.position = { 0.0f, 1.0f, 5.0f };
-    trs6.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs6.scale = { 10.0f, 5.0f, 0.1f };
-    wall = new gllib::Box(trs6, { 1.0f, 1.0f, 1.0f, 1.0f }, floorMat);
-
     gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
-    dirLight = new gllib::DirectionalLight(dirLightDirection, {0.30f, 0.30f, 0.35f, 1.0f});
+    dirLight = new gllib::DirectionalLight(dirLightDirection, {0.80f, 0.80f, 0.85f, 1.0f});
     gllib::Transform trs5;
     trs5.position = { -1.5f, 0.5f, 0.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -110,38 +92,8 @@ Game::Game() {
     lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
     light = new gllib::PointLight(trs5.position);
 
-    gllib::Transform trs10;
-    trs10.position = { -2.0f, 0.0f, 3.0f };
-    trs10.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs10.scale = { 0.25f, 0.25f, 0.25f };
-    lightBox2 = new gllib::Box(trs10, { 0.2f, 0.4f, 1.0f, 1.0f });
-    light2 = new gllib::PointLight(trs10.position, 1.0f, 0.11f, 0.05f, {0.2f, 0.4f, 1.0f, 1.0f});
-
-    gllib::Transform trs11;
-    trs11.position = { 0.0f, 0.0f, 3.0f };
-    trs11.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs11.scale = { 0.25f, 0.25f, 0.25f };
-    lightBox3 = new gllib::Box(trs11, { 1.0f, 0.2f, 0.2f, 1.0f });
-    light3 = new gllib::PointLight(trs11.position, 1.0f, 0.11f, 0.05f, { 1.0f, 0.2f, 0.2f, 1.0f });;;
-
-    gllib::Transform trs12;
-    trs12.position = { 2.0f, 0.0f, 3.0f };
-    trs12.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs12.scale = { 0.25f, 0.25f, 0.25f };
-    lightBox4 = new gllib::Box(trs12, { 0.2f, 1.0f, 0.2f, 1.0f });
-    light4 = new gllib::PointLight(trs12.position, 1.0f, 0.11f, 0.05f, { 0.2f, 1.0f, 0.2f, 1.0f });
-
     spotLight = new gllib::SpotLight(player->getPosition(), player->forward(),{1.0f, 1.0f, 1.0f, 1.0f});
     lightData = new gllib::LightingData();
-
-    gllib::Transform trs;
-    trs.position = { 0.0f, -0.75f, 0.0f };
-    trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs.scale = { 1.0f, 1.0f, 1.0f };
-    gllib::ModelData cannonModelData = gllib::ModelData("cannon.fbx");
-    cannon = new gllib::Model(cannonModelData, trs, {1.0f, 1.0f, 1.0f, 1.0f});
-    cannonFrontWheels = cannon->findNode(16);
-    cannonBarrel = cannon->findNode(3);
 }
 
 Game::~Game() {
@@ -156,9 +108,6 @@ void Game::init() {
 
     lightData->SetDirectionalLight(*dirLight);
     lightData->AddPointLight(*light);
-    lightData->AddPointLight(*light2);
-    lightData->AddPointLight(*light3);
-    lightData->AddPointLight(*light4);
     lightData->AddSpotLight(*spotLight);
 }
 
@@ -171,19 +120,14 @@ void Game::update() {
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     lightBox->draw();
-    lightBox2->draw();
-    lightBox3->draw();
-    lightBox4->draw();
     lit ? gllib::Shader::useShaderProgram(shaderProgramSolidColorLit) :
           gllib::Shader::useShaderProgram(shaderProgramNormals);
     gllib::Renderer::setLightingData(*lightData);
 
-    cannon->draw();
+    scene->draw();
     if (thirdPerson) {
         playerModel->draw();
     }
-    floor->draw();
-    wall->draw();
     gllib::Shader::useShaderProgram(shaderProgramTexture);
 }
 
@@ -191,20 +135,12 @@ void Game::uninit() {
     cout << "External uninit!!!\n";
     delete lightData;
     delete lightBox;
-    delete lightBox2;
-    delete lightBox3;
-    delete lightBox4;
     delete dirLight;
     delete light;
-    delete light2;
-    delete light3;
-    delete light4;
     delete spotLight;
-    delete floor;
-    delete wall;
+    delete scene;
     delete player;
     delete playerModel;
-    delete cannon;
     delete cameraFp;
     delete cameraTp;
 }
@@ -238,15 +174,6 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyReleased(Key_P)) {
         dirLight->setActive(!dirLight->isActive());
-    }
-    if (Input::getKeyReleased(Key_O)) {
-        light2->setActive(!light2->isActive());
-    }
-    if (Input::getKeyReleased(Key_I)) {
-        light3->setActive(!light3->isActive());
-    }
-    if (Input::getKeyReleased(Key_U)) {
-        light4->setActive(!light4->isActive());
     }
     if (Input::getKeyReleased(Key_X)) {
         light->setActive(!light->isActive());
@@ -315,21 +242,6 @@ void Game::handlePlayerInput() {
         else {
             playerModel->move(-gllib::Camera::upWorld() * playerSpeed * static_cast<float>(gllib::LibTime::getDeltaTime()));
         }
-    }
-
-    if (Input::getKeyPressed(Key_M)) {
-        gllib::Quaternion currentWheelRot = cannonFrontWheels->getLocalRotation();
-        cannonFrontWheels->setLocalRotation(
-            {currentWheelRot.x, currentWheelRot.y + 75.0f * static_cast<float>(gllib::LibTime::getDeltaTime()), currentWheelRot.z});
-    }
-    if (Input::getKeyPressed(Key_N)) {
-        gllib::Vector3 currentCannonSize = cannon->getScale();
-        cannon->setScale({currentCannonSize.x, currentCannonSize.y + 1.0f * static_cast<float>(gllib::LibTime::getDeltaTime()), currentCannonSize.z});
-    }
-    if (Input::getKeyPressed(Key_B)) {
-        gllib::Quaternion currentBarrelRot = cannonBarrel->getLocalRotation();
-        cannonBarrel->setLocalRotation(
-            {currentBarrelRot.x, currentBarrelRot.y, currentBarrelRot.z + 75.0f * static_cast<float>(gllib::LibTime::getDeltaTime())});
     }
 
     if (thirdPerson) {
