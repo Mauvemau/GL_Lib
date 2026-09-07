@@ -192,7 +192,6 @@ void Game::handlePlayerInput() {
         Input::setCursorLocked(!cameraLocked);
     }
 
-    // Pre-calculate delta time once to keep the code clean and efficient
     const float dt = static_cast<float>(gllib::LibTime::getDeltaTime());
     const float moveStep = playerSpeed * dt;
 

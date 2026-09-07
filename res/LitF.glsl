@@ -135,14 +135,23 @@ void main() {
 	vec3 viewDir = normalize(u_viewPos - vFragPos);
 	vec4 baseColor = vColor;
 
-	vec3 result = CalcDirLight(u_dirLight, norm, viewDir);
+	vec3 result = vec3(0.0);
+
+	if (u_dirLight.color != vec3(0.0)) {
+		result += CalcDirLight(u_dirLight, norm, viewDir);
+	}
 
 	for(int i = 0; i < NR_POINT_LIGHTS; i++) {
+		if(u_pointLights[i].color == vec3(0.0)) {
+			continue;
+		}
 		result += CalcPointLight(u_pointLights[i], norm, vFragPos, viewDir);
 	}
 
-
 	for(int i = 0; i < NR_SPOT_LIGHTS; i++) {
+		if (u_spotLights[i].color == vec3(0.0)) {
+			continue;
+		}
 		result += CalcSpotLight(u_spotLights[i], norm, vFragPos, viewDir);
 	}
 
