@@ -29,6 +29,8 @@ namespace gllib {
         BoundingBox localAABB;
         BoundingBox worldAABB;
 
+        bool isBSPPlane = false;
+
         void calculateBoundingBox();
 
     public:
@@ -44,6 +46,7 @@ namespace gllib {
         void setLocalPosition(const Vector3& position);
         void setLocalRotation(const Vector3& rotationEuler);
         void setLocalScale(const Vector3& scale);
+        void setIsBSPPlane(bool bsp);
 
         const Transform& getTransform() const;
         Vector3 getLocalPosition() const;
@@ -57,6 +60,7 @@ namespace gllib {
         int getMeshIndex() const;
         const BoundingBox& getLocalBoundingBox() const;
         const BoundingBox& getWorldBoundingBox() const;
+        bool getIsBSPPlane() const;
 
         bool hasMesh() const;
 

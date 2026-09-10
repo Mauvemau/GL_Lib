@@ -86,6 +86,10 @@ Vector3 ModelNode::getLocalScale() const {
     return transform.scale;
 }
 
+void ModelNode::setIsBSPPlane(bool bsp) {
+    isBSPPlane = bsp;
+}
+
 const glm::mat4& ModelNode::getLocalMatrix() const {
     return localMatrix;
 }
@@ -104,6 +108,10 @@ const BoundingBox& ModelNode::getLocalBoundingBox() const {
 
 const BoundingBox& ModelNode::getWorldBoundingBox() const {
     return worldAABB;
+}
+
+bool ModelNode::getIsBSPPlane() const {
+    return isBSPPlane;
 }
 
 void ModelNode::updateTransformsAndBounds(const glm::mat4& parentWorldMatrix, bool parentWasDirty) {
