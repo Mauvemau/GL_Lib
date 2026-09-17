@@ -12,6 +12,7 @@ namespace gllib {
 
     struct DLLExport Frustum {
         glm::vec4 planes[6];
+        glm::vec3 cameraPosition{0.0f};
 
         enum Planes {
             LEFT = 0,
@@ -22,7 +23,11 @@ namespace gllib {
             FAR_PLANE
         };
 
-        void update(const glm::mat4& viewProj) {
+        void update(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+            glm::mat4 invView = glm::inverse(viewMatrix);
+            cameraPosition = glm::vec3(invView[3]);
+
+            glm::mat4 viewProj = projectionMatrix * viewMatrix;
             planes[LEFT].x = viewProj[0][3] + viewProj[0][0];
             planes[LEFT].y = viewProj[1][3] + viewProj[1][0];
             planes[LEFT].z = viewProj[2][3] + viewProj[2][0];

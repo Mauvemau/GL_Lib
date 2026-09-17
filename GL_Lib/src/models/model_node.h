@@ -3,7 +3,6 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-#include "mesh.h"
 #include "transform.h"
 
 namespace gllib {

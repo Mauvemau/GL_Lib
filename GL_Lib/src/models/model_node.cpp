@@ -210,6 +210,7 @@ ModelNode* ModelNode::clone() const {
     cloned->localMatrix = this->localMatrix;
     cloned->worldMatrix = this->worldMatrix;
     cloned->isDirty = true;
+    cloned->isBSPPlane = this->isBSPPlane;
 
     for (ModelNode* child : this->children) {
         cloned->addChild(child->clone());

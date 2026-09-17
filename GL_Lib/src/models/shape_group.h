@@ -10,12 +10,11 @@ namespace gllib {
 
     class DLLExport ShapeGroup : public Entity {
         private:
-        std::vector<RenderData> renderDatas;
-        std::vector<unsigned int> indexSizes;
-
         Material getDefaultMaterial();
 
         protected:
+        std::vector<RenderData> renderDatas;
+        std::vector<unsigned int> indexSizes;
         std::vector<Material> materials;
 
         void addRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize);

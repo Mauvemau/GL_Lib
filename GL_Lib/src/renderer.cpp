@@ -236,6 +236,52 @@ void Renderer::drawBoundingBox(const BoundingBox& box, const glm::mat4& worldMat
     setDefaultMaterial();
 }
 
+void Renderer::drawLine(const Vector3& start, const Vector3& end, const glm::vec4& color) {
+    std::vector<float> vertexData;
+    vertexData.reserve(2 * 12);
+
+    vertexData.push_back(start.x);
+    vertexData.push_back(start.y);
+    vertexData.push_back(start.z);
+    vertexData.push_back(0.0f); vertexData.push_back(0.0f); vertexData.push_back(0.0f); // Normal dummy
+    vertexData.push_back(color.r); vertexData.push_back(color.g); vertexData.push_back(color.b); vertexData.push_back(color.a);
+    vertexData.push_back(0.0f); vertexData.push_back(0.0f);
+
+    vertexData.push_back(end.x);
+    vertexData.push_back(end.y);
+    vertexData.push_back(end.z);
+    vertexData.push_back(0.0f); vertexData.push_back(0.0f); vertexData.push_back(0.0f); // Normal dummy
+    vertexData.push_back(color.r); vertexData.push_back(color.g); vertexData.push_back(color.b); vertexData.push_back(color.a);
+    vertexData.push_back(0.0f); vertexData.push_back(0.0f);
+
+    int indices[2] = { 0, 1 };
+
+    RenderData rData = createRenderData(vertexData.data(), static_cast<GLsizei>(vertexData.size()), indices, 2);
+
+    setModelMatrix(glm::mat4(1.0f));
+    setUpMVP();
+    bindSolidColor();
+
+    Material debugMaterial;
+    debugMaterial.ambient = Vector3(1.0f, 1.0f, 1.0f);
+    debugMaterial.diffuse = Vector3(0.0f, 0.0f, 0.0f);
+    debugMaterial.specular = Vector3(0.0f, 0.0f, 0.0f);
+    debugMaterial.shininess = 1.0f;
+    setMaterial(debugMaterial);
+
+    glBindVertexArray(rData.VAO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rData.EBO);
+
+    glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, nullptr);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    destroyRenderData(rData);
+
+    setDefaultMaterial();
+}
+
 void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(textureID);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);

@@ -65,6 +65,7 @@ namespace gllib {
 		static void drawSolidColor(RenderData rData, GLsizei indexSize);
 		static void drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID);
 		static void drawBoundingBox(const BoundingBox& box, const glm::mat4& worldMatrix, const glm::vec4& color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		static void drawLine(const Vector3& start, const Vector3& end, const glm::vec4& color);
 
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 		static const glm::mat4& getViewMatrix() { return viewMatrix; }

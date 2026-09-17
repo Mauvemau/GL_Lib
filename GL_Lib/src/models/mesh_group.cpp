@@ -18,3 +18,7 @@ MeshGroup::~MeshGroup() {
 std::vector<Mesh>& MeshGroup::getMeshes() {
     return meshes;
 }
+
+MeshGroup* MeshGroup::clone() const {
+    return new MeshGroup(meshes);
+}

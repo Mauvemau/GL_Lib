@@ -7,12 +7,16 @@ using namespace gllib;
 using namespace std;
 
 Model::Model(ModelData& modelData, Transform transform, Color color) :
-    ShapeGroup(transform), meshGroup(modelData.getMeshGroup()), lastFrameDrawnCount(-1), totalMeshesCount(0) {
+    ShapeGroup(transform),
+    meshGroup(modelData.getMeshGroup()->clone()),
+    lastFrameDrawnCount(-1),
+    totalMeshesCount(0) {
 
     this->color = color;
 
     if (modelData.getRootNode() != nullptr) {
         this->rootNode = modelData.getRootNode()->clone();
+        collectBSPPlanes(rootNode);
     } else {
         this->rootNode = nullptr;
     }
@@ -38,6 +42,12 @@ Model::~Model() {
         delete rootNode;
         rootNode = nullptr;
     }
+
+    if (meshGroup != nullptr) {
+        delete meshGroup;
+        meshGroup = nullptr;
+    }
+
     cout << "Destroyed model.\n";
 }
 
@@ -109,6 +119,11 @@ Mesh& Model::getMesh() {
     return meshGroup->getMeshes()[0];
 }
 
+void Model::printBSPPlanes() {
+    cout << "BSP Nodes: " << bspNodes.size() << endl;
+    cout << "BSP Planes: " << bspPlanes.size() << endl;
+}
+
 ModelNode* Model::findNode(int id) {
     return findNodeRecursive(rootNode, id);
 }
@@ -128,6 +143,23 @@ ModelNode* Model::findNodeRecursive(ModelNode* node, int id) {
     }
 
     return nullptr;
+}
+
+void Model::drawBSPPlanesDebug() {
+    if (!Renderer::isDebug()) return;
+
+    for (const BSPPlane& plane : bspPlanes) {
+        Vector3 planePoint = Vector3(plane.point.x, plane.point.y, plane.point.z);
+        Vector3 planeNormal = Vector3(plane.normal.x, plane.normal.y, plane.normal.z);
+
+        BoundingBox originBox;
+        originBox.min = planePoint - Vector3(0.15f, 0.15f, 0.15f);
+        originBox.max = planePoint + Vector3(0.15f, 0.15f, 0.15f);
+        Renderer::drawBoundingBox(originBox, glm::mat4(1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)); // Magenta
+
+        Vector3 normalEnd = planePoint + (planeNormal * 2.0f);
+        Renderer::drawLine(planePoint, normalEnd, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)); // Amarillo
+    }
 }
 
 int Model::countTotalMeshesRecursive(ModelNode* node) const {
@@ -163,6 +195,116 @@ void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& dr
     }
 }
 
+void Model::collectBSPPlanes(ModelNode* node){
+    if (!node) {
+        return;
+    }
+
+    if (node->getIsBSPPlane()) {
+        bspNodes.push_back(node);
+    }
+
+    const std::vector<ModelNode*>& children = node->getChildren();
+
+    for (ModelNode* child : children) {
+        collectBSPPlanes(child);
+    }
+}
+
+void Model::updateBSPPlanes() {
+    bspPlanes.clear();
+
+    vector<Mesh>& meshes = meshGroup->getMeshes();
+
+    for (ModelNode* bspNode : bspNodes) {
+        if (bspNode == nullptr) {
+            continue;
+        }
+
+        const vector<ModelNode*>& children = bspNode->getChildren();
+
+        if (children.empty()) {
+            continue;
+        }
+
+        ModelNode* meshNode = children[0];
+
+        if (meshNode == nullptr || !meshNode->hasMesh()) {
+            continue;
+        }
+
+        int meshIndex = meshNode->getMeshIndex();
+
+        if (meshIndex < 0 || meshIndex >= static_cast<int>(meshes.size())) {
+            continue;
+        }
+
+        Mesh& mesh = meshes[meshIndex];
+
+        vector<Vertex>& vertices = mesh.getVertices();
+        vector<int>& indices = mesh.getIndices();
+
+        if (vertices.empty() || indices.size() < 3) {
+            continue;
+        }
+
+        int i0 = indices[0];
+        int i1 = indices[1];
+        int i2 = indices[2];
+
+        if (i0 < 0 || i0 >= static_cast<int>(vertices.size()) ||
+            i1 < 0 || i1 >= static_cast<int>(vertices.size()) ||
+            i2 < 0 || i2 >= static_cast<int>(vertices.size())) {
+            continue;
+        }
+
+        const glm::mat4& worldMatrix = meshNode->getWorldMatrix();
+
+        glm::vec3 v0 = glm::vec3(
+            worldMatrix * glm::vec4(
+                vertices[i0].position.x,
+                vertices[i0].position.y,
+                vertices[i0].position.z,
+                1.0f));
+
+        glm::vec3 v1 = glm::vec3(
+            worldMatrix * glm::vec4(
+                vertices[i1].position.x,
+                vertices[i1].position.y,
+                vertices[i1].position.z,
+                1.0f));
+
+        glm::vec3 v2 = glm::vec3(
+            worldMatrix * glm::vec4(
+                vertices[i2].position.x,
+                vertices[i2].position.y,
+                vertices[i2].position.z,
+                1.0f));
+
+        glm::vec3 edge1 = v1 - v0;
+        glm::vec3 edge2 = v2 - v0;
+
+        glm::vec3 normal = glm::normalize(glm::cross(edge1, edge2));
+
+        glm::vec3 center(0.0f);
+
+        for (const Vertex& vertex : vertices) {
+            center += glm::vec3(
+                vertex.position.x,
+                vertex.position.y,
+                vertex.position.z);
+        }
+
+        center /= static_cast<float>(vertices.size());
+
+        BSPPlane plane;
+        plane.point = glm::vec3(worldMatrix * glm::vec4(center, 1.0f));
+        plane.normal = normal;
+
+        bspPlanes.push_back(plane);
+    }
+}
+
 void Model::draw() {
     if (rootNode == nullptr) return;
 
@@ -178,13 +320,17 @@ void Model::draw() {
     baseWorldMatrix = glm::scale(baseWorldMatrix, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 
     rootNode->updateTransformsAndBounds(baseWorldMatrix, true);
+    updateBSPPlanes();
 
-    glm::mat4 viewProj = Renderer::getProjMatrix() * Renderer::getViewMatrix();
     Frustum frustum;
-    frustum.update(viewProj);
+    frustum.update(Renderer::getViewMatrix(), Renderer::getProjMatrix());
 
     int drawnCounter = 0;
     renderNodeRecursive(rootNode, frustum, drawnCounter);
+
+    if (Renderer::isDebug()) {
+        drawBSPPlanesDebug();
+    }
 
     if (drawnCounter != lastFrameDrawnCount && Renderer::isDebug()) {
         cout << "[Culling] Current: " << drawnCounter

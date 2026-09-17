@@ -15,6 +15,8 @@ namespace gllib {
         ~MeshGroup();
 
         std::vector<Mesh>& getMeshes();
+
+        MeshGroup* clone() const;
     };
 
 }

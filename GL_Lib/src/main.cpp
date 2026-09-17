@@ -26,6 +26,7 @@ private:
     gllib::Model* playerModel;
     gllib::Model* scene;
     gllib::ModelNode* pawn;
+    gllib::ModelNode* wallBSP;
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
     gllib::PointLight* light;
@@ -71,6 +72,7 @@ Game::Game() {
     gllib::ModelData sceneData = gllib::ModelData("Walls.fbx");
     scene = new gllib::Model(sceneData, trs1, {1.0f, 1.0f, 1.0f, 1.0f});
     pawn = scene->findNode(3);
+    wallBSP = scene->findNode(27);
 
     gllib::Transform trs3;
     trs3.position = { 0.0f, -1.0f, -3.0f };
@@ -111,6 +113,8 @@ void Game::init() {
     lightData->SetDirectionalLight(*dirLight);
     lightData->AddPointLight(*light);
     lightData->AddSpotLight(*spotLight);
+
+    wallBSP->getIsBSPPlane() ? cout << "bsp is TRUE\n" : cout << "bsp is FALSE\n";
 }
 
 void Game::update() {
@@ -148,6 +152,9 @@ void Game::uninit() {
 }
 
 void Game::handlePlayerInput() {
+    if (Input::getKeyReleased(Key_T)) {
+        scene->printBSPPlanes();
+    }
     if (Input::getKeyPressed(Key_Escape)) {
         stop();
     }
