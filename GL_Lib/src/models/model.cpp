@@ -172,9 +172,20 @@ int Model::countTotalMeshesRecursive(ModelNode* node) const {
     return count;
 }
 
-void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& drawnCounter) {
+void Model::renderNodeRecursive(
+    ModelNode* node,
+    const Frustum& frustum,
+    int& drawnCounter) {
+
     if (node == nullptr) return;
 
+    // The root is only the container for the whole model.
+    // Don't BSP-cull it.
+    if (node != rootNode && cullBSP && !bspPlanes.empty() && isBoxCulledByBSP(node->getWorldBoundingBox(), frustum.cameraPosition)) {
+        return;
+    }
+
+    // Existing frustum culling.
     if (!frustum.isBoxInFrustum(node->getWorldBoundingBox())) {
         return;
     }
@@ -185,14 +196,53 @@ void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& dr
     }
 
     if (Renderer::isDebug()) {
-        glm::vec4 boxColor = node->hasMesh() ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)
-                                             : glm::vec4(0.0f, 0.7f, 1.0f, 1.0f);
+        glm::vec4 boxColor = node->hasMesh() ? glm::vec4(0.0f, 1.0f, 0.0f, 1.0f) : glm::vec4(0.0f, 0.7f, 1.0f, 1.0f);
         Renderer::drawBoundingBox(node->getWorldBoundingBox(), glm::mat4(1.0f), boxColor);
     }
 
     for (ModelNode* child : node->getChildren()) {
         renderNodeRecursive(child, frustum, drawnCounter);
     }
+}
+
+bool Model::isBoxCulledByBSP(BoundingBox box, glm::vec3 cameraPosition) const {
+
+    for (const BSPPlane& plane : bspPlanes) {
+        float cameraDistance = glm::dot(plane.normal, cameraPosition - plane.point);
+
+        // Camera is exactly on the plane.
+        // Don't try to cull from this plane.
+        if (cameraDistance == 0.0f) {
+            continue;
+        }
+
+        glm::vec3 positiveVertex;
+        positiveVertex.x = (plane.normal.x >= 0.0f) ? box.max.x : box.min.x;
+        positiveVertex.y = (plane.normal.y >= 0.0f) ? box.max.y : box.min.y;
+        positiveVertex.z = (plane.normal.z >= 0.0f) ? box.max.z : box.min.z;
+
+        glm::vec3 negativeVertex;
+        negativeVertex.x = (plane.normal.x >= 0.0f) ? box.min.x : box.max.x;
+        negativeVertex.y = (plane.normal.y >= 0.0f) ? box.min.y : box.max.y;
+        negativeVertex.z = (plane.normal.z >= 0.0f) ? box.min.z : box.max.z;
+
+        float maxDistance = glm::dot(plane.normal, positiveVertex - plane.point);
+        float minDistance = glm::dot(plane.normal, negativeVertex - plane.point);
+
+        // Camera is in positive half-space.
+        // Entire box is in negative half-space.
+        if (cameraDistance > 0.0f && maxDistance < 0.0f) {
+            return true;
+        }
+
+        // Camera is in negative half-space.
+        // Entire box is in positive half-space.
+        if (cameraDistance < 0.0f && minDistance > 0.0f) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Model::collectBSPPlanes(ModelNode* node){
@@ -303,6 +353,14 @@ void Model::updateBSPPlanes() {
 
         bspPlanes.push_back(plane);
     }
+}
+
+void Model::setBSPCulling(bool enabled) {
+    cullBSP = enabled;
+}
+
+bool Model::getBSPCulling() const {
+    return cullBSP;
 }
 
 void Model::draw() {

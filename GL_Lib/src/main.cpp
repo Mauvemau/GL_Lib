@@ -1,15 +1,3 @@
-/*
-AABB:
-
-Transformacion nodos recursiva:
-
-- Calculo Transform
-> Llamar a calcular nodos hijo
-- Calcular bounding box
-
-Dibujar las bounding boxes
-Imprimir la cantidad de nodos que se estan mandando a dibujar vs la cantidad de nodos en cpu
-*/
 
 #include "base_game.h"
 
@@ -90,7 +78,7 @@ Game::Game() {
     gllib::Vector3 dirLightDirection = gllib::Vector3(-0.2f, -1.0f, -0.3f);
     dirLight = new gllib::DirectionalLight(dirLightDirection, {0.80f, 0.80f, 0.85f, 1.0f});
     gllib::Transform trs5;
-    trs5.position = { -1.5f, 0.5f, 0.0f };
+    trs5.position = { -1.5f, 3.5f, 0.0f };
     trs5.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs5.scale = { 0.25f, 0.25f, 0.25f };
     lightBox = new gllib::Box(trs5, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -152,9 +140,6 @@ void Game::uninit() {
 }
 
 void Game::handlePlayerInput() {
-    if (Input::getKeyReleased(Key_T)) {
-        scene->printBSPPlanes();
-    }
     if (Input::getKeyPressed(Key_Escape)) {
         stop();
     }
@@ -167,6 +152,9 @@ void Game::handlePlayerInput() {
     }
     if (Input::getKeyReleased(Key_B)) {
         gllib::Renderer::setDebug(!gllib::Renderer::isDebug());
+    }
+    if (Input::getKeyReleased(Key_N)) {
+        scene->setBSPCulling(!scene->getBSPCulling());
     }
     if (Input::getKeyReleased(Key_K)) {
         controllingPawn = !controllingPawn;

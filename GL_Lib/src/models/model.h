@@ -24,9 +24,12 @@ namespace gllib {
         std::vector<ModelNode*> bspNodes;
         std::vector<BSPPlane> bspPlanes;
 
+        bool cullBSP = true;
+
         void updateRenderData(Color color, bool centerPivot);
         void renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& drawnCounter);
         int countTotalMeshesRecursive(ModelNode* node) const;
+        bool isBoxCulledByBSP(BoundingBox box, glm::vec3 cameraPosition) const;
         void collectBSPPlanes(ModelNode* node);
         void updateBSPPlanes();
 
@@ -42,9 +45,13 @@ namespace gllib {
 
         Color getColor();
 
+        bool getBSPCulling() const;
+
         void printBSPPlanes();
 
         void setMaterial(unsigned int index, const Material& mat);
+
+        void setBSPCulling(bool enabled);
 
         ModelNode* findNode(int id);
 
