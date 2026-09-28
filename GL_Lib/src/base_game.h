@@ -20,6 +20,8 @@
 #include "models/model_importer.h"
 #include "shader.h"
 
+#include "video/video_loader.h"
+
 namespace gllib {
 
 	class DLLExport BaseGame {

@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "video/video_loader.h"
+
 using namespace std;
 
 class Game : public gllib::BaseGame {
@@ -46,6 +48,7 @@ public:
 
 Game::Game() {
     window->setVsyncEnabled(true);
+
     cout << "Game created!\n";
     gllib::Renderer::setLazyWireframeMode(wireframeMode);
     cameraFp = new gllib::FirstPersonCamera(gllib::Vector3(0.0f, 0.0f, 0.0f),
@@ -102,7 +105,17 @@ void Game::init() {
     lightData->AddPointLight(*light);
     lightData->AddSpotLight(*spotLight);
 
-    wallBSP->getIsBSPPlane() ? cout << "bsp is TRUE\n" : cout << "bsp is FALSE\n";
+    gllib::VideoAsset vod1 = gllib::VideoLoader::load("Longplay.mp4");
+    gllib::VideoAsset vod2 = gllib::VideoLoader::load("Phantasy_-_Mental_Respirator.avi");
+    gllib::VideoAsset vod3 = gllib::VideoLoader::load("takeshi.ogv");
+
+    cout << "\n";
+    vod1.printInfo();
+    cout << "\n";
+    vod2.printInfo();
+    cout << "\n";
+    vod3.printInfo();
+    cout << "\n";
 }
 
 void Game::update() {

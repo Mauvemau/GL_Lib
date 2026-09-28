@@ -10,6 +10,14 @@ find_package(glfw3 3.3 REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(assimp REQUIRED)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+    libavformat
+    libavcodec
+    libswscale
+    libavutil
+)
+
 include_directories(GL_Lib/src GL_Lib/src/glad/include)
 add_executable(glLib ${GL_LIB_SOURCES} ${GL_LIB_SOURCES_C})
 
@@ -17,4 +25,4 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(glLib PRIVATE -fPIC)
 endif()
 
-target_link_libraries(glLib PRIVATE ${OPENGL_LIBRARIES} glfw glm::glm assimp m)
+target_link_libraries(glLib PRIVATE ${OPENGL_LIBRARIES} glfw glm::glm assimp m PkgConfig::FFMPEG)

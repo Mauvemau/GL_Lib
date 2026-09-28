@@ -172,24 +172,16 @@ int Model::countTotalMeshesRecursive(ModelNode* node) const {
     return count;
 }
 
-void Model::renderNodeRecursive(
-    ModelNode* node,
-    const Frustum& frustum,
-    int& drawnCounter) {
-
+void Model::renderNodeRecursive(ModelNode* node, const Frustum& frustum, int& drawnCounter) {
     if (node == nullptr) return;
 
-    // The root is only the container for the whole model.
-    // Don't BSP-cull it.
     if (node != rootNode && cullBSP && !bspPlanes.empty() && isBoxCulledByBSP(node->getWorldBoundingBox(), frustum.cameraPosition)) {
         return;
     }
 
-    // Existing frustum culling.
     if (!frustum.isBoxInFrustum(node->getWorldBoundingBox())) {
         return;
     }
-
     if (node->hasMesh()) {
         drawSubMesh(node->getMeshIndex(), node->getWorldMatrix());
         drawnCounter++;
@@ -206,12 +198,8 @@ void Model::renderNodeRecursive(
 }
 
 bool Model::isBoxCulledByBSP(BoundingBox box, glm::vec3 cameraPosition) const {
-
     for (const BSPPlane& plane : bspPlanes) {
         float cameraDistance = glm::dot(plane.normal, cameraPosition - plane.point);
-
-        // Camera is exactly on the plane.
-        // Don't try to cull from this plane.
         if (cameraDistance == 0.0f) {
             continue;
         }
@@ -229,14 +217,9 @@ bool Model::isBoxCulledByBSP(BoundingBox box, glm::vec3 cameraPosition) const {
         float maxDistance = glm::dot(plane.normal, positiveVertex - plane.point);
         float minDistance = glm::dot(plane.normal, negativeVertex - plane.point);
 
-        // Camera is in positive half-space.
-        // Entire box is in negative half-space.
         if (cameraDistance > 0.0f && maxDistance < 0.0f) {
             return true;
         }
-
-        // Camera is in negative half-space.
-        // Entire box is in positive half-space.
         if (cameraDistance < 0.0f && minDistance > 0.0f) {
             return true;
         }
@@ -270,13 +253,11 @@ void Model::updateBSPPlanes() {
         if (bspNode == nullptr) {
             continue;
         }
-
         const vector<ModelNode*>& children = bspNode->getChildren();
 
         if (children.empty()) {
             continue;
         }
-
         ModelNode* meshNode = children[0];
 
         if (meshNode == nullptr || !meshNode->hasMesh()) {
@@ -284,11 +265,9 @@ void Model::updateBSPPlanes() {
         }
 
         int meshIndex = meshNode->getMeshIndex();
-
         if (meshIndex < 0 || meshIndex >= static_cast<int>(meshes.size())) {
             continue;
         }
-
         Mesh& mesh = meshes[meshIndex];
 
         vector<Vertex>& vertices = mesh.getVertices();
@@ -307,44 +286,21 @@ void Model::updateBSPPlanes() {
             i2 < 0 || i2 >= static_cast<int>(vertices.size())) {
             continue;
         }
-
         const glm::mat4& worldMatrix = meshNode->getWorldMatrix();
 
-        glm::vec3 v0 = glm::vec3(
-            worldMatrix * glm::vec4(
-                vertices[i0].position.x,
-                vertices[i0].position.y,
-                vertices[i0].position.z,
-                1.0f));
-
-        glm::vec3 v1 = glm::vec3(
-            worldMatrix * glm::vec4(
-                vertices[i1].position.x,
-                vertices[i1].position.y,
-                vertices[i1].position.z,
-                1.0f));
-
-        glm::vec3 v2 = glm::vec3(
-            worldMatrix * glm::vec4(
-                vertices[i2].position.x,
-                vertices[i2].position.y,
-                vertices[i2].position.z,
-                1.0f));
+        glm::vec3 v0 = glm::vec3(worldMatrix * glm::vec4(vertices[i0].position.x, vertices[i0].position.y, vertices[i0].position.z, 1.0f));
+        glm::vec3 v1 = glm::vec3(worldMatrix * glm::vec4(vertices[i1].position.x, vertices[i1].position.y, vertices[i1].position.z, 1.0f));
+        glm::vec3 v2 = glm::vec3(worldMatrix * glm::vec4(vertices[i2].position.x, vertices[i2].position.y, vertices[i2].position.z, 1.0f));
 
         glm::vec3 edge1 = v1 - v0;
         glm::vec3 edge2 = v2 - v0;
 
         glm::vec3 normal = glm::normalize(glm::cross(edge1, edge2));
-
         glm::vec3 center(0.0f);
 
         for (const Vertex& vertex : vertices) {
-            center += glm::vec3(
-                vertex.position.x,
-                vertex.position.y,
-                vertex.position.z);
+            center += glm::vec3(vertex.position.x, vertex.position.y, vertex.position.z);
         }
-
         center /= static_cast<float>(vertices.size());
 
         BSPPlane plane;
