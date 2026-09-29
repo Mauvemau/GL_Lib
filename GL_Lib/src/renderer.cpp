@@ -282,6 +282,63 @@ void Renderer::drawLine(const Vector3& start, const Vector3& end, const glm::vec
     setDefaultMaterial();
 }
 
+unsigned int Renderer::createDynamicTexture(int width, int height) {
+    if (width <= 0 || height <= 0) {
+        return 0;
+    }
+
+    unsigned int textureID = 0;
+    glGenTextures(1, &textureID);
+    if (textureID == 0) {
+        return 0;
+    }
+
+    GLint previousTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, previousTexture);
+    return textureID;
+}
+
+bool Renderer::updateDynamicTexture(unsigned int textureID, int width, int height, const unsigned char* rgbaPixels, std::size_t byteCount) {
+    if (textureID == 0 || width <= 0 || height <= 0 || rgbaPixels == nullptr) {
+        return false;
+    }
+
+    const std::size_t expectedByteCount = static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
+    if (byteCount != expectedByteCount) {
+        return false;
+    }
+
+    GLint previousTexture = 0;
+    GLint previousUnpackAlignment = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
+    glGetIntegerv(GL_UNPACK_ALIGNMENT, &previousUnpackAlignment);
+
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rgbaPixels);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, previousUnpackAlignment);
+    glBindTexture(GL_TEXTURE_2D, previousTexture);
+    return true;
+}
+
+void Renderer::destroyTexture(unsigned int textureID) {
+    if (textureID != 0) {
+        glDeleteTextures(1, &textureID);
+    }
+}
+
 void Renderer::getTextureSize(unsigned int textureID, int* width, int* height) {
     bindTexture(textureID);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width);

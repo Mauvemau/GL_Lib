@@ -16,12 +16,12 @@ private:
     gllib::Model* playerModel;
     gllib::Model* scene;
     gllib::ModelNode* pawn;
-    gllib::ModelNode* wallBSP;
     gllib::DirectionalLight* dirLight;
     gllib::Box* lightBox;
     gllib::PointLight* light;
     gllib::SpotLight* spotLight;
     gllib::LightingData* lightData;
+    gllib::VirtualMediaPlayer mediaPlayer;
     bool wireframeMode = false;
 
     float playerSpeed = 6.5f;
@@ -63,7 +63,6 @@ Game::Game() {
     gllib::ModelData sceneData = gllib::ModelData("Walls.fbx");
     scene = new gllib::Model(sceneData, trs1, {1.0f, 1.0f, 1.0f, 1.0f});
     pawn = scene->findNode(3);
-    wallBSP = scene->findNode(27);
 
     gllib::Transform trs3;
     trs3.position = { 0.0f, -1.0f, -3.0f };
@@ -106,8 +105,8 @@ void Game::init() {
     lightData->AddSpotLight(*spotLight);
 
     gllib::VideoAsset vod1 = gllib::VideoLoader::load("Longplay.mp4");
-    gllib::VideoAsset vod2 = gllib::VideoLoader::load("Phantasy_-_Mental_Respirator.avi");
-    gllib::VideoAsset vod3 = gllib::VideoLoader::load("takeshi.ogv");
+    gllib::VideoAsset vod2 = gllib::VideoLoader::load("Phantasy_unpacked.avi");
+    gllib::VideoAsset vod3 = gllib::VideoLoader::load("nggyu.mp4");
 
     cout << "\n";
     vod1.printInfo();
@@ -116,11 +115,23 @@ void Game::init() {
     cout << "\n";
     vod3.printInfo();
     cout << "\n";
+
+    cerr << "before mediaPlayer.load\n";
+    mediaPlayer.load(vod3);
+    cerr << "after mediaPlayer.load\n";
+
+    gllib::ModelNode* wall = scene->findNode(32);
+    cerr << "after node fetch\n";
+    int mi = wall->getMeshIndex();
+    cerr << "after mesh index fetch\n";
+    scene->setMaterial(mi, mediaPlayer.getScreenMaterial());
+    cerr << "after material set\n";
 }
 
 void Game::update() {
     // Update
     handlePlayerInput();
+    mediaPlayer.update(gllib::LibTime::getDeltaTime());
 
     // Draw
     gllib::Renderer::clear();

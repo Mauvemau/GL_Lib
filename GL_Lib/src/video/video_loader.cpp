@@ -86,9 +86,7 @@ VideoAsset VideoLoader::load(const std::string& path) {
         asset.frameRateDenominator = frameRate.den;
     }
 
-    if (stream->duration != AV_NOPTS_VALUE &&
-        stream->duration > 0 &&
-        stream->time_base.den > 0) {
+    if (stream->duration != AV_NOPTS_VALUE && stream->duration > 0 && stream->time_base.den > 0) {
         asset.durationInSeconds = static_cast<double>(stream->duration) * av_q2d(stream->time_base);
     }
     else if (formatContext->duration != AV_NOPTS_VALUE && formatContext->duration > 0) {

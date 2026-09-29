@@ -67,6 +67,10 @@ namespace gllib {
 		static void drawBoundingBox(const BoundingBox& box, const glm::mat4& worldMatrix, const glm::vec4& color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		static void drawLine(const Vector3& start, const Vector3& end, const glm::vec4& color);
 
+		static unsigned int createDynamicTexture(int width, int height);
+		static bool updateDynamicTexture(unsigned int textureID, int width, int height, const unsigned char* rgbaPixels, std::size_t byteCount);
+		static void destroyTexture(unsigned int textureID);
+
 		static void getTextureSize(unsigned int textureID, int* width, int* height);
 		static const glm::mat4& getViewMatrix() { return viewMatrix; }
 		static const glm::mat4& getProjMatrix() { return projMatrix; }

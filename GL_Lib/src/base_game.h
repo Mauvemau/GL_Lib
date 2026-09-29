@@ -21,6 +21,7 @@
 #include "shader.h"
 
 #include "video/video_loader.h"
+#include "video/virtual_media_player.h"
 
 namespace gllib {
 
