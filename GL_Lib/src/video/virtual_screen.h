@@ -19,6 +19,7 @@ namespace gllib {
 
         unsigned int getTextureId() const;
 
+        bool resize(int setWidth, int setHeight);
         int getWidth() const;
         int getHeight() const;
     };

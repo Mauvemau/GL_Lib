@@ -69,6 +69,7 @@ namespace gllib {
 
 		static unsigned int createDynamicTexture(int width, int height);
 		static bool updateDynamicTexture(unsigned int textureID, int width, int height, const unsigned char* rgbaPixels, std::size_t byteCount);
+		static bool resizeDynamicTexture(unsigned int textureID, int width, int height);
 		static void destroyTexture(unsigned int textureID);
 
 		static void getTextureSize(unsigned int textureID, int* width, int* height);

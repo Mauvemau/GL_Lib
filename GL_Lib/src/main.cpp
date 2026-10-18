@@ -104,28 +104,25 @@ void Game::init() {
     lightData->AddPointLight(*light);
     lightData->AddSpotLight(*spotLight);
 
+    gllib::VideoAsset vodIdle = gllib::VideoLoader::load("dvd.mp4");
     gllib::VideoAsset vod1 = gllib::VideoLoader::load("Longplay.mp4");
-    gllib::VideoAsset vod2 = gllib::VideoLoader::load("Phantasy_unpacked.avi");
-    gllib::VideoAsset vod3 = gllib::VideoLoader::load("nggyu.mp4");
+    gllib::VideoAsset vod2 = gllib::VideoLoader::load("nggyu.mp4");
 
+    cout << "\n";
+    vodIdle.printInfo();
     cout << "\n";
     vod1.printInfo();
     cout << "\n";
     vod2.printInfo();
     cout << "\n";
-    vod3.printInfo();
-    cout << "\n";
 
-    cerr << "before mediaPlayer.load\n";
-    mediaPlayer.load(vod3);
-    cerr << "after mediaPlayer.load\n";
+    mediaPlayer.setIdleVideo(vodIdle);
+    mediaPlayer.queue(vod1);
+    mediaPlayer.queue(vod2);
 
     gllib::ModelNode* wall = scene->findNode(32);
-    cerr << "after node fetch\n";
     int mi = wall->getMeshIndex();
-    cerr << "after mesh index fetch\n";
     scene->setMaterial(mi, mediaPlayer.getScreenMaterial());
-    cerr << "after material set\n";
 }
 
 void Game::update() {
@@ -209,6 +206,14 @@ void Game::handlePlayerInput() {
     if (Input::getKeyReleased(Key_Tab)) {
         cameraLocked = !cameraLocked;
         Input::setCursorLocked(!cameraLocked);
+    }
+    if (Input::getKeyReleased(Key_Right)) {
+        cout << "Skipping video...\n";
+        mediaPlayer.skip();
+    }
+    if (Input::getKeyReleased(Key_Left)) {
+        gllib::VideoAsset vod = gllib::VideoLoader::load("Longplay.mp4");
+        mediaPlayer.play(vod);
     }
 
     const float dt = static_cast<float>(gllib::LibTime::getDeltaTime());

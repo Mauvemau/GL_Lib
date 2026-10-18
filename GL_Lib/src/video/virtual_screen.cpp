@@ -25,6 +25,24 @@ unsigned int VirtualScreen::getTextureId() const {
     return textureId;
 }
 
+bool VirtualScreen::resize(int setWidth, int setHeight) {
+    if (setWidth <= 0 || setHeight <= 0) {
+        return false;
+    }
+
+    if (setWidth == this->width && setHeight == this->height) {
+        return true;
+    }
+
+    if (!Renderer::resizeDynamicTexture(textureId, setWidth, setHeight)) {
+        return false;
+    }
+
+    this->width = setWidth;
+    this->height = setHeight;
+    return true;
+}
+
 int VirtualScreen::getWidth() const {
     return width;
 }

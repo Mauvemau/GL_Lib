@@ -333,6 +333,21 @@ bool Renderer::updateDynamicTexture(unsigned int textureID, int width, int heigh
     return true;
 }
 
+bool Renderer::resizeDynamicTexture(unsigned int textureID, int width, int height) {
+    if (textureID == 0 || width <= 0 || height <= 0) {
+        return false;
+    }
+
+    GLint previousTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexture);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    glBindTexture(GL_TEXTURE_2D, previousTexture);
+    return true;
+}
+
 void Renderer::destroyTexture(unsigned int textureID) {
     if (textureID != 0) {
         glDeleteTextures(1, &textureID);
